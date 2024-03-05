@@ -13,7 +13,8 @@ const buttonVariants = cva(
 	{
 		variants: {
 			variant: {
-				primary: "bg-main-gradient text-white disabled:bg-[#353542]",
+				primary:
+					"bg-main-gradient text-white disabled:bg-[#353542] disabled:bg-none",
 				secondary:
 					"text-main-gradient outline outline-main_blue disabled:outline-[#353542]",
 				tertiary:
@@ -35,11 +36,7 @@ export default function BasicButton({
 }: Props) {
 	return (
 		<button
-			className={twMerge(
-				buttonVariants({ variant }),
-				className,
-				disabled && "bg-none",
-			)}
+			className={twMerge(buttonVariants({ variant }), className)}
 			style={
 				variant === "secondary" && disabled
 					? { WebkitTextFillColor: "initial" }
