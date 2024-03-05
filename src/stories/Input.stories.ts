@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
-import Input from "../components/Input";
+import Input from "../components/commons/Input";
 
 const meta = {
-	title: "Commons/Input",
+	title: "Commons/Input/Input",
 	component: Input,
 	tags: ["autodocs"],
 } satisfies Meta<typeof Input>;
