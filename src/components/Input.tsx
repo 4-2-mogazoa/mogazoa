@@ -1,26 +1,27 @@
-import React, { InputHTMLAttributes } from "react";
-import Background from "./Background";
+/* eslint-disable tailwindcss/no-custom-classname */
 import { cva, VariantProps } from "class-variance-authority";
+import React, { InputHTMLAttributes } from "react";
+
 import { cn } from "../utils/cn";
 
 const InputVariants = cva(
 	`
-  px-[2rem] py-[2.3rem] 
-  bg-[#252530]
-  w-screen
-  text-white
-  border border-[#353542] rounded-xl
-  placeholder:gray-200 
+  placeholder:gray-200 w-screen 
+  rounded-xl
+  border
+  border-[#353542]
+  bg-[#252530] px-[2rem] py-[2.3rem]
+  text-white 
 `,
 	{
 		variants: {
 			variant: {
-				default: "focus:outline-none focus:border-main_blue",
-				error: "outline-none border-red",
+				default: "focus:border-main_blue focus:outline-none",
+				error: "border-red outline-none",
 			},
 			size: {
-				lg: "placeholder:text-[1.6rem] text-[1.6rem]",
-				md: "placeholder:text-[1.4rem] text-[1.4rem]",
+				lg: "text-[1.6rem] placeholder:text-[1.6rem]",
+				md: "text-[1.4rem] placeholder:text-[1.4rem]",
 			},
 		},
 		defaultVariants: {
@@ -34,7 +35,6 @@ interface InputProps
 	extends Omit<InputHTMLAttributes<HTMLInputElement>, "size">,
 		VariantProps<typeof InputVariants> {
 	inputType: "email" | "password" | "nickname" | "textfield";
-	isError?: boolean;
 }
 
 export default function Input({ variant, size, inputType }: InputProps) {
@@ -81,27 +81,25 @@ export default function Input({ variant, size, inputType }: InputProps) {
 
 	return (
 		<>
-			<Background>
-				<div className="flex flex-col gap-[1rem]">
-					<label
-						className={`text-white text-[${textSizes.labelSize[size ?? "lg"]}]`}
-						htmlFor={labelValue}
-					>
-						{labelValue}
-					</label>
-					<input
-						type={type}
-						placeholder={placeholderValue}
-						className={cn(InputVariants({ variant: variant, size: size }))}
-						id={labelValue}
-					/>
-					<p
-						className={`text-red text-[${textSizes.errorMsgSize[size ?? "lg"]}]`}
-					>
-						{errorMsg}
-					</p>
-				</div>
-			</Background>
+			<div className="flex flex-col gap-[1rem]">
+				<label
+					className={`text-[${textSizes.labelSize[size ?? "lg"]}] text-white`}
+					htmlFor={labelValue}
+				>
+					{labelValue}
+				</label>
+				<input
+					type={type}
+					placeholder={placeholderValue}
+					className={cn(InputVariants({ variant: variant, size: size }))}
+					id={labelValue}
+				/>
+				<p
+					className={`text-[${textSizes.errorMsgSize[size ?? "lg"]}] text-red`}
+				>
+					{errorMsg}
+				</p>
+			</div>
 		</>
 	);
 }
