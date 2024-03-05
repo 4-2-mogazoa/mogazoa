@@ -11,9 +11,39 @@ type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
 	args: {
-		placeholderValue: "이메일을 입력해 주세요",
-		labelValue: "이메일",
-		errorMsg: "잘못된 이메일입니다.",
+		inputType: "email",
+		size: "lg",
+		variant: "default",
+	},
+};
+
+export const Email: Story = {
+	args: {
+		inputType: "email",
+		size: "lg",
+		variant: "default",
+	},
+};
+
+export const Password: Story = {
+	args: {
+		inputType: "password",
+		size: "lg",
+		variant: "default",
+	},
+};
+
+export const Nickname: Story = {
+	args: {
+		inputType: "nickname",
+		size: "lg",
+		variant: "default",
+	},
+};
+
+export const Textfield: Story = {
+	args: {
+		inputType: "textfield",
 		size: "lg",
 		variant: "default",
 	},
