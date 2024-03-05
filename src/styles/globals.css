@@ -16,9 +16,16 @@
 	}
 }
 
-body {
+html {
 	font-size: 62.5%;
 	font-family: "Pretendard";
+}
+
+@layer utilities {
+	.text-main-gradient {
+		@apply bg-main-gradient bg-clip-text text-transparent;
+		-webkit-text-fill-color: transparent;
+	}
 }
 
 @font-face {
