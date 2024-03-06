@@ -1,4 +1,4 @@
-type StatisticsCardProps = {
+export type StatisticsCardProps = {
 	type: "rate" | "like" | "review";
 	rateData?: number;
 	likeData?: number;
@@ -63,7 +63,7 @@ export default function StatisticsCard({
 	const dataDiff = calculateDifference(data, avgData);
 
 	return (
-		<div className="flex flex-col justify-center rounded-[1.2rem] h-[8.2rem] min-w-[33.5rem] px-[2rem] border border-[#353542] bg-[#252530] md:items-center md:py-[3rem] md:gap-[2rem] md:min-w-[21.8rem] md:min-h-[16.9rem] lg:items-center lg:py-[3rem] lg:gap-[2rem] lg:w-full lg:h-full">
+		<div className="flex flex-col justify-center rounded-[1.2rem] min-w-[33.5rem] h-[8.2rem] px-[2rem] border border-[#353542] bg-[#252530] md:items-center md:gap-[2rem] md:min-w-[21.8rem] md:min-h-[16.9rem] lg:items-center lg:gap-[2rem] lg:w-[30rem] lg:h-[19rem]">
 			<div className="flex flex-row gap-[1rem]">
 				<span className="text-white text-[1.4rem] md:text-[1.6rem] lg:text-[1.8rem]">
 					{typeLabel}
