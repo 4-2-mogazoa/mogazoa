@@ -1,5 +1,6 @@
 import { cva, VariantProps } from "class-variance-authority";
-import { ButtonHTMLAttributes, ReactNode } from "react";
+import clsx from "clsx";
+import { ButtonHTMLAttributes } from "react";
 import { twMerge } from "tailwind-merge";
 
 type Props = ButtonHTMLAttributes<HTMLButtonElement> &
@@ -15,8 +16,7 @@ const buttonVariants = cva(
 			variant: {
 				primary:
 					"bg-main-gradient text-white disabled:bg-[#353542] disabled:bg-none",
-				secondary:
-					"text-main-gradient outline outline-main_blue disabled:outline-[#353542]",
+				secondary: "outline outline-main_blue disabled:outline-[#353542]",
 				tertiary:
 					"text-gray-100 outline outline-gray-100 disabled:outline-[#353542]",
 			},
@@ -37,15 +37,16 @@ export default function BasicButton({
 	return (
 		<button
 			className={twMerge(buttonVariants({ variant }), className)}
-			style={
-				variant === "secondary" && disabled
-					? { WebkitTextFillColor: "initial" }
-					: {}
-			}
 			disabled={disabled}
 			{...props}
 		>
-			{label}
+			<span
+				className={clsx(
+					variant === "secondary" && !disabled && "text-main-gradient",
+				)}
+			>
+				{label}
+			</span>
 		</button>
 	);
 }

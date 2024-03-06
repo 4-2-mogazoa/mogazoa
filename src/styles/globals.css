@@ -24,7 +24,6 @@ html {
 @layer utilities {
 	.text-main-gradient {
 		@apply bg-main-gradient bg-clip-text text-transparent;
-		-webkit-text-fill-color: transparent;
 	}
 }
 
