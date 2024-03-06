@@ -4,7 +4,7 @@ import { userEvent, within } from "@storybook/test";
 import BasicButton from "../components/common/button/BasicButton";
 
 const meta = {
-	title: "Component/BasicButton",
+	title: "Components/Common/BasicButton",
 	component: BasicButton,
 	tags: ["autodocs"],
 	args: {
