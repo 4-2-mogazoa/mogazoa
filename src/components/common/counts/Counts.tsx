@@ -1,21 +1,22 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import React from "react";
 
-import { cn } from "../../utils/utils";
+import cn from "@/utils/cn";
+
 import Count from "./Count";
 
 const countsVariants = cva("_flex-center gap-4", {
 	variants: {
 		gapBreakpoint: {
-			tablet: "md:gap-6",
-			pc: "xl:gap-6",
+			atTablet: "md:gap-6",
+			atPc: "lg:gap-6",
 		},
 	},
 });
 
 type Props = React.HTMLAttributes<HTMLDivElement> &
 	VariantProps<typeof countsVariants> & {
-		gapBreakpoint: "tablet" | "pc";
+		gapBreakpoint: "atTablet" | "atPc";
 		children: React.ReactNode;
 	};
 

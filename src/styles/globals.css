@@ -21,7 +21,7 @@ html {
 	font-family: "Pretendard";
 }
 
-@layer component {
+@layer utilities {
 	._flex-center {
 		@apply flex items-center justify-center;
 	}

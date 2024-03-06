@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
-import Count from "../components/common/Count";
+import Count from "@/components/common/counts/Count";
 
 const meta = {
-	title: "Common/Count",
+	title: "Components/Common/Count",
 	component: Count,
 	tags: ["autodocs"],
 	parameters: {
