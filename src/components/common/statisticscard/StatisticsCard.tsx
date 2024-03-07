@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-export type StatisticsCardProps = {
+type StatisticsCardProps = {
 	type: "rate" | "like" | "review";
 	rateData?: number;
 	likeData?: number;
