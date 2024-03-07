@@ -4,7 +4,7 @@ import React from "react";
 import cn from "@/utils/cn";
 
 const rankingVariants = cva(
-	"_flex-center gap-4 rounded-[5rem] px-[0.6rem] py-[0.2rem] text-center text-base lg:px-[0.8rem] lg:text-[1.2rem]",
+	"_flex-center w-fit gap-4 rounded-[5rem] px-[0.6rem] py-[0.2rem] text-center text-base lg:px-[0.8rem] lg:text-[1.2rem]",
 	{
 		variants: {
 			rank: {
