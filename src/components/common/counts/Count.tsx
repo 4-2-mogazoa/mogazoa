@@ -16,7 +16,7 @@ const countVariants = cva("_flex-center gap-2 font-light text-gray-200", {
 type Props = React.HTMLAttributes<HTMLDivElement> &
 	VariantProps<typeof countVariants> & {
 		size: "large" | "medium" | "small";
-		text: string;
+		text: "리뷰" | "찜" | "팔로워" | "조회";
 		count: number;
 	};
 
