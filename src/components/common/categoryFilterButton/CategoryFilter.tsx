@@ -2,8 +2,6 @@ import clsx from "clsx";
 import Image from "next/image";
 import React, { MouseEventHandler } from "react";
 
-import Category from "../../../../public/icons/category.svg";
-
 type Props = {
 	category:
 		| "카테고리"
@@ -24,6 +22,8 @@ export default function CategoryFilterButton({
 	category = "카테고리",
 	handleButtonClick,
 }: Props) {
+	const iconSrc = "/icons/category.svg";
+
 	return (
 		<button
 			className={clsx(
@@ -32,7 +32,7 @@ export default function CategoryFilterButton({
 			)}
 			onClick={handleButtonClick}
 		>
-			<Image src={Category} alt="선택한 카테고리" width={18} height={18} />
+			<Image src={iconSrc} alt="선택한 카테고리" width={18} height={18} />
 			{category}
 		</button>
 	);
