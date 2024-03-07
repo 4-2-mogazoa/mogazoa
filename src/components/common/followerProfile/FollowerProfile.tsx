@@ -1,17 +1,11 @@
 import ProfileImage from "../profileImage/ProfileImage";
 
-type FollowerData = {
+type Props = {
 	image: string;
 	nickname: string;
 };
 
-type Props = {
-	followerData: FollowerData;
-};
-
-export default function FollowerProfile({ followerData }: Props) {
-	const { image, nickname } = followerData;
-
+export default function FollowerProfile({ image, nickname }: Props) {
 	return (
 		<div className="_flex-center w-fit gap-8">
 			<ProfileImage size="medium" src={image} />

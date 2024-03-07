@@ -16,9 +16,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
 	args: {
-		followerData: {
-			image: "/images/testImage.png",
-			nickname: "리뷰왕",
-		},
+		image: "/images/testImage.png",
+		nickname: "리뷰왕",
 	},
 };
