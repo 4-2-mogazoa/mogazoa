@@ -7,9 +7,9 @@ import cn from "@/utils/cn";
 const profileImageVariants = cva("relative overflow-hidden rounded-full", {
 	variants: {
 		size: {
-			small: "size-[3.6rem] md:size-[4.2rem]",
-			medium: "size-[4.8rem] md:size-[5.2rem]",
-			large: "size-[12rem] md:size-[18rem]",
+			small: "size-[3.6rem] lg:size-[4.2rem]",
+			medium: "size-[4.8rem] lg:size-[5.2rem]",
+			large: "size-[12rem] lg:size-[18rem]",
 		},
 	},
 });
