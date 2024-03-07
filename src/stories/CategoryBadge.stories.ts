@@ -16,7 +16,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Music: Story = {
 	args: {
-		size: "smallToLarge",
+		size: "responsive",
 		category: "음악",
 	},
 };

@@ -10,27 +10,27 @@ const categoryBadgeVariants = cva("_flex-center gap-4 ", {
 				"rounded-[0.6rem] px-[0.8rem] py-[0.4rem] text-center text-[1.2rem]",
 			large:
 				"rounded-[0.8rem] px-[1rem] py-[0.4rem] text-center text-[1.8rem] font-medium",
-			smallToLarge:
+			responsive:
 				"rounded-[0.6rem] px-[0.8rem] py-[0.4rem] text-center text-[1.2rem] lg:rounded-[0.8rem] lg:px-[1rem] lg:py-[0.4rem] lg:text-center lg:text-[1.8rem] lg:font-medium",
 		},
 		category: {
-			음악: "bg-tags-music/10 text-tags-music",
-			"영화/드라마": "bg-tags-movie/10 text-tags-movie",
-			"강의/책": "bg-tags-book/10 text-tags-book",
-			호텔: "bg-tags-hotel/10 text-tags-hotel",
-			"가구/인테리어": "bg-tags-interior/10 text-tags-interior",
-			식당: "bg-tags-restaurant/10 text-tags-restaurant",
-			전자기기: "bg-tags-electronics/10 text-tags-electronics",
-			화장품: "bg-tags-cosmetics/10 text-tags-cosmetics",
-			"의류/잡화": "bg-tags-clothes/10 text-tags-clothes",
-			앱: "bg-tags-app/10 text-tags-app",
+			음악: "bg-wildWillow/10 text-wildWillow",
+			"영화/드라마": "bg-flamingo/10 text-flamingo",
+			"강의/책": "bg-heliotrope/10 text-heliotrope",
+			호텔: "bg-christi/10 text-christi",
+			"가구/인테리어": "bg-orchid/10 text-orchid",
+			식당: "bg-coral/10 text-coral",
+			전자기기: "bg-jungleGreen/10 text-jungleGreen",
+			화장품: "bg-brilliantRose/10 text-brilliantRose",
+			"의류/잡화": "bg-mediumSlateBlue/10 text-mediumSlateBlue",
+			앱: "bg-curiousBlue/10 text-curiousBlue",
 		},
 	},
 });
 
 type Props = React.HTMLAttributes<HTMLDivElement> &
 	VariantProps<typeof categoryBadgeVariants> & {
-		size: "small" | "large" | "smallToLarge";
+		size: "small" | "large" | "responsive";
 		category:
 			| "음악"
 			| "영화/드라마"
