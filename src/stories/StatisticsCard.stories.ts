@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
+
 import StatisticsCard from "@/components/common/statisticscard/StatisticsCard";
 
 const meta = {
@@ -59,7 +60,7 @@ export const Review: Story = {
 	},
 };
 
-export const equal: Story = {
+export const Equal: Story = {
 	args: {
 		type: "review",
 		reviewData: 4123,
