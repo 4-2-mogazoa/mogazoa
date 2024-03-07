@@ -5,7 +5,6 @@ import TextBox from "../components/common/inputs/TextBox";
 const meta = {
 	title: "Commons/Input/TextBox",
 	component: TextBox,
-	tags: ["autodocs"],
 } satisfies Meta<typeof TextBox>;
 
 export default meta;
