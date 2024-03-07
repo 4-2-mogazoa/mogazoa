@@ -6,23 +6,24 @@ import cn from "@/utils/cn";
 
 const profileImageVariants = cva("relative overflow-hidden rounded-full", {
 	variants: {
-		variant: {
-			ranking: "size-[3.6rem] md:size-[4.2rem]",
-			follower: "size-[4.8rem] md:size-[5.2rem]",
-			profile: "size-[12rem] md:size-[18rem]",
+		size: {
+			small: "size-[3.6rem] md:size-[4.2rem]",
+			medium: "size-[4.8rem] md:size-[5.2rem]",
+			large: "size-[12rem] md:size-[18rem]",
 		},
 	},
 });
 
+// todo: StaticImageData 타입은 추후 기능 구현 테스트 이후에 삭제 예정
 type Props = React.HTMLAttributes<HTMLDivElement> &
 	VariantProps<typeof profileImageVariants> & {
-		variant: "ranking" | "follower" | "profile";
+		size: "small" | "medium" | "large";
 		src: string | StaticImageData;
 	};
 
-export default function ProfileImage({ src, variant }: Props) {
+export default function ProfileImage({ src, size }: Props) {
 	return (
-		<div className={cn(profileImageVariants({ variant }))}>
+		<div className={cn(profileImageVariants({ size }))}>
 			<Image src={src} alt="사용자 프로필 이미지" fill />
 		</div>
 	);

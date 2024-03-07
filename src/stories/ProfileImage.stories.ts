@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 
 import ProfileImage from "@/components/common/profileImage/ProfileImage";
 
-import TestImage from "../../public/images/textImage.png";
+import TestImage from "../../public/images/testImage.png";
 
 const meta = {
 	title: "Components/Common/ProfileImage",
@@ -18,21 +18,21 @@ type Story = StoryObj<typeof meta>;
 
 export const Ranking: Story = {
 	args: {
-		variant: "ranking",
+		size: "small",
 		src: TestImage,
 	},
 };
 
 export const Follower: Story = {
 	args: {
-		variant: "follower",
+		size: "medium",
 		src: TestImage,
 	},
 };
 
 export const Profile: Story = {
 	args: {
-		variant: "profile",
+		size: "large",
 		src: TestImage,
 	},
 };
