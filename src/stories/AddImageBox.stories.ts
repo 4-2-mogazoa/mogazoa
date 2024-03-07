@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import AddImageBox from "../components/common/inputs/AddImageBox";
 
 const meta = {
-	title: "Commons/Input/AddImageBox",
+	title: "Components/Common/Input/AddImageBox",
 	component: AddImageBox,
 } satisfies Meta<typeof AddImageBox>;
 
