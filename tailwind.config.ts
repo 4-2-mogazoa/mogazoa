@@ -22,10 +22,6 @@ const config: Config = {
 					100: "#9FA6B2",
 					200: "#6E6E82",
 				},
-				main_gradation: {
-					start: "#5097FA",
-					end: "#5363FF",
-				},
 				main_blue: "#5097FA",
 				main_indigo: "#5363FF",
 				yellow: "#FFC83C",
@@ -44,6 +40,9 @@ const config: Config = {
 				mediumSlateBlue: "#757AFF",
 				curiousBlue: "#3098E3",
 			},
+			backgroundImage: ({ theme }) => ({
+				"main-gradient": `linear-gradient(to right, ${theme("colors.main_blue")}, ${theme("colors.main_indigo")})`,
+			}),
 		},
 	},
 	plugins: [],
