@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export type StatisticsCardProps = {
 	type: "rate" | "like" | "review";
 	rateData?: number;
@@ -63,46 +65,53 @@ export default function StatisticsCard({
 	const dataDiff = calculateDifference(data, avgData);
 
 	return (
-		<div className="flex flex-col justify-center rounded-[1.2rem] min-w-[33.5rem] h-[8.2rem] px-[2rem] border border-[#353542] bg-[#252530] md:items-center md:gap-[2rem] md:min-w-[21.8rem] md:min-h-[16.9rem] lg:items-center lg:gap-[2rem] lg:w-[30rem] lg:h-[19rem]">
+		<div className="flex h-[8.2rem] min-w-[33.5rem] flex-col justify-center rounded-[1.2rem] border border-[#353542] bg-[#252530] px-[2rem] md:min-h-[16.9rem] md:min-w-[21.8rem] md:items-center md:gap-[2rem] lg:h-[19rem] lg:w-[30rem] lg:items-center lg:gap-[2rem]">
 			<div className="flex flex-row gap-[1rem]">
-				<span className="text-white text-[1.4rem] md:text-[1.6rem] lg:text-[1.8rem]">
+				<span className="text-[1.4rem] text-white md:text-[1.6rem] lg:text-[1.8rem]">
 					{typeLabel}
 				</span>
 				<div className="flex items-center md:hidden lg:hidden">
-					<img
-						className="w-[1.9rem] h-[1.9rem] mr-[0.5rem] md:w-[2rem] md:h-[2rem] lg:w-[2.4rem] lg:h-[2.4rem]"
-						src={typeIcon}
-						alt={typeLabel}
-					/>
-					<span className="text-gray-100 text-[1.6rem] md:text-[2rem] lg:text-[2.4rem]">
+					<div className="relative mr-[0.5rem] size-[1.9rem]  md:size-[2rem] lg:size-[2.4rem]">
+						<Image
+							src={typeIcon}
+							alt={typeLabel}
+							fill
+							className="object-cover"
+						/>
+					</div>
+
+					<span className="text-[1.6rem] text-gray-100 md:text-[2rem] lg:text-[2.4rem]">
 						{rateData}
 					</span>
-					<span className="text-gray-100 text-[1.6rem] md:text-[2rem] lg:text-[2.4rem] ">
+					<span className="text-[1.6rem] text-gray-100 md:text-[2rem] lg:text-[2.4rem] ">
 						{likeData}
 					</span>
-					<span className="text-gray-100 text-[1.6rem] md:text-[2rem] lg:text-[2.4rem] ">
+					<span className="text-[1.6rem] text-gray-100 md:text-[2rem] lg:text-[2.4rem] ">
 						{reviewComma}
 					</span>
 				</div>
 			</div>
 			<div className="hidden md:flex md:items-center lg:flex lg:items-center">
-				<img
-					className="w-[1.9rem] h-[1.9rem] mr-[0.5rem] md:w-[2rem] md:h-[2rem] lg:w-[2.4rem] lg:h-[2.4rem]"
-					src={typeIcon}
-					alt={typeLabel}
-				/>
-				<span className="text-gray-100 text-[1.6rem] md:text-[2rem] lg:text-[2.4rem]">
+				<div className="relative mr-[0.5rem] size-[1.9rem]  md:size-[2rem] lg:size-[2.4rem]">
+					<Image
+						src={typeIcon}
+						alt={typeLabel}
+						fill
+						className="object-cover "
+					/>
+				</div>
+				<span className="text-[1.6rem] text-gray-100 md:text-[2rem] lg:text-[2.4rem]">
 					{rateData}
 				</span>
-				<span className="text-gray-100 text-[1.6rem] md:text-[2rem] lg:text-[2.4rem] ">
+				<span className="text-[1.6rem] text-gray-100 md:text-[2rem] lg:text-[2.4rem] ">
 					{likeData}
 				</span>
-				<span className="text-gray-100 text-[1.6rem] md:text-[2rem] lg:text-[2.4rem] ">
+				<span className="text-[1.6rem] text-gray-100 md:text-[2rem] lg:text-[2.4rem] ">
 					{reviewComma}
 				</span>
 			</div>
 			{!dataDiff.isSame && (
-				<div className="flex flex-row items-center text-[1.2rem] md:flex-col lg:text-[1.4rem] lg:flex-col">
+				<div className="flex flex-row items-center text-[1.2rem] md:flex-col lg:flex-col lg:text-[1.4rem]">
 					<span className="text-gray-200">
 						같은 카테고리의 제품들보다&nbsp;
 					</span>
@@ -127,7 +136,7 @@ export default function StatisticsCard({
 				</div>
 			)}
 			{dataDiff.isSame && (
-				<div className="flex flex-row items-center text-[1.2rem] text-gray-200 md:flex-col lg:text-[1.4rem] lg:flex-col">
+				<div className="flex flex-row items-center text-[1.2rem] text-gray-200 md:flex-col lg:flex-col lg:text-[1.4rem]">
 					<span>같은 카테고리의 제품들과&nbsp;</span>
 					<span>동일해요!</span>
 				</div>
