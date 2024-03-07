@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
-import TextBox from "../components/common/inputs/TextBox";
+import AddImageBox from "../components/common/inputs/AddImageBox";
 
 const meta = {
-	title: "Commons/Input/TextBox",
-	component: TextBox,
+	title: "Commons/Input/AddImageBox",
+	component: AddImageBox,
 	tags: ["autodocs"],
-} satisfies Meta<typeof TextBox>;
+} satisfies Meta<typeof AddImageBox>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
