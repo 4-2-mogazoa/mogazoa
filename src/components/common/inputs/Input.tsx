@@ -26,11 +26,10 @@ const InputVariants = cva(
 	},
 );
 
-interface InputProps
-	extends Omit<InputHTMLAttributes<HTMLInputElement>, "size">,
-		VariantProps<typeof InputVariants> {
-	inputType: "email" | "password" | "nickname" | "textfield";
-}
+type InputProps = InputHTMLAttributes<HTMLInputElement> &
+	VariantProps<typeof InputVariants> & {
+		inputType: "email" | "password" | "nickname" | "textfield";
+	};
 
 export default function Input({ variant, inputType }: InputProps) {
 	const [isVisibility, setIsVisibility] = useState(false);

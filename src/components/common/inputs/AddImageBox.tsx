@@ -1,9 +1,9 @@
 import Image from "next/image";
 import React, { useRef, useState } from "react";
 
-interface EditorDataType {
+type EditorDataType = {
 	file?: string | null;
-}
+};
 
 export default function AddImageBox() {
 	const [editorData, setEditorData] = useState<EditorDataType>({ file: null });
