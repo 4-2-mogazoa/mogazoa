@@ -6,7 +6,7 @@ import cn from "@/utils/cn";
 const countVariants = cva("_flex-center gap-2 font-light text-gray-200", {
 	variants: {
 		size: {
-			small: "text-[1rem] md:text-[1.2rem]",
+			small: "text-[1rem] lg:text-[1.2rem]",
 			medium: "text-[1.2rem] md:text-[1.4rem] lg:text-[1.6rem]",
 			large: "text-[1.4rem] lg:text-[1.6rem]",
 		},
