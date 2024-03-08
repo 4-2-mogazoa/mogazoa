@@ -27,7 +27,7 @@ export default function CategoryFilterButton({
 	return (
 		<button
 			className={clsx(
-				"_flex-center gap-2 rounded-[10rem] border border-solid border-black-353542 bg-black-252530 px-[1.2rem] py-[0.6rem] text-[1.4rem] text-gray-100 hover:bg-black-100",
+				"_flex-center gap-2 rounded-[10rem] border border-solid border-black-border bg-black-bg px-[1.2rem] py-[0.6rem] text-[1.4rem] text-gray-100 hover:bg-black-100",
 				category === "카테고리" && "text-gray-200",
 			)}
 			onClick={handleButtonClick}
