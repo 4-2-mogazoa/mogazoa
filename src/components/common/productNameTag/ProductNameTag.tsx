@@ -31,16 +31,16 @@ export default function ProductNameTag({
 	const deleteIconSrc = "/icons/close.svg";
 
 	return (
-		<div className={cn(productNameTagVariants({ color }))}>
+		<button
+			className={cn(productNameTagVariants({ color }))}
+			onClick={handleDeleteButtonClick}
+		>
 			{productName}
-			<button
-				className="_flex-center size-[1.7rem] rounded-[0.6rem] bg-[#000000]/50 p-[0.2rem] md:size-[1.9rem]"
-				onClick={handleDeleteButtonClick}
-			>
+			<div className="_flex-center size-[1.7rem] rounded-[0.6rem] bg-[#000000]/50 p-[0.2rem] md:size-[1.9rem]">
 				<div className="relative size-[1.3rem] md:size-[1.5rem]">
 					<Image src={deleteIconSrc} alt="상품 삭제하기" fill />
 				</div>
-			</button>
-		</div>
+			</div>
+		</button>
 	);
 }
