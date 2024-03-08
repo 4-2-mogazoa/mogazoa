@@ -30,6 +30,17 @@ const config: Config = {
 				green: "#05D58B",
 				pink: "#FF2F9F",
 				red: "#FF0000",
+				// category colors
+				wildWillow: "#C5D17C",
+				flamingo: "#F75532",
+				heliotrope: "#A953FF",
+				christi: "#49AF1A",
+				orchid: "#D676C1",
+				coral: "#FF7E46",
+				jungleGreen: "#23B581",
+				brilliantRose: "#FD529A",
+				mediumSlateBlue: "#757AFF",
+				curiousBlue: "#3098E3",
 			},
 			backgroundImage: ({ theme }) => ({
 				"main-gradient": `linear-gradient(to right, ${theme("colors.main_blue")}, ${theme("colors.main_indigo")})`,
