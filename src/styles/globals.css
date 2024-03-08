@@ -22,6 +22,10 @@ html {
 }
 
 @layer utilities {
+	.text-main-gradient {
+		@apply bg-main-gradient bg-clip-text text-transparent;
+	}
+
 	._flex-center {
 		@apply flex items-center justify-center;
 	}
