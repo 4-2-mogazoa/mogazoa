@@ -7,22 +7,25 @@ const rankingVariants = cva(
 	"_flex-center w-fit gap-4 rounded-[5rem] px-[0.6rem] py-[0.2rem] text-center text-base lg:px-[0.8rem] lg:text-[1.2rem]",
 	{
 		variants: {
-			rank: {
+			variant: {
+				default: "bg-gray-100/10 text-gray-100",
 				1: "bg-pink/10 text-pink",
 				2: "bg-green/10 text-green",
-				3: "bg-gray-100/10 text-gray-100",
-				4: "bg-gray-100/10 text-gray-100",
-				5: "bg-gray-100/10 text-gray-100",
 			},
+		},
+		defaultVariants: {
+			variant: "default",
 		},
 	},
 );
 
 type Props = React.HTMLAttributes<HTMLDivElement> &
 	VariantProps<typeof rankingVariants> & {
-		rank: 1 | 2 | 3 | 4 | 5;
+		rank: number;
 	};
 
 export default function Ranking({ rank }: Props) {
-	return <div className={cn(rankingVariants({ rank }))}>{rank}등</div>;
+	const variant = rank === 1 || rank === 2 ? rank : "default";
+
+	return <div className={cn(rankingVariants({ variant }))}>{rank}등</div>;
 }
