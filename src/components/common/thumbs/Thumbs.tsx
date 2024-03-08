@@ -5,7 +5,7 @@ import React from "react";
 import cn from "@/utils/cn";
 
 const thumbsVariants = cva(
-	"_flex-center gap-2 rounded-[10rem] border border-solid border-black-353542 bg-black-252530 px-[1rem] py-[0.6rem] text-[1.2rem] hover:bg-black-100 lg:px-[1.2rem] lg:text-[1.4rem]",
+	"_flex-center gap-2 rounded-[10rem] border border-solid border-black-border bg-black-bg px-[1rem] py-[0.6rem] text-[1.2rem] hover:bg-black-100 lg:px-[1.2rem] lg:text-[1.4rem]",
 	{
 		variants: {
 			isLiked: {
