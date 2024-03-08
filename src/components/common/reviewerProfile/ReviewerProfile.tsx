@@ -1,5 +1,7 @@
 import Counts from "../counts/Counts";
+import Nickname from "../nickname/Nickname";
 import ProfileImage from "../profileImage/ProfileImage";
+import Ranking from "../ranking/Ranking";
 
 type ReviewerData = {
 	image: string;
@@ -21,10 +23,8 @@ export default function ReviewerProfile({ reviewerData }: Props) {
 			<ProfileImage size="small" src={image} />
 			<div className="flex flex-col gap-2 lg:gap-4">
 				<div className="flex gap-2">
-					{/* todo: 랭킹 컴포넌트 머지 후 반영 */}
-					<span>{rank}등</span>
-					{/* todo: 닉네임 컴포넌트 머지 후 반영 */}
-					<p>{nickname}</p>
+					<Ranking rank={rank} />
+					<Nickname size="small" nickname={nickname} />
 				</div>
 				<Counts>
 					<Counts.Count size="small" text="팔로워" count={followersCount} />
