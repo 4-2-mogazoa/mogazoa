@@ -21,12 +21,11 @@ export default function TextBox() {
 				onFocus={() => setIsFocused(true)}
 				onBlur={() => setIsFocused(false)}
 			/>
-			<div>
-				<p className="text-right text-[1.4rem] text-[#6E6E82]">
-					<span>{count}</span>
-					<span>/300 자</span>
-				</p>
-			</div>
+
+			<p className="text-right text-[1.4rem] text-[#6E6E82]">
+				<span>{count}</span>
+				<span>/300 자</span>
+			</p>
 		</div>
 	);
 }
