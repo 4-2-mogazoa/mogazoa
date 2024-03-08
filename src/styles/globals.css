@@ -22,6 +22,10 @@ html {
 }
 
 @layer utilities {
+	.text-main-gradient {
+		@apply bg-main-gradient bg-clip-text text-transparent;
+	}
+
 	._flex-center {
 		@apply flex items-center justify-center;
 	}
@@ -29,9 +33,14 @@ html {
 	._flex-col-center {
 		@apply flex flex-col items-center justify-center;
 	}
+  
 	._pos-center {
 		@apply top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4;
 	}
+}
+
+button {
+	cursor: pointer;
 }
 
 @font-face {
