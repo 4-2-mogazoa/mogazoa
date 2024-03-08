@@ -38,6 +38,10 @@ html {
 	}
 }
 
+button {
+	cursor: pointer;
+}
+
 @font-face {
 	font-family: "Pretendard";
 	font-weight: 100;
