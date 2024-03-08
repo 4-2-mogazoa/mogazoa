@@ -4,7 +4,7 @@ export default function TextBox() {
 	const [count, setCount] = useState(0);
 	const [isFocused, setIsFocused] = useState(false);
 
-	const onTextareaHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
+	const hadleOnTextarea = (e: ChangeEvent<HTMLTextAreaElement>) => {
 		setCount(e.target.value.length);
 	};
 
@@ -14,10 +14,10 @@ export default function TextBox() {
 		>
 			<textarea
 				maxLength={300}
-				className="text-[1.4rem]focus:outline-none w-full resize-none overflow-hidden border-none bg-[#252530] text-white placeholder:text-[1.4rem] focus:outline-none lg:text-[1.6rem] lg:placeholder:text-[1.6rem]"
+				className="w-full resize-none overflow-hidden border-none bg-[#252530] text-[1.4rem] text-white placeholder:text-[1.4rem] focus:outline-none lg:text-[1.6rem] lg:placeholder:text-[1.6rem]"
 				placeholder="리뷰를 작성해 주세요"
 				rows={3}
-				onChange={onTextareaHandler}
+				onChange={hadleOnTextarea}
 				onFocus={() => setIsFocused(true)}
 				onBlur={() => setIsFocused(false)}
 			/>
