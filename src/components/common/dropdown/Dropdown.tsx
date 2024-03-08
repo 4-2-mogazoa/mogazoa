@@ -24,7 +24,7 @@ const dropdownVariants = cva(
 					"bg-[#252530] px-[2rem] py-[1.25rem] outline outline-[#353542] md:py-[1.5rem] lg:py-[2rem]",
 				smallDropdown: "w-[6.2rem] md:w-[14rem] lg:w-[16rem]",
 				filteredDropdown:
-					"bg-[#252530] px-[2rem] py-[1.25rem] text-[1.4rem] text-white outline outline-[#353542] placeholder:text-[1.4rem] placeholder:text-gray-200 focus:outline-[#5097FA] md:py-[1.5rem] lg:py-[2rem] lg:text-[1.6rem] placeholder:lg:text-[1.6rem]",
+					"bg-[#252530] px-[2rem] py-[1.7rem] text-[1.4rem] text-white outline outline-[#353542] placeholder:text-[1.4rem] placeholder:text-gray-200 focus:outline-[#5097FA] md:py-[1.95rem] lg:py-[2.3rem] lg:text-[1.6rem] placeholder:lg:text-[1.6rem]",
 			},
 		},
 	},
