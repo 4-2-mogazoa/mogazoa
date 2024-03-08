@@ -8,8 +8,8 @@ type EditorDataType = {
 export default function AddImageBox() {
 	const [editorData, setEditorData] = useState<EditorDataType>({ file: null });
 	const fileRef = useRef<HTMLInputElement>(null);
-	const addPhotoIcon = "/icons/add_photo.svg";
-	const closeIcon = "/icons/close.svg";
+	const addPhotoIconSrc = "/icons/add_photo.svg";
+	const closeIconSrc = "/icons/close.svg";
 
 	const handleUploadFile = () => {
 		const fileImg = fileRef?.current?.files?.[0];
@@ -42,7 +42,7 @@ export default function AddImageBox() {
 						<Image src={editorData.file} alt="photo_preview" layout="fill" />
 						<div className="absolute right-[0.5rem] top-[0.5rem] size-[2.6rem] rounded-xl bg-[#000000]/50 lg:size-[2.8rem]">
 							<Image
-								src={closeIcon}
+								src={closeIconSrc}
 								alt="close"
 								layout="fill"
 								className="size-[1.8rem] cursor-pointer p-[0.4rem] lg:size-[2rem]"
@@ -53,7 +53,7 @@ export default function AddImageBox() {
 				)}
 				{!editorData.file && (
 					<div className="relative size-[2.5rem]">
-						<Image src={addPhotoIcon} alt="add_photo_icon" layout="fill" />
+						<Image src={addPhotoIconSrc} alt="add_photo_icon" layout="fill" />
 					</div>
 				)}
 			</div>

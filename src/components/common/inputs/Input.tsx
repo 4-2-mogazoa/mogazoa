@@ -64,8 +64,8 @@ export default function Input({ variant, inputType }: InputProps) {
 	const { type, labelValue, placeholderValue, errorMsg } =
 		inputTypeValues[inputType];
 
-	const visibilityOffIcon = "/icons/visibility_off.svg";
-	const visibilityOnIcon = "/icons/visibility_on.svg";
+	const visibilityOffIconSrc = "/icons/visibility_off.svg";
+	const visibilityOnIconSrc = "/icons/visibility_on.svg";
 
 	return (
 		<>
@@ -87,7 +87,7 @@ export default function Input({ variant, inputType }: InputProps) {
 					{inputType === "password" && (
 						<div className="absolute bottom-1/2 right-[2rem] size-[2.2rem] translate-y-1/2 cursor-pointer">
 							<Image
-								src={isVisibility ? visibilityOnIcon : visibilityOffIcon}
+								src={isVisibility ? visibilityOnIconSrc : visibilityOffIconSrc}
 								fill
 								alt="visbility"
 								onClick={() => {
