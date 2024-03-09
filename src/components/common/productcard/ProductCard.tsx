@@ -17,8 +17,9 @@ export default function ProductCard({
 	likeCount,
 	rate,
 }: Props) {
+	const starIconSrc = "/icons/star.svg";
 	return (
-		<div className="flex h-[18.3rem] w-[16rem] flex-col rounded-[1.2rem] border border-[#353542] bg-[#252530] md:h-[25.6rem] md:w-[24.7rem] lg:h-[30.8rem] lg:w-[30rem]">
+		<div className="flex h-[18.3rem] w-[16rem] flex-col rounded-[1.2rem] border border-black-border bg-black-bg md:h-[25.6rem] md:w-[24.7rem] lg:h-[30.8rem] lg:w-[30rem]">
 			<div className="relative size-[14rem] md:size-[22.7rem] lg:size-[28.4rem]">
 				<Image
 					src={imageData}
@@ -39,7 +40,7 @@ export default function ProductCard({
 					<div className="flex items-center">
 						<div className="relative mr-[0.2rem] size-[1.2rem] md:size-[1.5rem] lg:size-[1.6rem]">
 							<Image
-								src="./icons/star.svg"
+								src={starIconSrc}
 								alt="별점"
 								className="object-cover"
 								fill
