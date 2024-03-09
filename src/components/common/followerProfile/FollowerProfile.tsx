@@ -1,3 +1,4 @@
+import Nickname from "../nickname/Nickname";
 import ProfileImage from "../profileImage/ProfileImage";
 
 type Props = {
@@ -9,8 +10,7 @@ export default function FollowerProfile({ image, nickname }: Props) {
 	return (
 		<div className="_flex-center w-fit gap-8">
 			<ProfileImage size="medium" src={image} />
-			{/* todo: 닉네임 컴포넌트 머지 후 반영 예정 */}
-			<p>{nickname}</p>
+			<Nickname size="large" nickname={nickname} />
 		</div>
 	);
 }
