@@ -9,7 +9,7 @@ import cn from "@/utils/cn";
 import { DropdownContext } from "./Dropdown";
 
 type DropdownButtonProps = ButtonHTMLAttributes<HTMLButtonElement> &
-	VariantProps<typeof dropdownButtonVariants>;
+	VariantProps<typeof dropdownButtonVariants> & { placeholder?: string };
 
 const dropdownButtonVariants = cva(
 	"flex w-full items-center justify-between rounded-[0.8rem]",
@@ -26,9 +26,10 @@ const dropdownButtonVariants = cva(
 
 export default function DropdownToggleButton({
 	variant = "basic",
+	placeholder,
 	...props
 }: DropdownButtonProps) {
-	const { isOpen, setIsOpen, selectedItem, placeholder, setButtonVariant } =
+	const { isOpen, setIsOpen, selectedItem, setButtonVariant } =
 		useContext(DropdownContext);
 	const dropdownIcon = "/icons/drop_down.svg";
 

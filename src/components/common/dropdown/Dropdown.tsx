@@ -23,7 +23,6 @@ export type Item = {
 type DropdownContextType<T extends Item> = {
 	isOpen: boolean;
 	setIsOpen: Dispatch<SetStateAction<boolean>>;
-	placeholder: string | undefined;
 	selectedItem: T | null;
 	setSelectedItem: Dispatch<SetStateAction<T | null>>;
 	onSelect: (item: T) => void;
@@ -39,13 +38,11 @@ export const DropdownContext = createContext<DropdownContextType<any>>(null!);
 type Props<T extends Item> = {
 	items: T[];
 	defaultItem?: T;
-	placeholder?: string;
 	onSelect: (item: T) => void;
 	children: ReactNode;
 };
 
 export default function Dropdown<T extends Item>({
-	placeholder,
 	items,
 	defaultItem,
 	onSelect,
@@ -60,7 +57,6 @@ export default function Dropdown<T extends Item>({
 	const [inputRef, setInputRef] = useState<RefObject<HTMLInputElement> | null>(
 		null,
 	);
-	console.log("렌더링");
 
 	const dropdownRef = useOutsideClick<HTMLDivElement>(() => setIsOpen(false));
 
@@ -74,7 +70,6 @@ export default function Dropdown<T extends Item>({
 			value={{
 				isOpen,
 				setIsOpen,
-				placeholder,
 				selectedItem,
 				setSelectedItem,
 				onSelect,

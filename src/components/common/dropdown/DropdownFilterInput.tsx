@@ -30,7 +30,7 @@ export default function DropdownFilterInput({
 	variant,
 	...props
 }: DropdownFilterProps) {
-	const { setIsOpen, setFilterQuery, placeholder, setInputRef } =
+	const { setIsOpen, setFilterQuery, setInputRef } =
 		useContext(DropdownContext);
 	const inputRef = useRef<HTMLInputElement>(null);
 
@@ -50,7 +50,6 @@ export default function DropdownFilterInput({
 				aria-label="드롭다운 아이템 필터링"
 				ref={inputRef}
 				className={cn(dropdownFilterVariants({ variant }))}
-				placeholder={placeholder}
 				onChange={handleChange}
 				onFocus={() => setIsOpen(true)}
 				{...props}
