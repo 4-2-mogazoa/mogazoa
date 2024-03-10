@@ -91,23 +91,41 @@ const filterBy = [
 
 export const BasicDropdown: StoryObj<typeof Dropdown> = {
 	args: {
-		variant: "dropdown",
 		placeholder: "카테고리 선택",
 		items: categories,
+		onSelect: (item) => console.log(`선택된 항목: ${item.name}`),
+		children: (
+			<>
+				<Dropdown.Button variant={"basic"} />
+				<Dropdown.List />
+			</>
+		),
 	},
 };
 
 export const SmallDropdown: StoryObj<typeof Dropdown> = {
 	args: {
-		variant: "smallDropdown",
 		items: filterBy,
+		onSelect: (item) => console.log(`선택된 항목: ${item.name}`),
+		children: (
+			<>
+				<Dropdown.Button variant={"small"} />
+				<Dropdown.List />
+			</>
+		),
 	},
 };
 
 export const FilteredDropdown: StoryObj<typeof Dropdown> = {
 	args: {
-		variant: "filteredDropdown",
 		placeholder: "카테고리 선택",
 		items: categories,
+		onSelect: (item) => console.log(`선택된 항목: ${item.name}`),
+		children: (
+			<>
+				<Dropdown.Input />
+				<Dropdown.List />
+			</>
+		),
 	},
 };
