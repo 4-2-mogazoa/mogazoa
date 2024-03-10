@@ -5,6 +5,7 @@ import {
 	ReactNode,
 	RefObject,
 	SetStateAction,
+	useMemo,
 	useState,
 } from "react";
 
@@ -22,7 +23,7 @@ export type Item = {
 type DropdownContextType<T extends Item> = {
 	isOpen: boolean;
 	setIsOpen: Dispatch<SetStateAction<boolean>>;
-	placeholder: string;
+	placeholder: string | undefined;
 	selectedItem: T | null;
 	setSelectedItem: Dispatch<SetStateAction<T | null>>;
 	onSelect: (item: T) => void;
@@ -37,7 +38,8 @@ export const DropdownContext = createContext<DropdownContextType<any>>(null!);
 
 type Props<T extends Item> = {
 	items: T[];
-	placeholder: string;
+	defaultItem?: T;
+	placeholder?: string;
 	onSelect: (item: T) => void;
 	children: ReactNode;
 };
@@ -45,20 +47,27 @@ type Props<T extends Item> = {
 export default function Dropdown<T extends Item>({
 	placeholder,
 	items,
+	defaultItem,
 	onSelect,
 	children,
 }: Props<T>) {
 	const [isOpen, setIsOpen] = useState(false);
 	const [filterQuery, setFilterQuery] = useState("");
-	const [selectedItem, setSelectedItem] = useState<T | null>(null);
+	const [selectedItem, setSelectedItem] = useState<T | null | undefined>(
+		defaultItem,
+	);
 	const [buttonVariant, setButtonVariant] = useState("");
 	const [inputRef, setInputRef] = useState<RefObject<HTMLInputElement> | null>(
 		null,
 	);
+	console.log("렌더링");
 
 	const dropdownRef = useOutsideClick<HTMLDivElement>(() => setIsOpen(false));
 
-	const filteredItems = items.filter((item) => item.name.includes(filterQuery));
+	const filteredItems = useMemo(
+		() => items.filter((item) => item.name.includes(filterQuery)),
+		[filterQuery, items],
+	);
 
 	return (
 		<DropdownContext.Provider
