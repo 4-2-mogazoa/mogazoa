@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
 import AuthContainer from "@/components/common/auth/AuthContainer";
-import Input from "@/components/common/inputs/Input";
 
 const meta = {
 	title: "components/Auth/AuthContainer",
