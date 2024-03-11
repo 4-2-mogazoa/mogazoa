@@ -42,7 +42,7 @@ type Props<T extends Item> = {
 	children: ReactNode;
 };
 
-export default function Dropdown<T extends Item>({
+function Dropdown<T extends Item>({
 	items,
 	defaultItem,
 	onSelect,
@@ -97,3 +97,5 @@ export default function Dropdown<T extends Item>({
 Dropdown.Button = DropdownToggleButton;
 Dropdown.Input = DropdownFilterInput;
 Dropdown.List = DropdownList;
+
+export default Dropdown;

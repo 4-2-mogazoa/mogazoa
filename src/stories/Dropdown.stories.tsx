@@ -91,12 +91,11 @@ const filterBy = [
 
 export const BasicDropdown: StoryObj<typeof Dropdown> = {
 	args: {
-		placeholder: "카테고리 선택",
 		items: categories,
 		onSelect: (item) => console.log(`선택된 항목: ${item.name}`),
 		children: (
 			<>
-				<Dropdown.Button variant={"basic"} />
+				<Dropdown.Button variant={"basic"} placeholder="카테고리 선택" />
 				<Dropdown.List />
 			</>
 		),
@@ -106,6 +105,7 @@ export const BasicDropdown: StoryObj<typeof Dropdown> = {
 export const SmallDropdown: StoryObj<typeof Dropdown> = {
 	args: {
 		items: filterBy,
+		defaultItem: filterBy[0],
 		onSelect: (item) => console.log(`선택된 항목: ${item.name}`),
 		children: (
 			<>
@@ -118,12 +118,11 @@ export const SmallDropdown: StoryObj<typeof Dropdown> = {
 
 export const FilteredDropdown: StoryObj<typeof Dropdown> = {
 	args: {
-		placeholder: "카테고리 선택",
 		items: categories,
 		onSelect: (item) => console.log(`선택된 항목: ${item.name}`),
 		children: (
 			<>
-				<Dropdown.Input />
+				<Dropdown.Input placeholder="카테고리 선택" />
 				<Dropdown.List />
 			</>
 		),
