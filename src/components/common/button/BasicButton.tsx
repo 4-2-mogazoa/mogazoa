@@ -1,5 +1,4 @@
 import { cva, VariantProps } from "class-variance-authority";
-import clsx from "clsx";
 import { ButtonHTMLAttributes } from "react";
 
 import cn from "@/utils/cn";
@@ -42,7 +41,7 @@ export default function BasicButton({
 			{...props}
 		>
 			<span
-				className={clsx(
+				className={cn(
 					variant === "secondary" && !disabled && "text-main-gradient",
 				)}
 			>

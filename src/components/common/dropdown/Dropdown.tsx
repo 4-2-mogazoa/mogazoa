@@ -1,4 +1,3 @@
-import clsx from "clsx";
 import {
 	createContext,
 	Dispatch,
@@ -10,6 +9,7 @@ import {
 } from "react";
 
 import useOutsideClick from "@/hooks/common/useOutsideClick";
+import cn from "@/utils/cn";
 
 import DropdownFilterInput from "./DropdownFilterInput";
 import DropdownList from "./DropdownList";
@@ -50,9 +50,7 @@ function Dropdown<T extends Item>({
 }: Props<T>) {
 	const [isOpen, setIsOpen] = useState(false);
 	const [filterQuery, setFilterQuery] = useState("");
-	const [selectedItem, setSelectedItem] = useState<T | null | undefined>(
-		defaultItem,
-	);
+	const [selectedItem, setSelectedItem] = useState(defaultItem);
 	const [buttonVariant, setButtonVariant] = useState("");
 	const [inputRef, setInputRef] = useState<RefObject<HTMLInputElement> | null>(
 		null,
@@ -82,7 +80,7 @@ function Dropdown<T extends Item>({
 		>
 			<div
 				ref={dropdownRef}
-				className={clsx(
+				className={cn(
 					"relative flex flex-col gap-[0.5rem]",
 					buttonVariant === "small" &&
 						"w-[10.2rem] items-center md:w-[18rem] lg:w-[20rem]",

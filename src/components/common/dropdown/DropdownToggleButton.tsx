@@ -1,5 +1,4 @@
 import { cva, VariantProps } from "class-variance-authority";
-import clsx from "clsx";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { ButtonHTMLAttributes, useContext, useEffect } from "react";
@@ -31,7 +30,7 @@ export default function DropdownToggleButton({
 }: DropdownButtonProps) {
 	const { isOpen, setIsOpen, selectedItem, setButtonVariant } =
 		useContext(DropdownContext);
-	const dropdownIcon = "/icons/drop_down.svg";
+	const dropdownIconSrc = "/icons/drop_down.svg";
 
 	useEffect(() => {
 		setButtonVariant(variant as string);
@@ -49,7 +48,7 @@ export default function DropdownToggleButton({
 			{...props}
 		>
 			<span
-				className={clsx(
+				className={cn(
 					"text-[1.4rem] text-gray-200 lg:text-[1.6rem]",
 					variant === "small" && isOpen && "text-white",
 				)}
@@ -61,10 +60,10 @@ export default function DropdownToggleButton({
 				variants={{ open: { rotate: 180 }, close: { rotate: 0 } }}
 			>
 				<Image
-					src={dropdownIcon}
+					src={dropdownIconSrc}
 					alt="드랍다운 아이콘"
-					width={30}
-					height={30}
+					width={24}
+					height={24}
 				/>
 			</motion.div>
 		</button>
