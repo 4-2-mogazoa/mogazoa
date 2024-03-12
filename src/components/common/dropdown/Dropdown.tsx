@@ -83,7 +83,7 @@ function Dropdown<T extends Item>({
 				className={cn(
 					"relative flex flex-col gap-[0.5rem]",
 					buttonVariant === "small" &&
-						"w-[10.2rem] items-center md:w-[18rem] lg:w-[20rem]",
+						"w-[12rem] items-center md:w-[18rem] lg:w-[20rem]",
 				)}
 			>
 				{children}

@@ -17,7 +17,7 @@ const dropdownButtonVariants = cva(
 			variant: {
 				basic:
 					"bg-[#252530] px-[2rem] py-[1.25rem] outline outline-[#353542] md:py-[1.5rem] lg:py-[2rem]",
-				small: "w-[6.2rem] md:w-[14rem] lg:w-[16rem]",
+				small: "gap-[1rem]",
 			},
 		},
 	},

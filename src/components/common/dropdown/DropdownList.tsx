@@ -51,7 +51,7 @@ export default function DropdownList<T extends Item>() {
 				>
 					<button
 						onClick={() => handleSelectItem(item)}
-						className="w-full rounded-[0.6rem] px-[2rem] py-[0.6rem] text-left text-gray-200 hover:bg-[#353542] hover:text-white"
+						className="w-full rounded-[0.6rem] px-[0.5rem] py-[0.6rem] text-left text-gray-200 hover:bg-[#353542] hover:text-white md:px-[2rem]"
 					>
 						<span className="text-[1.4rem] lg:text-[1.6rem]">{item.name}</span>
 					</button>
