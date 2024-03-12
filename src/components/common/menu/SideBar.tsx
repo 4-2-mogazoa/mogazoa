@@ -7,6 +7,7 @@ import { Category } from '@/types/common';
 
 type SideBarProps = {
   user?: UserType;
+  className?: string;
 };
 
 type UserType = {
@@ -39,7 +40,7 @@ export const SideBar: React.FC<SideBarProps> = ({user}) => {
   return (
     <div className={'flex w-[18rem] flex-col gap-[2rem] bg-[#1c1c22] text-white lg:w-[22rem]'}>
       <h2 className={'ml-[3rem] mt-[4.5rem] text-[1.4rem] font-normal lg:text-[1.6rem]'}>카테고리</h2>
-      <div className={'mx-auto flex w-[16rem] flex-col gap-[0.4rem] lg:w-[20rem]'}>
+      <div className={'mx-[1rem] flex w-[16rem] flex-col gap-[0.4rem] lg:w-[20rem]'}>
         <ul className='flex flex-col'>
           {categories.map((category) => (
             <Link

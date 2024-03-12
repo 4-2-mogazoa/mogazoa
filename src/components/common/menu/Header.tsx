@@ -33,7 +33,7 @@ export default function Header({ user, ...props }: HeaderProps) {
   }, []);
 
   return (
-    <div className='flex h-[7rem] w-[100%] min-w-[37.5rem] flex-row justify-between bg-[#1c1c22] align-middle md:h-[8rem] lg:h-[10rem]'>
+    <div className='flex h-[7rem] w-[100%] min-w-[37.5rem] flex-row justify-between border-b border-black-bg bg-[#1c1c22] align-middle md:h-[8rem] lg:h-[10rem]'>
       <Image src={hamburgerSrc} alt='side menu' width={24} height={24} className='ml-[2rem] block md:hidden' />
       {!(windowWidth < 430 && isSearchVisible) && (
         <Link href='/' className='relative my-auto h-[1.8rem] w-[11.2rem] md:ml-[3rem] md:h-[2.4rem] md:w-[13.8rem] lg:ml-[12rem] lg:h-[2.8rem] lg:w-[16.6rem]'>
