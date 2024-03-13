@@ -5,3 +5,4 @@ const emailPattern: RegExp = /^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
 const passwordPattern = /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])/;
 
 export { emailPattern, passwordPattern };
+

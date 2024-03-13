@@ -24,12 +24,12 @@ export default function ProductCard({
 				<Image
 					src={imageData}
 					alt={productName}
-					className="object-cover"
+					className="object-contain"
 					fill
 				/>
 			</div>
 			<div className=" p-[1rem] md:px-[1.647rem] md:py-[2rem] lg:px-[2rem] lg:py-[2.5rem]">
-				<div className="text-[1.4rem] text-white md:text-[1.6rem] lg:text-[1.8rem]">
+				<div className="truncate text-[1.4rem] text-white md:text-[1.6rem] lg:text-[1.8rem]">
 					{productName}
 				</div>
 				<div className="flex flex-col justify-between md:flex-row lg:flex-row">
