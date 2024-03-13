@@ -1,6 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 
+import { postSignup } from "@/apis/postSignup";
 import BasicButton from "@/components/common/button/BasicButton";
 import Input from "@/components/common/inputs/Input";
 import { emailPattern, passwordPattern } from "@/constants/regExp";
@@ -61,7 +62,7 @@ export default function SignupForm() {
 	};
 
 	return (
-		<AuthFormContainer handleSubmit={handleSubmit}>
+		<AuthFormContainer handleSubmit={handleSubmit} api={postSignup}>
 			<div className="mb-[6rem] flex flex-col gap-[3rem] md:gap-[4rem]">
 				<Input
 					inputType="email"
