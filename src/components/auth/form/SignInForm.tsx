@@ -5,9 +5,10 @@ import BasicButton from "@/components/common/button/BasicButton";
 import Input from "@/components/common/inputs/Input";
 import { emailPattern } from "@/constants/regExp";
 
+import OAuthLayout from "../OAuthLayout";
 import AuthFormContainer from "./AuthFormContainer";
 
-export interface ISignInForm {
+interface ISignInForm {
 	email: string;
 	password: string;
 }
@@ -33,7 +34,7 @@ export default function SignInForm() {
 
 	return (
 		<AuthFormContainer handleSubmit={handleSubmit}>
-			<div className="mb-[6rem] flex flex-col gap-[4rem]">
+			<div className="mb-[6rem] flex flex-col gap-[3rem] md:gap-[4rem]">
 				<Input
 					inputType="email"
 					register={register}
@@ -47,7 +48,10 @@ export default function SignInForm() {
 					errors={errors}
 				/>
 			</div>
-			<BasicButton label="로그인" />
+			<div className="mb-[6rem]">
+				<BasicButton label="로그인" />
+			</div>
+			<OAuthLayout />
 		</AuthFormContainer>
 	);
 }
