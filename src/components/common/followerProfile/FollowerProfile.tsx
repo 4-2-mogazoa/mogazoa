@@ -2,7 +2,7 @@ import Nickname from "../nickname/Nickname";
 import ProfileImage from "../profileImage/ProfileImage";
 
 type Props = {
-	image: string;
+	image: null | string;
 	nickname: string;
 };
 

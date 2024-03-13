@@ -4,7 +4,7 @@ import ProfileImage from "../profileImage/ProfileImage";
 import Ranking from "../ranking/Ranking";
 
 type ReviewerData = {
-	image: string;
+	image: null | string;
 	rank: number;
 	nickname: string;
 	followersCount: number;
