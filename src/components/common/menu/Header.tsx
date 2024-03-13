@@ -81,12 +81,12 @@ export default function Header({ user, ...props }: HeaderProps) {
 				</div>
 				<div className="my-auto ml-[6rem] hidden font-normal text-white md:mr-[3rem] md:block md:text-[1.4rem] lg:mr-[12rem] lg:block lg:text-[1.6rem]">
 					<Link
-						href={user ? "#" : "signin"}
+						href={user ? "#" : "/signin"}
 						className="min-w-[3.7rem] md:mr-[3rem] lg:mr-[6rem]"
 					>
 						{user ? "비교하기" : "로그인"}
 					</Link>
-					<Link href={user ? "#" : "signup"} className="min-w-[4.9rem]">
+					<Link href={user ? "#" : "/signup"} className="min-w-[4.9rem]">
 						{user ? "내 프로필" : "회원가입"}
 					</Link>
 				</div>
