@@ -40,6 +40,7 @@ type Props<T extends Item> = {
 	defaultItem?: T;
 	onSelect: (item: T) => void;
 	children: ReactNode;
+	className?: string;
 };
 
 function Dropdown<T extends Item>({
@@ -47,6 +48,7 @@ function Dropdown<T extends Item>({
 	defaultItem,
 	onSelect,
 	children,
+	className,
 }: Props<T>) {
 	const [isOpen, setIsOpen] = useState(false);
 	const [filterQuery, setFilterQuery] = useState("");
@@ -84,6 +86,7 @@ function Dropdown<T extends Item>({
 					"relative flex flex-col gap-[0.5rem]",
 					buttonVariant === "small" &&
 						"w-[12rem] items-center md:w-[18rem] lg:w-[20rem]",
+					className,
 				)}
 			>
 				{children}
