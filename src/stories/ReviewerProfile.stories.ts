@@ -25,3 +25,15 @@ export const Default: Story = {
 		},
 	},
 };
+
+export const NoImage: Story = {
+	args: {
+		reviewerData: {
+			image: null,
+			rank: 1,
+			nickname: "리뷰왕",
+			followersCount: 123,
+			reviewCount: 456,
+		},
+	},
+};
