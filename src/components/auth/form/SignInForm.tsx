@@ -18,7 +18,7 @@ export default function SignInForm() {
 		register,
 		handleSubmit,
 		formState: { errors },
-	} = useForm<ISignInForm>();
+	} = useForm<ISignInForm>({ mode: "onBlur" });
 
 	const emailValidationSchema = {
 		required: "이메일은 필수 입력입니다.",
