@@ -14,17 +14,18 @@ const profileImageVariants = cva("relative overflow-hidden rounded-full", {
 	},
 });
 
-// todo: StaticImageData 타입은 추후 기능 구현 테스트 이후에 삭제 예정
 type Props = React.HTMLAttributes<HTMLDivElement> &
 	VariantProps<typeof profileImageVariants> & {
 		size: "small" | "medium" | "large";
-		src: string | StaticImageData;
+		src: null | string;
 	};
 
 export default function ProfileImage({ src, size }: Props) {
+	const iconSrc = src ? src : "/icons/profile.svg";
+
 	return (
 		<div className={cn(profileImageVariants({ size }))}>
-			<Image src={src} alt="사용자 프로필 이미지" fill />
+			<Image src={iconSrc} alt="사용자 프로필 이미지" fill />
 		</div>
 	);
 }

@@ -1,7 +1,7 @@
 import { cva, VariantProps } from "class-variance-authority";
-import clsx from "clsx";
 import { ButtonHTMLAttributes } from "react";
-import { twMerge } from "tailwind-merge";
+
+import cn from "@/utils/cn";
 
 type Props = ButtonHTMLAttributes<HTMLButtonElement> &
 	VariantProps<typeof buttonVariants> & {
@@ -36,12 +36,12 @@ export default function BasicButton({
 }: Props) {
 	return (
 		<button
-			className={twMerge(buttonVariants({ variant }), className)}
+			className={cn(buttonVariants({ variant }), className)}
 			disabled={disabled}
 			{...props}
 		>
 			<span
-				className={clsx(
+				className={cn(
 					variant === "secondary" && !disabled && "text-main-gradient",
 				)}
 			>
