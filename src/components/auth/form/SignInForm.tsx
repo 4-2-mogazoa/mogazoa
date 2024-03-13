@@ -1,10 +1,10 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 
+import BasicButton from "@/components/common/button/BasicButton";
+import Input from "@/components/common/inputs/Input";
 import { emailPattern } from "@/constants/regExp";
 
-import BasicButton from "../../button/BasicButton";
-import Input from "../../inputs/Input";
 import AuthFormContainer from "./AuthFormContainer";
 
 export interface ISignInForm {

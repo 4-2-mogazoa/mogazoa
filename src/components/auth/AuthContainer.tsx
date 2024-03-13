@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 
-import Header from "../menu/Header";
+import Header from "../common/menu/Header";
 
 export default function AuthContainer({ children }: { children: ReactNode }) {
 	return (
