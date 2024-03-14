@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import Image from "next/image";
 
 import { ProductDetail } from "@/types/common";
@@ -10,109 +11,107 @@ type Props = {
 	productData: ProductDetail;
 	isMyProduct: boolean;
 };
+
+type ShareProps = {
+	className: string;
+};
+
+type FavoriteProps = {
+	isFavorite: boolean;
+	className: string;
+};
+
 const kakaoShareIconSrc = "/icons/kakaotalk.svg";
 const shareIconSrc = "/icons/share.svg";
 const heartOnIconSrc = "/icons/heart_on.svg";
 const heartOffIconSrc = "/icons/heart_off.svg";
+const imageCn = "object-contain";
+const mobileHiddenCn = "hidden md:flex";
+const onlyMobileCn = "flex md:hidden";
 
-export default function DetailCard({
-	productData,
-	isMyProduct = false,
-}: Props) {
+export default function DetailCard({ productData, isMyProduct }: Props) {
 	const { name, description, image, isFavorite, category } = productData;
 
 	return (
-		<div className="flex flex-col items-center  gap-[4rem] md:flex-row md:gap-[2rem]">
+		<div className="flex flex-col items-center gap-[4rem] md:flex-row md:gap-[2rem]">
 			<div className="relative h-[23.6rem] w-[33.5rem] md:h-[19.7rem] md:w-[28rem] lg:h-[25rem] lg:w-[35.5rem] ">
-				<Image src={image} fill alt={name} className="object-cover" />
+				<Image src={image} fill alt={name} className={imageCn} />
 			</div>
 			<div className="flex w-[33.5rem] flex-col md:w-[38.4rem] lg:w-[54.5rem]">
 				<div className="flex justify-between">
 					<CategoryBadge size="small" category={category.name} />
-					<Share className="flex md:hidden" />
+					<Share className={onlyMobileCn} />
 				</div>
 				<div className="flex flex-row justify-between pb-[2rem] pt-[1.1rem] md:pb-[5.15rem] md:pt-[1.25rem] lg:pb-[4.9rem] lg:pt-[1rem]">
 					<div className="flex items-center md:gap-[1.5rem]">
 						<span className="text-[2rem] font-semibold text-white lg:text-[2.4rem]">
 							{name}
 						</span>
-						<Favorite isFavorite={isFavorite} className="hidden md:flex" />
+						<Favorite isFavorite={isFavorite} className={mobileHiddenCn} />
 					</div>
-					<Share className="hidden md:flex" />
-					<Favorite isFavorite={isFavorite} className="flex md:hidden" />
+					<Share className={mobileHiddenCn} />
+					<Favorite isFavorite={isFavorite} className={onlyMobileCn} />
 				</div>
 				<div className="text-[1.4rem] text-white lg:text-[1.6rem]">
 					{description}
 				</div>
-				{isMyProduct && (
-					<div className="flex  flex-col  gap-[1.5rem] pt-[2rem] md:flex-row  md:gap-[2rem] md:pt-[6rem] ">
-						<BasicButton
-							label="리뷰 작성하기"
-							variant="primary"
-							className="md:w-[14rem] lg:w-[18.5rem]"
-						/>
-						<BasicButton
-							label="비교하기"
-							variant="secondary"
-							className="md:w-[10.7rem] lg:w-[16rem]"
-						/>
+				<div className="flex flex-col gap-[1.5rem] pt-[2rem] md:flex-row md:gap-[2rem] md:pt-[6rem]">
+					<BasicButton
+						label="리뷰 작성하기"
+						variant="primary"
+						className={clsx("md:w-[24.6rem] lg:w-[34.5rem]", {
+							"md:w-[14rem] lg:w-[18.5rem]": isMyProduct,
+						})}
+					/>
+					<BasicButton
+						label="비교하기"
+						variant="secondary"
+						className={clsx("md:w-[12.3rem] lg:w-[18rem]", {
+							"md:w-[10.7rem] lg:w-[16rem]": isMyProduct,
+						})}
+					/>
+					{isMyProduct && (
 						<BasicButton
 							label="편집하기"
 							variant="tertiary"
 							className="md:w-[10.7rem] lg:w-[16rem]"
 						/>
-					</div>
-				)}
-				{!isMyProduct && (
-					<div className="flex  flex-col gap-[1.5rem] pt-[2rem] md:flex-row  md:gap-[2rem] md:pt-[6rem] ">
-						<BasicButton label="리뷰 작성하기" variant="primary" />
-						<BasicButton
-							label="비교하기"
-							variant="secondary"
-							className="md:w-[20.7rem] lg:w-[24rem]"
-						/>
-					</div>
-				)}
+					)}
+				</div>
 			</div>
 		</div>
 	);
 }
 
-type ShareProps = {
-	className: string;
-};
-
 export function Share({ className }: ShareProps) {
+	const buttonCn =
+		"flex size-[2.4rem] items-center justify-center rounded-[0.6rem] bg-black-bg lg:size-[2.8rem]";
+	const imageDivCn = "relative size-[1.4rem] lg:size-[1.8rem]";
 	return (
 		<div className={cn("flex gap-[1rem]", className)}>
-			<button className="flex size-[2.4rem] items-center justify-center rounded-[0.6rem] bg-black-bg lg:size-[2.8rem]">
-				<div className="relative size-[1.4rem] lg:size-[1.8rem]">
+			<button className={buttonCn}>
+				<div className={imageDivCn}>
 					<Image
 						src={kakaoShareIconSrc}
 						alt="카카오_공유"
 						fill
-						className="object-contain"
+						className={imageCn}
 					/>
 				</div>
 			</button>
-			<button className="flex size-[2.4rem] items-center justify-center rounded-[0.6rem] bg-black-bg lg:size-[2.8rem]">
-				<div className="relative size-[1.4rem] lg:size-[1.8rem]">
+			<button className={buttonCn}>
+				<div className={imageDivCn}>
 					<Image
 						src={shareIconSrc}
 						alt="클립보드_공유"
 						fill
-						className="object-contain"
+						className={imageCn}
 					/>
 				</div>
 			</button>
 		</div>
 	);
 }
-
-type FavoriteProps = {
-	isFavorite: boolean;
-	className: string;
-};
 
 export function Favorite({ isFavorite, className }: FavoriteProps) {
 	return (
@@ -122,7 +121,7 @@ export function Favorite({ isFavorite, className }: FavoriteProps) {
 					src={isFavorite ? heartOnIconSrc : heartOffIconSrc}
 					alt="찜"
 					fill
-					className="object-contain"
+					className={imageCn}
 				/>
 			</div>
 		</button>
