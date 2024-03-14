@@ -1,5 +1,9 @@
+import { useRouter } from "next/router";
+
 import { UserDetail } from "@/types/user";
 
+import ActivityDetails from "./ActivityDetails";
+import FilteredProductList from "./FilteredProductList";
 import ProfileCard from "./ProfileCard";
 
 const dummyUser: UserDetail = {
@@ -14,10 +18,18 @@ const dummyUser: UserDetail = {
 	isFollowing: false,
 };
 
-export default function ProfilePageLayout({}) {
+export default function ProfilePageLayout() {
+	const router = useRouter();
+	const isMine = router.asPath.includes("my");
+
 	return (
-		<div className="_flex-col-center gap-[6rem] bg-[#1C1C22] px-[2rem] py-[3rem] lg:p-[6rem]">
-			<ProfileCard user={dummyUser} isMine={true} />
-		</div>
+		<main className="_flex-col-center gap-[6rem] bg-[#1C1C22] px-[2rem] py-[3rem] lg:flex-row lg:items-start lg:p-[6rem]">
+			<h1 className="sr-only">프로필 페이지</h1>
+			<ProfileCard user={dummyUser} isMine={isMine} />
+			<div className="flex flex-col gap-[6rem]">
+				<ActivityDetails />
+				<FilteredProductList />
+			</div>
+		</main>
 	);
 }

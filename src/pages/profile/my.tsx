@@ -1,5 +1,5 @@
 import ProfilePageLayout from "@/components/profile/ProfilePageLayout";
 
-export default function ProfilePage() {
+export default function MyProfilePage() {
 	return <ProfilePageLayout />;
 }
