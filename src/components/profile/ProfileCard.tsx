@@ -19,10 +19,7 @@ export default function ProfileCard({ user, isMine = true }: Props) {
 				<strong className="self-center text-[2rem] font-semibold text-white">
 					{user.nickname}
 				</strong>
-				<p className="text-[1.4rem] text-gray-200">
-					세상에 리뷰 못할 제품은 없다. surisuri마수리와 함께라면 당신도
-					프로쇼핑러! 안녕하세요, 별점의 화신 surisuri마수리입니다!
-				</p>
+				<p className="text-[1.4rem] text-gray-200">{user.description}</p>
 			</div>
 			<div className="flex w-full justify-evenly">
 				<div className="_flex-col-center">
