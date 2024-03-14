@@ -55,7 +55,7 @@ export default function DropdownToggleButton({
 			<span className={cn(variant === "small" && isOpen && "text-white")}>
 				{selectedItem ? selectedItem.name : placeholder}
 			</span>
-			<motion.div
+			<motion.span
 				animate={isOpen ? "open" : "close"}
 				variants={{ open: { rotate: 180 }, close: { rotate: 0 } }}
 			>
@@ -65,7 +65,7 @@ export default function DropdownToggleButton({
 					width={24}
 					height={24}
 				/>
-			</motion.div>
+			</motion.span>
 		</button>
 	);
 }
