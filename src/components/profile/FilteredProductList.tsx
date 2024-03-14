@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import Dropdown from "@/components/common/dropdown/Dropdown";
 import ProductCard from "@/components/common/productcard/ProductCard";
-import { breakPoint } from "@/constants/breakPoint";
+import { BREAK_POINT } from "@/constants/breakPoint";
 import useWindowWidth from "@/hooks/common/useWindowWidth";
 import cn from "@/utils/cn";
 
@@ -163,7 +163,7 @@ export default function FilteredProductList() {
 	};
 
 	useEffect(() => {
-		setIsLarge(currentWidth >= breakPoint.lg);
+		setIsLarge(currentWidth >= BREAK_POINT.lg);
 	}, [currentWidth]);
 
 	return (
