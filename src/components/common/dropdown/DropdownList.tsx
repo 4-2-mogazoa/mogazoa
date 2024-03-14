@@ -51,7 +51,7 @@ export default function DropdownList<T extends Item>({
 			transition={{ duration: 0.1 }}
 			style={{ pointerEvents: isOpen ? "auto" : "none" }}
 			className={cn(
-				"absolute top-[100%] mt-[0.6rem] flex w-full flex-col gap-[0.5rem] rounded-[0.8rem] bg-[#252530] p-[1rem] outline outline-[#353542]",
+				"z-10 absolute top-[100%] mt-[0.6rem] flex w-full flex-col gap-[0.5rem] rounded-[0.8rem] bg-[#252530] p-[1rem] outline outline-[#353542]",
 				className,
 			)}
 			{...props}
