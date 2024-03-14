@@ -57,7 +57,7 @@ export default function ActivityCard({
 	const { label, img, data } = DataList[type];
 
 	return (
-		<div className="flex h-[11.9rem] w-[10.5rem] flex-col items-center justify-center gap-[1.5rem] rounded-[1.2rem] border border-[#353542] bg-[#252530] md:w-[16.3rem] lg:h-[12.8rem] lg:w-[30rem] lg:gap-[2rem]">
+		<div className="flex h-[11.9rem] max-w-[10.5rem] grow flex-col items-center justify-center gap-[1.5rem] rounded-[1.2rem] border border-[#353542] bg-[#252530] md:max-w-[16.3rem] lg:h-[12.8rem] lg:max-w-[30rem] lg:gap-[2rem]">
 			<div className="hidden text-[1.4rem] text-gray-100 md:flex lg:text-[1.6rem]">
 				{label.join(" ")}
 			</div>
