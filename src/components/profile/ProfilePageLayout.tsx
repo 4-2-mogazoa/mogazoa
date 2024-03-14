@@ -12,6 +12,8 @@ const dummyUser: UserDetail = {
 	updatedAt: "2024-03-12T12:00:00.000Z",
 	teamId: "team123",
 	nickname: "Froggy",
+	description:
+		"세상에 리뷰 못할 제품은 없다. surisuri마수리와 함께라면 당신도 프로쇼핑러! 안녕하세요, 별점의 화신 surisuri마수리입니다!",
 	image: "https://example.com/path/to/image.jpg",
 	followeesCount: 5,
 	followersCount: 8,

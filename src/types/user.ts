@@ -10,4 +10,5 @@ export type UserDetail = User & {
 	followeesCount: number;
 	followersCount: number;
 	isFollowing: boolean;
+	description: string;
 };
