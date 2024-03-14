@@ -10,10 +10,10 @@ type Props = {
 	productData: ProductDetail;
 	isMyProduct: boolean;
 };
-const kakaoShare = "/icons/kakaotalk.svg";
-const share = "/icons/share.svg";
-const heartOn = "/icons/heart_on.svg";
-const heartOff = "/icons/heart_off.svg";
+const kakaoShareIconSrc = "/icons/kakaotalk.svg";
+const shareIconSrc = "/icons/share.svg";
+const heartOnIconSrc = "/icons/heart_on.svg";
+const heartOffIconSrc = "/icons/heart_off.svg";
 
 export default function DetailCard({
 	productData,
@@ -88,7 +88,7 @@ export function Share({ className }: ShareProps) {
 			<button className="flex size-[2.4rem] items-center justify-center rounded-[0.6rem] bg-black-bg lg:size-[2.8rem]">
 				<div className="relative size-[1.4rem] lg:size-[1.8rem]">
 					<Image
-						src={kakaoShare}
+						src={kakaoShareIconSrc}
 						alt="카카오_공유"
 						fill
 						className="object-contain"
@@ -98,7 +98,7 @@ export function Share({ className }: ShareProps) {
 			<button className="flex size-[2.4rem] items-center justify-center rounded-[0.6rem] bg-black-bg lg:size-[2.8rem]">
 				<div className="relative size-[1.4rem] lg:size-[1.8rem]">
 					<Image
-						src={share}
+						src={shareIconSrc}
 						alt="클립보드_공유"
 						fill
 						className="object-contain"
@@ -119,7 +119,7 @@ export function Favorite({ isFavorite, className }: FavoriteProps) {
 		<button className={className}>
 			<div className="relative size-[2.4rem] lg:size-[2.8rem]">
 				<Image
-					src={isFavorite ? heartOn : heartOff}
+					src={isFavorite ? heartOnIconSrc : heartOffIconSrc}
 					alt="찜"
 					fill
 					className="object-contain"
