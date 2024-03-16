@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import Image from "next/image";
 
-import { ProductDetail } from "@/types/common";
+import { ProductDetail } from "@/types/products";
 import cn from "@/utils/cn";
 
 import BasicButton from "../common/button/BasicButton";
@@ -21,16 +21,12 @@ type FavoriteProps = {
 	className: string;
 };
 
-const kakaoShareIconSrc = "/icons/kakaotalk.svg";
-const shareIconSrc = "/icons/share.svg";
-const heartOnIconSrc = "/icons/heart_on.svg";
-const heartOffIconSrc = "/icons/heart_off.svg";
 const imageCn = "object-contain";
-const mobileHiddenCn = "hidden md:flex";
-const onlyMobileCn = "flex md:hidden";
 
 export default function DetailCard({ productData, isMyProduct }: Props) {
 	const { name, description, image, isFavorite, category } = productData;
+	const mobileHiddenCn = "hidden md:flex";
+	const onlyMobileCn = "flex md:hidden";
 
 	return (
 		<div className="flex flex-col items-center gap-[4rem] md:flex-row md:gap-[2rem]">
@@ -87,6 +83,8 @@ export function Share({ className }: ShareProps) {
 	const buttonCn =
 		"flex size-[2.4rem] items-center justify-center rounded-[0.6rem] bg-black-bg lg:size-[2.8rem]";
 	const imageDivCn = "relative size-[1.4rem] lg:size-[1.8rem]";
+	const kakaoShareIconSrc = "/icons/kakaotalk.svg";
+	const shareIconSrc = "/icons/share.svg";
 	return (
 		<div className={cn("flex gap-[1rem]", className)}>
 			<button className={buttonCn}>
@@ -114,6 +112,8 @@ export function Share({ className }: ShareProps) {
 }
 
 export function Favorite({ isFavorite, className }: FavoriteProps) {
+	const heartOnIconSrc = "/icons/heart_on.svg";
+	const heartOffIconSrc = "/icons/heart_off.svg";
 	return (
 		<button className={className}>
 			<div className="relative size-[2.4rem] lg:size-[2.8rem]">
