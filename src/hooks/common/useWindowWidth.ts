@@ -13,7 +13,7 @@ function useWindowWidth() {
 		}
 	};
 
-	const throttledHandleResize = useThrottle(handleResize, 100);
+	const throttledHandleResize = useThrottle(handleResize, 200);
 
 	useEffect(() => {
 		if (isClientSide) {
