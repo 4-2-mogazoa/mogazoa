@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import DetailCard from "@/components/productdetail/DetailCard";
 
 const meta = {
-	title: "Components/Common/DetailCard",
+	title: "Components/ProductDetail/DetailCard",
 	component: DetailCard,
 	tags: ["autodocs"],
 	parameters: {
