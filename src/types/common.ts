@@ -4,3 +4,8 @@ export type Category = {
 	name: string;
 	id: number;
 };
+
+export type Response<T> = {
+	nextCursor: number;
+	list: T[];
+};
