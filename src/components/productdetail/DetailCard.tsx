@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import Image from "next/image";
 
-import { ProductDetail } from "@/types/products";
+import { ProductDetail } from "@/types/product";
 import cn from "@/utils/cn";
 
 import BasicButton from "../common/button/BasicButton";
