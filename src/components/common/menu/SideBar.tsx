@@ -8,13 +8,14 @@ import { Category } from '@/types/common';
 type SideBarProps = {
   user?: UserType;
   className?: string;
+  isOpen?: boolean;
 };
 
 type UserType = {
   id: number;
 };
 
-export const SideBar: React.FC<SideBarProps> = ({user}) => {
+export const SideBar: React.FC<SideBarProps> = ({ user, isOpen }) => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
 
@@ -38,8 +39,8 @@ export const SideBar: React.FC<SideBarProps> = ({user}) => {
   };
 
   return (
-    <div className={'flex w-[18rem] flex-col gap-[2rem] bg-[#1c1c22] text-white lg:w-[22rem]'}>
-      <h2 className={'ml-[3rem] mt-[4.5rem] text-[1.4rem] font-normal lg:text-[1.6rem]'}>카테고리</h2>
+    <div className={clsx('flex flex-col gap-[2rem] bg-[#1c1c22] text-white', !isOpen ? 'hidden md:block' : 'block')}>
+      <h2 className={'ml-[3rem] text-[1.4rem] font-normal lg:text-[1.6rem]'}>카테고리</h2>
       <div className={'mx-[1rem] flex w-[16rem] flex-col gap-[0.4rem] lg:w-[20rem]'}>
         <ul className='flex flex-col'>
           {categories.map((category) => (
@@ -54,7 +55,7 @@ export const SideBar: React.FC<SideBarProps> = ({user}) => {
           ))}
         </ul>
       </div>
-      <div className={'mx-auto flex w-[16rem] flex-col gap-[0.4rem] lg:w-[20rem]'}>
+      <div className={'ml-[1rem] flex w-[16rem] flex-col gap-[0.4rem] lg:w-[20rem]'}>
         <Link href='#' className={'h-[4.5rem] w-[100%] px-[2rem] py-[1.5rem] text-[1.4rem] font-medium lg:h-[5rem] lg:text-[1.6rem]'}>
           {user ? '비교하기' : '로그인'}
         </Link>

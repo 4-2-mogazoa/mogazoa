@@ -1,6 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect,useState } from 'react';
+import { useEffect, useState } from 'react';
+
+import { SideBar } from '@/components/common/menu/SideBar';
 
 type UserType = {
   id: number;
@@ -8,17 +10,23 @@ type UserType = {
 
 type HeaderProps = {
   user?: UserType;
-}
+};
 
-export default function Header({ user, ...props }: HeaderProps) {
+export default function Header({ user }: HeaderProps) {
   const [isSearchVisible, setSearchVisible] = useState(false);
+  const [isSideBarOpen, setSideBarOpen] = useState(false);
   const [windowWidth, setWindowWidth] = useState(0);
   const hamburgerSrc = '/icons/hamburger.svg';
   const logoSrc = '/icons/logo.svg';
   const searchSrc = '/icons/search.svg';
+  const closeSrc = '/icons/close.svg';
 
   const toggleSearch = () => {
     setSearchVisible(!isSearchVisible);
+  };
+
+  const toggleSideBar = () => {
+    setSideBarOpen(!isSideBarOpen);
   };
 
   useEffect(() => {
@@ -33,10 +41,20 @@ export default function Header({ user, ...props }: HeaderProps) {
   }, []);
 
   return (
+    <>
     <div className='flex h-[7rem] w-[100%] min-w-[37.5rem] flex-row justify-between border-b border-black-bg bg-[#1c1c22] align-middle md:h-[8rem] lg:h-[10rem]'>
-      <Image src={hamburgerSrc} alt='side menu' width={24} height={24} className='ml-[2rem] block md:hidden' />
+      <Image
+        src={isSideBarOpen ? closeSrc : hamburgerSrc}
+        alt='side menu'
+        width={24}
+        height={24}
+        onClick={toggleSideBar}
+        className='ml-[2rem] block md:hidden'
+      />
       {!(windowWidth < 430 && isSearchVisible) && (
-        <Link href='/' className='relative my-auto h-[1.8rem] w-[11.2rem] md:ml-[3rem] md:h-[2.4rem] md:w-[13.8rem] lg:ml-[12rem] lg:h-[2.8rem] lg:w-[16.6rem]'>
+        <Link
+          href='/'
+          className='relative my-auto h-[1.8rem] w-[11.2rem] md:ml-[3rem] md:h-[2.4rem] md:w-[13.8rem] lg:ml-[12rem] lg:h-[2.8rem] lg:w-[16.6rem]'>
           <Image src={logoSrc} alt='Logo' className='absolute inset-0 object-cover' width={500} height={500} />
         </Link>
       )}
@@ -61,5 +79,7 @@ export default function Header({ user, ...props }: HeaderProps) {
         </div>
       </div>
     </div>
+    <SideBar isOpen={isSideBarOpen} />
+    </>
   );
 }
