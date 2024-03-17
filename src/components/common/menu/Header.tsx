@@ -2,7 +2,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
-import { SideBar } from '@/components/common/menu/SideBar';
 
 type UserType = {
   id: number;
@@ -10,11 +9,12 @@ type UserType = {
 
 type HeaderProps = {
   user?: UserType;
+  isSidebarOpen?: boolean;
+  toggleSidebar?: () => void;
 };
 
-export default function Header({ user }: HeaderProps) {
+export default function Header({ user, isSidebarOpen, toggleSidebar }: HeaderProps) {
   const [isSearchVisible, setSearchVisible] = useState(false);
-  const [isSideBarOpen, setSideBarOpen] = useState(false);
   const [windowWidth, setWindowWidth] = useState(0);
   const hamburgerSrc = '/icons/hamburger.svg';
   const logoSrc = '/icons/logo.svg';
@@ -23,10 +23,6 @@ export default function Header({ user }: HeaderProps) {
 
   const toggleSearch = () => {
     setSearchVisible(!isSearchVisible);
-  };
-
-  const toggleSideBar = () => {
-    setSideBarOpen(!isSideBarOpen);
   };
 
   useEffect(() => {
@@ -41,14 +37,13 @@ export default function Header({ user }: HeaderProps) {
   }, []);
 
   return (
-    <>
     <div className='flex h-[7rem] w-[100%] min-w-[37.5rem] flex-row justify-between border-b border-black-bg bg-[#1c1c22] align-middle md:h-[8rem] lg:h-[10rem]'>
       <Image
-        src={isSideBarOpen ? closeSrc : hamburgerSrc}
+        src={isSidebarOpen ? closeSrc : hamburgerSrc}
         alt='side menu'
         width={24}
         height={24}
-        onClick={toggleSideBar}
+        onClick={toggleSidebar}
         className='ml-[2rem] block md:hidden'
       />
       {!(windowWidth < 430 && isSearchVisible) && (
@@ -59,27 +54,25 @@ export default function Header({ user }: HeaderProps) {
         </Link>
       )}
       <div className='flex flex-row align-middle'>
-          <div className='my-auto mr-[2rem] flex h-[4.8rem] w-fit max-w-[30rem] flex-row rounded-[2.8rem] bg-black-bg px-[1.5rem] py-[1.6rem] align-middle text-[1.4rem] text-gray-300 md:hidden'>
-            <Image src={searchSrc} alt='Search' width={24} height={24} className='cursor-pointer' onClick={toggleSearch} />
-            {isSearchVisible && (
-              <input placeholder='상품 이름을 검색해 보세요' className='ml-[1.5rem] w-[80%] bg-black-bg outline-none'/>
-            )}
-          </div>
-          <div className='my-auto hidden w-[30rem] flex-row rounded-[2.8rem] bg-black-bg px-[2rem] py-[1.6rem] align-middle text-[1.4rem] text-gray-300 md:flex md:h-[5rem] lg:flex lg:h-[5.6rem]'>
-            <Image src={searchSrc} alt='Search' width={24} height={24} />
-            <input placeholder='상품 이름을 검색해 보세요' className='w-[80%] bg-black-bg outline-none md:ml-[1rem] lg:ml-[2rem]'/>
-          </div>
+        <div className='my-auto mr-[2rem] flex h-[4.8rem] w-fit max-w-[30rem] flex-row rounded-[2.8rem] bg-black-bg px-[1.5rem] py-[1.6rem] align-middle text-[1.4rem] text-gray-300 md:hidden'>
+          <Image src={searchSrc} alt='Search' width={24} height={24} className='cursor-pointer' onClick={toggleSearch} />
+          {isSearchVisible && (
+            <input placeholder='상품 이름을 검색해 보세요' className='ml-[1.5rem] w-[80%] bg-black-bg outline-none'/>
+          )}
+        </div>
+        <div className='my-auto hidden w-[30rem] flex-row rounded-[2.8rem] bg-black-bg px-[2rem] py-[1.6rem] align-middle text-[1.4rem] text-gray-300 md:flex md:h-[5rem] lg:flex lg:h-[5.6rem]'>
+          <Image src={searchSrc} alt='Search' width={24} height={24} />
+          <input placeholder='상품 이름을 검색해 보세요' className='w-[80%] bg-black-bg outline-none md:ml-[1rem] lg:ml-[2rem]'/>
+        </div>
         <div className='my-auto ml-[6rem] hidden font-normal text-white md:mr-[3rem] md:block md:text-[1.4rem] lg:mr-[12rem] lg:block lg:text-[1.6rem]'>
-              <Link href='#' className='min-w-[3.7rem] md:mr-[3rem] lg:mr-[6rem]'>
-              {user ? '비교하기' : '로그인'}
-              </Link>
-              <Link href='#' className='min-w-[4.9rem]'>
-              {user ? '내 프로필' : '회원가입'}
-              </Link>
+          <Link href='#' className='min-w-[3.7rem] md:mr-[3rem] lg:mr-[6rem]'>
+            {user ? '비교하기' : '로그인'}
+          </Link>
+          <Link href='#' className='min-w-[4.9rem]'>
+            {user ? '내 프로필' : '회원가입'}
+          </Link>
         </div>
       </div>
     </div>
-    <SideBar isOpen={isSideBarOpen} />
-    </>
   );
 }
