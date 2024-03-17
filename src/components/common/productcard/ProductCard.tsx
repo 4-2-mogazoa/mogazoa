@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import Counts from "../counts/Counts";
+import Counts from "@/components/common/counts/Counts";
 
 type Props = {
 	productName: string;
@@ -19,17 +19,17 @@ export default function ProductCard({
 }: Props) {
 	const starIconSrc = "/icons/star.svg";
 	return (
-		<div className="flex h-[18.3rem] w-[16rem] flex-col rounded-[1.2rem] border border-black-border bg-black-bg md:h-[25.6rem] md:w-[24.7rem] lg:h-[30.8rem] lg:w-[30rem]">
-			<div className="relative size-[14rem] md:size-[22.7rem] lg:size-[28.4rem]">
+		<div className="flex max-h-[18.3rem] max-w-[16rem] grow flex-col rounded-[1.2rem] border border-black-border bg-black-bg md:max-h-[25.6rem] md:max-w-[24.7rem] lg:max-h-[30.8rem] lg:max-w-[30rem]">
+			<div className="relative h-[14rem] max-w-[14rem] md:h-[22.7rem] md:max-w-[22.7rem] lg:h-[18.4rem] lg:max-w-[28.4rem]">
 				<Image
 					src={imageData}
 					alt={productName}
-					className="object-cover"
+					className="object-contain"
 					fill
 				/>
 			</div>
 			<div className=" p-[1rem] md:px-[1.647rem] md:py-[2rem] lg:px-[2rem] lg:py-[2.5rem]">
-				<div className="text-[1.4rem] text-white md:text-[1.6rem] lg:text-[1.8rem]">
+				<div className="truncate text-[1.4rem] text-white md:text-[1.6rem] lg:text-[1.8rem]">
 					{productName}
 				</div>
 				<div className="flex flex-col justify-between md:flex-row lg:flex-row">

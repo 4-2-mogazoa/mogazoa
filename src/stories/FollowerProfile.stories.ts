@@ -20,3 +20,10 @@ export const Default: Story = {
 		nickname: "리뷰왕",
 	},
 };
+
+export const NoImage: Story = {
+	args: {
+		image: null,
+		nickname: "리뷰왕",
+	},
+};

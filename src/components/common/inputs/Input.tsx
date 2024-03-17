@@ -28,10 +28,19 @@ const InputVariants = cva(
 
 type InputProps = InputHTMLAttributes<HTMLInputElement> &
 	VariantProps<typeof InputVariants> & {
-		inputType: "email" | "password" | "nickname" | "textfield";
+		inputType: "email" | "password" | "nickname" | "textfield" | "passwordCkd";
+		register?: any;
+		validationSchema?: any;
+		errors?: any;
 	};
 
-export default function Input({ variant, inputType }: InputProps) {
+export default function Input({
+	variant,
+	inputType,
+	register,
+	validationSchema,
+	errors,
+}: InputProps) {
 	const [isVisibility, setIsVisibility] = useState(false);
 
 	const inputTypeValues = {
@@ -39,30 +48,30 @@ export default function Input({ variant, inputType }: InputProps) {
 			type: "text",
 			labelValue: "이메일",
 			placeholderValue: "이메일을 입력해 주세요",
-			errorMsg: "잘못된 이메일입니다.",
 		},
 		password: {
 			type: isVisibility ? "text" : "password",
 			labelValue: "비밀번호",
 			placeholderValue: "비밀번호를 입력해 주세요",
-			errorMsg: "비밀번호가 일치하지 않습니다.",
 		},
 		nickname: {
 			type: "text",
 			labelValue: "닉네임",
 			placeholderValue: "닉네임을 입력해 주세요",
-			errorMsg: "",
 		},
 		textfield: {
 			type: "text",
 			labelValue: "",
 			placeholderValue: "상품명",
-			errorMsg: "",
+		},
+		passwordCkd: {
+			type: isVisibility ? "text" : "password",
+			labelValue: "비밀번호 확인",
+			placeholderValue: "비밀번호를 한번 더 입력해 주세요",
 		},
 	};
 
-	const { type, labelValue, placeholderValue, errorMsg } =
-		inputTypeValues[inputType];
+	const { type, labelValue, placeholderValue } = inputTypeValues[inputType];
 
 	const visibilityOffIconSrc = "/icons/visibility_off.svg";
 	const visibilityOnIconSrc = "/icons/visibility_on.svg";
@@ -82,14 +91,15 @@ export default function Input({ variant, inputType }: InputProps) {
 						placeholder={placeholderValue}
 						className={cn(InputVariants({ variant: variant }))}
 						id={labelValue}
+						{...register(inputType, validationSchema)}
 					/>
 
-					{inputType === "password" && (
+					{(inputType === "password" || inputType === "passwordCkd") && (
 						<div className="absolute bottom-1/2 right-[2rem] size-[2.2rem] translate-y-1/2 cursor-pointer">
 							<Image
 								src={isVisibility ? visibilityOnIconSrc : visibilityOffIconSrc}
 								fill
-								alt="visbility"
+								alt="visibility"
 								onClick={() => {
 									setIsVisibility(!isVisibility);
 								}}
@@ -98,9 +108,11 @@ export default function Input({ variant, inputType }: InputProps) {
 					)}
 				</div>
 
-				<p className={`text-[text-1.2rem] text-red lg:text-[1.4rem]`}>
-					{errorMsg}
-				</p>
+				{errors && (
+					<p className={`text-[text-1.2rem] text-red lg:text-[1.4rem]`}>
+						{errors[inputType]?.message}
+					</p>
+				)}
 			</div>
 		</>
 	);
