@@ -5,7 +5,10 @@ export default function AddProductButton() {
 		// TODO: 상품 추가 모달 열기
 	};
 	return (
-		<button className="fixed bottom-[9rem] right-[3rem] rounded-full bg-main-gradient lg:right-[18rem]">
+		<button
+			className="fixed bottom-[9rem] right-[3rem] rounded-full bg-main-gradient lg:right-[18rem]"
+			onClick={handleOpenAddProductModal}
+		>
 			<span>
 				<Image
 					src={"/icons/plus.svg"}
