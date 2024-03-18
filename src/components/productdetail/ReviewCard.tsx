@@ -18,9 +18,9 @@ export default function ReviewCard({ reviewData, isMyReview }: Props) {
 	const starOnIconSrc = "/icons/star_on.svg";
 	const starOffIconSrc = "/icons/star_off.svg";
 
-	function handleButtonClick() {
+	const handleButtonClick = () => {
 		console.log("TODO:좋아요 개수 증가");
-	}
+	};
 
 	const reviewerData = {
 		image: user.image,
