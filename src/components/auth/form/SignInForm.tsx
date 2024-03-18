@@ -17,6 +17,7 @@ export default function SignInForm() {
 	const {
 		register,
 		handleSubmit,
+		setError,
 		formState: { errors },
 	} = useForm<ISignInForm>({ mode: "onBlur" });
 
@@ -33,7 +34,7 @@ export default function SignInForm() {
 	};
 
 	return (
-		<AuthFormContainer handleSubmit={handleSubmit}>
+		<AuthFormContainer handleSubmit={handleSubmit} setError={setError}>
 			<div className="mb-[6rem] flex flex-col gap-[3rem] md:gap-[4rem]">
 				<Input
 					inputType="email"

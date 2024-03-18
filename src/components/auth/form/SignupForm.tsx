@@ -21,6 +21,7 @@ export default function SignupForm() {
 		handleSubmit,
 		formState: { errors },
 		getValues,
+		setError,
 	} = useForm<ISignupForm>({ mode: "onBlur" });
 
 	const emailValidationSchema = {
@@ -62,7 +63,11 @@ export default function SignupForm() {
 	};
 
 	return (
-		<AuthFormContainer handleSubmit={handleSubmit} api={postSignup}>
+		<AuthFormContainer
+			handleSubmit={handleSubmit}
+			api={postSignup}
+			setError={setError}
+		>
 			<div className="mb-[6rem] flex flex-col gap-[3rem] md:gap-[4rem]">
 				<Input
 					inputType="email"

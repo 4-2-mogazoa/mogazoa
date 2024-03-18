@@ -9,6 +9,7 @@ import {
 type Props = {
 	children: ReactNode;
 	handleSubmit: UseFormHandleSubmit<FieldValues>;
+	setError?: any;
 	api?: any;
 };
 
@@ -16,16 +17,14 @@ export default function AuthFormContainer({
 	children,
 	handleSubmit,
 	api,
+	setError,
 }: Props) {
 	const router = useRouter();
 	const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-		console.log("데이터 :", data);
-
 		try {
-			await api(data);
-			router.push("/");
+			await api(data, setError, router);
 		} catch (e) {
-			throw new Error(`${e}`);
+			console.log(e);
 		}
 	};
 
