@@ -39,7 +39,7 @@ export const SideBar: React.FC<SideBarProps> = ({ user, isSidebarOpen }) => {
   };
 
   return (
-    <div className={clsx('flex flex-col gap-[2rem] bg-[#1c1c22] text-white', !isSidebarOpen ? 'hidden md:block' : 'block')}>
+    <div className={clsx('flex flex-col gap-[2rem] bg-[#1c1c22] pt-[4.5rem] text-white', !isSidebarOpen ? 'hidden md:block' : 'block')}>
       <h2 className={'ml-[3rem] text-[1.4rem] font-normal lg:text-[1.6rem]'}>카테고리</h2>
       <div className={'mx-[1rem] flex w-[16rem] flex-col gap-[0.4rem] lg:w-[20rem]'}>
         <ul className='flex flex-col'>

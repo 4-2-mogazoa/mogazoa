@@ -1,6 +1,10 @@
-import ProductCard from "@/components/common/productcard/ProductCard";
+import clsx from "clsx";
 
-const tempPopularData = [
+import ProductCard from "@/components/common/productcard/ProductCard";
+import { BREAK_POINT } from "@/constants/breakPoint";
+import useWindowWidth from "@/hooks/common/useWindowWidth";
+
+const tempProductData = [
   {
     id: 1,
     name: "다이슨 슈퍼소닉 블루",
@@ -51,11 +55,13 @@ const tempPopularData = [
   },
 ]
 
-type PopularProductType = {
+type ProductListType = {
   type: 'rating' | 'review'
 }
 
-export default function PopularProduct({type}: PopularProductType) {
+export default function ProductList({type}: ProductListType) {
+  const currentWidth = useWindowWidth();
+  const isWrapPoint = BREAK_POINT.md < currentWidth && currentWidth < 1523;
   return (
     <div className="flex flex-col gap-[3rem] text-[2rem] font-semibold text-white md:max-w-[63rem] lg:mt-[6rem] lg:max-w-[95rem] lg:text-[2.4rem]">
       <div className="ml-[2rem] w-[100%] md:ml-[4rem] lg:m-0">
@@ -64,8 +70,8 @@ export default function PopularProduct({type}: PopularProductType) {
         <span className="ml-[1rem] bg-gradient-to-r from-main_blue to-main_indigo bg-clip-text text-transparent">TOP 6</span>
         : ''}
       </div>
-      <div className="flex flex-wrap justify-center gap-[2rem]">
-      {tempPopularData.map((product) => (
+      <div className={clsx('ml-[2rem] grid max-w-[34rem] grid-cols-2 gap-[1.5rem] md:ml-[4rem] md:max-w-[52rem]', isWrapPoint ? 'lg:m-0 lg:min-w-[46.6rem]' : 'lg:m-0 lg:min-w-[71.7rem] lg:grid-cols-3 lg:gap-[2rem]')}>
+      {tempProductData.map((product) => (
         <div key={product.id}>
           <ProductCard
             productName={product.name}
