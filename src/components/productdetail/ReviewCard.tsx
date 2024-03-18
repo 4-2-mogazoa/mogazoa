@@ -13,8 +13,10 @@ type Props = {
 export default function ReviewCard({ reviewData, isMyReview }: Props) {
 	const { user, reviewImages, createdAt, isLiked, likeCount, content, rating } =
 		reviewData;
-	const rateArray = Array.from({ length: rating }, (_, i) => i + 1);
-	const starIconSrc = "/icons/star.svg";
+	const MAX_RATE = 5;
+	const rateArray = Array.from({ length: MAX_RATE }, (_, i) => i + 1);
+	const starOnIconSrc = "/icons/star_on.svg";
+	const starOffIconSrc = "/icons/star_off.svg";
 
 	function handleButtonClick() {
 		console.log("TODO:좋아요 개수 증가");
@@ -40,7 +42,7 @@ export default function ReviewCard({ reviewData, isMyReview }: Props) {
 							className="relative size-[1.2rem] lg:size-[1.8rem]"
 						>
 							<Image
-								src={starIconSrc}
+								src={index <= rating ? starOnIconSrc : starOffIconSrc}
 								alt="별점"
 								fill
 								className="object-contain"
