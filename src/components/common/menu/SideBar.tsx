@@ -7,7 +7,7 @@ import { Category } from '@/types/common';
 
 type SideBarProps = {
   user?: UserType;
-  isSidebarOpen: boolean;
+  isSidebarOpen?: boolean;
   className?: string;
 };
 
