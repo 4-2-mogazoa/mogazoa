@@ -1,8 +1,16 @@
 import { useRouter } from "next/router";
 import React, { ReactNode } from "react";
-import { FieldValues, SubmitHandler } from "react-hook-form";
+import {
+	FieldValues,
+	SubmitHandler,
+	UseFormHandleSubmit,
+} from "react-hook-form";
 
-type Props = { children: ReactNode; handleSubmit: any; api: any };
+type Props = {
+	children: ReactNode;
+	handleSubmit: UseFormHandleSubmit<FieldValues>;
+	api?: any;
+};
 
 export default function AuthFormContainer({
 	children,

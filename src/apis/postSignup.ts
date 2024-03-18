@@ -18,7 +18,9 @@ export const postSignup = async (data: Props) => {
 	};
 	try {
 		const res = await axios.post(url, userData);
-	} catch (e) {
-		throw new Error(`${e}`);
+	} catch (error) {
+		if (axios.isAxiosError(error)) {
+			console.log(error.response);
+		}
 	}
 };
