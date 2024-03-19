@@ -12,7 +12,7 @@ import cn from "@/utils/cn";
 import { DropdownContext } from "./Dropdown";
 
 type DropdownFilterProps = InputHTMLAttributes<HTMLInputElement> &
-	VariantProps<typeof dropdownFilterVariants>;
+	VariantProps<typeof dropdownFilterVariants> & { className?: string };
 
 const dropdownFilterVariants = cva(
 	"flex w-full items-center justify-between rounded-[0.8rem] bg-[#252530] px-[2rem] py-[1.7rem] text-[1.4rem] text-white outline outline-[#353542] placeholder:text-[1.4rem] placeholder:text-gray-200 focus:outline-[#5097FA] md:py-[1.95rem] lg:py-[2.3rem] lg:text-[1.6rem] placeholder:lg:text-[1.6rem]",
@@ -28,6 +28,7 @@ const dropdownFilterVariants = cva(
 
 export default function DropdownFilterInput({
 	variant,
+	className,
 	...props
 }: DropdownFilterProps) {
 	const { setIsOpen, setFilterQuery, setInputRef } =
@@ -49,7 +50,7 @@ export default function DropdownFilterInput({
 				aria-haspopup="listbox"
 				aria-label="드롭다운 아이템 필터링"
 				ref={inputRef}
-				className={cn(dropdownFilterVariants({ variant }))}
+				className={cn(dropdownFilterVariants({ variant }), className)}
 				onChange={handleChange}
 				onFocus={() => setIsOpen(true)}
 				{...props}

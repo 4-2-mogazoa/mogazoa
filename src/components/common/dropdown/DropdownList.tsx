@@ -1,9 +1,18 @@
-import { motion } from "framer-motion";
+import { HTMLMotionProps, motion } from "framer-motion";
 import { useContext } from "react";
+
+import cn from "@/utils/cn";
 
 import { DropdownContext, Item } from "./Dropdown";
 
-export default function DropdownList<T extends Item>() {
+type Props = HTMLMotionProps<"ul"> & {
+	className?: string;
+};
+
+export default function DropdownList<T extends Item>({
+	className,
+	...props
+}: Props) {
 	const {
 		isOpen,
 		filteredItems,
@@ -41,7 +50,11 @@ export default function DropdownList<T extends Item>() {
 			}}
 			transition={{ duration: 0.1 }}
 			style={{ pointerEvents: isOpen ? "auto" : "none" }}
-			className="absolute top-[100%] mt-[0.6rem] flex w-full flex-col gap-[0.5rem] rounded-[0.8rem] bg-[#252530] p-[1rem] outline outline-[#353542]"
+			className={cn(
+				"z-10 absolute top-[100%] mt-[0.6rem] flex w-full flex-col gap-[0.5rem] rounded-[0.8rem] bg-[#252530] p-[1rem] outline outline-[#353542]",
+				className,
+			)}
+			{...props}
 		>
 			{filteredItems?.map((item) => (
 				<li

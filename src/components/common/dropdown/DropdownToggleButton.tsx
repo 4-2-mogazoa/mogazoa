@@ -8,10 +8,13 @@ import cn from "@/utils/cn";
 import { DropdownContext } from "./Dropdown";
 
 type DropdownButtonProps = ButtonHTMLAttributes<HTMLButtonElement> &
-	VariantProps<typeof dropdownButtonVariants> & { placeholder?: string };
+	VariantProps<typeof dropdownButtonVariants> & {
+		placeholder?: string;
+		className?: string;
+	};
 
 const dropdownButtonVariants = cva(
-	"flex w-full items-center justify-between rounded-[0.8rem]",
+	"flex w-full items-center justify-between rounded-[0.8rem] text-[1.4rem] text-gray-200 lg:text-[1.6rem]",
 	{
 		variants: {
 			variant: {
@@ -26,6 +29,7 @@ const dropdownButtonVariants = cva(
 export default function DropdownToggleButton({
 	variant = "basic",
 	placeholder,
+	className,
 	...props
 }: DropdownButtonProps) {
 	const { isOpen, setIsOpen, selectedItem, setButtonVariant } =
@@ -42,20 +46,16 @@ export default function DropdownToggleButton({
 			aria-expanded={isOpen}
 			className={cn(
 				dropdownButtonVariants({ variant }),
+				className,
 				isOpen && "outline-[#5097FA]",
 			)}
 			onClick={() => setIsOpen(!isOpen)}
 			{...props}
 		>
-			<span
-				className={cn(
-					"text-[1.4rem] text-gray-200 lg:text-[1.6rem]",
-					variant === "small" && isOpen && "text-white",
-				)}
-			>
+			<span className={cn(variant === "small" && isOpen && "text-white")}>
 				{selectedItem ? selectedItem.name : placeholder}
 			</span>
-			<motion.div
+			<motion.span
 				animate={isOpen ? "open" : "close"}
 				variants={{ open: { rotate: 180 }, close: { rotate: 0 } }}
 			>
@@ -65,7 +65,7 @@ export default function DropdownToggleButton({
 					width={24}
 					height={24}
 				/>
-			</motion.div>
+			</motion.span>
 		</button>
 	);
 }
