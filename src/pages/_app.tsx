@@ -6,15 +6,31 @@ import type { AppProps } from "next/app";
 import React, { ReactNode } from "react";
 
 import Header from "@/components/common/menu/Header";
+import ModalWrapper from "@/components/common/modal/ModalWrapper";
+import { useModalActions, useModalsStore } from "@/store/modal";
 
 const queryClient = new QueryClient();
 
 function Providers({ children }: { children: ReactNode }) {
+	const modals = useModalsStore();
+	const { closeModal } = useModalActions();
+
 	return (
-		<QueryClientProvider client={queryClient}>
-			{children}
-			<ReactQueryDevtools initialIsOpen={false} />
-		</QueryClientProvider>
+		<>
+			{modals.map((modal) => (
+				<ModalWrapper
+					id={modal.id}
+					key={modal.id}
+					onRemove={() => closeModal(modal.id)}
+				>
+					{modal.content}
+				</ModalWrapper>
+			))}
+			<QueryClientProvider client={queryClient}>
+				{children}
+				<ReactQueryDevtools initialIsOpen={false} />
+			</QueryClientProvider>
+		</>
 	);
 }
 
@@ -28,4 +44,3 @@ export default function App({ Component, pageProps }: AppProps) {
 		</>
 	);
 }
-
