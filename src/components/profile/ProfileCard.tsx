@@ -1,6 +1,9 @@
 import BasicButton from "@/components/common/button/BasicButton";
 import ProfileImage from "@/components/common/profileImage/ProfileImage";
+import { useModalActions } from "@/store/modal";
 import { UserDetail } from "@/types/user";
+
+import ProfileModifyModal from "./ProfileModifyModal";
 
 type Props = {
 	user: UserDetail;
@@ -8,6 +11,14 @@ type Props = {
 };
 
 export default function ProfileCard({ user, isMine = true }: Props) {
+	const { openModal, closeModal } = useModalActions();
+
+	const handleOpenModal = () => {
+		const modalId = openModal(
+			<ProfileModifyModal user={user} closeModal={() => closeModal(modalId)} />,
+		);
+	};
+
 	return (
 		<section className="_flex-col-center w-[33.5rem] gap-[3rem] rounded-[1.2rem] border border-black-border bg-black-bg px-[2rem] py-[3rem] md:w-[50.9rem] lg:w-[34rem]">
 			<h2 className="sr-only">기본 정보</h2>
@@ -38,7 +49,11 @@ export default function ProfileCard({ user, isMine = true }: Props) {
 			</div>
 			{isMine ? (
 				<div className="_flex-col-center w-full gap-[1rem] md:gap-[1.5rem] lg:gap-[2rem]">
-					<BasicButton variant={"primary"} label="프로필 편집" />
+					<BasicButton
+						variant={"primary"}
+						label="프로필 편집"
+						onClick={handleOpenModal}
+					/>
 					<BasicButton variant={"tertiary"} label="로그아웃" />
 				</div>
 			) : (
