@@ -1,3 +1,4 @@
+import AddProductButton from "../common/button/AddProductButton";
 import ProductDetail from "./ProductDetail";
 import ProductReview from "./ProductReview";
 import ProductStatistics from "./ProductStatistics";
@@ -8,6 +9,7 @@ export default function ProductDetailPageLayout() {
 			<ProductDetail />
 			<ProductStatistics />
 			<ProductReview />
+			<AddProductButton />
 		</main>
 	);
 }
