@@ -24,7 +24,11 @@ export default function ProfileModifyModal({ user, closeModal }: Props) {
 					placeholder="닉네임을 입력해 주세요"
 					defaultValue={user.nickname}
 				/>
-				<TextBox placeholder="설명을 입력해 주세요" maxLength={500} />
+				<TextBox
+					placeholder="설명을 입력해 주세요"
+					maxLength={500}
+					defaultValue={user.description}
+				/>
 			</form>
 			<BasicButton
 				label="저장하기"
