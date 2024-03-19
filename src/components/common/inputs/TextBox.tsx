@@ -1,9 +1,4 @@
-import React, {
-	ButtonHTMLAttributes,
-	ChangeEvent,
-	TextareaHTMLAttributes,
-	useState,
-} from "react";
+import { ChangeEvent, TextareaHTMLAttributes, useState } from "react";
 
 export default function TextBox({
 	maxLength,
