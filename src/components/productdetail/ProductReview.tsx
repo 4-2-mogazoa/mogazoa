@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 import { filterBy } from "@/constants/filterBy";
@@ -43,6 +44,30 @@ export default function ProductReview() {
 					/>
 				))}
 			</div>
+		</div>
+	);
+}
+
+type NoneReviewProps = {
+	type: "none" | "loading";
+};
+// 기능 구현 때 데이터가 없거나 로딩중일때 렌더링하도록 컴포넌트 사용할 예정
+export function NoneReview({ type }: NoneReviewProps) {
+	const text = type === "none" ? "첫 리뷰를 작성해 보세요!" : "Loading...";
+	const noneReviewIconSrc = "/icons/none_review.svg";
+	return (
+		<div className="flex h-[20rem] flex-col items-center justify-center gap-[2rem] md:h-[29.8rem] lg:h-[32rem]">
+			<div className="relative h-[3.2rem] w-[3.92rem] lg:h-[4rem] lg:w-[4.9rem]">
+				<Image
+					src={noneReviewIconSrc}
+					fill
+					className="object-cover"
+					alt="none"
+				/>
+			</div>
+			<span className=" flex flex-row text-[1.8rem] text-gray-200 lg:text-[2rem]">
+				{text}
+			</span>
 		</div>
 	);
 }
