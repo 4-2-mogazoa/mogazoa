@@ -3,7 +3,7 @@ import React from "react";
 
 import cn from "@/utils/cn";
 
-const categoryBadgeVariants = cva("_flex-center gap-4 ", {
+const categoryBadgeVariants = cva("_flex-center w-fit gap-4 ", {
 	variants: {
 		size: {
 			small:
