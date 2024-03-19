@@ -21,7 +21,7 @@ type FavoriteProps = {
 	className: string;
 };
 
-const imageCn = "object-contain";
+const imageCn = "object-cover";
 
 export default function DetailCard({ productData, isMyProduct }: Props) {
 	const { name, description, image, isFavorite, category } = productData;
@@ -29,11 +29,11 @@ export default function DetailCard({ productData, isMyProduct }: Props) {
 	const onlyMobileCn = "flex md:hidden";
 
 	return (
-		<div className="flex flex-col items-center gap-[4rem] md:flex-row md:gap-[2rem]">
-			<div className="relative h-[23.6rem] w-[33.5rem] md:h-[19.7rem] md:w-[28rem] lg:h-[25rem] lg:w-[35.5rem] ">
+		<div className="flex min-w-[33.5rem] flex-col items-center md:flex-row lg:justify-between">
+			<div className="relative min-h-[19.7rem] min-w-[28rem] lg:ml-[3rem]">
 				<Image src={image} fill alt={name} className={imageCn} />
 			</div>
-			<div className="flex w-[33.5rem] flex-col md:w-[38.4rem] lg:w-[54.5rem]">
+			<div className="flex flex-col">
 				<div className="flex justify-between">
 					<CategoryBadge size="small" category={category.name} />
 					<Share className={onlyMobileCn} />
@@ -48,32 +48,35 @@ export default function DetailCard({ productData, isMyProduct }: Props) {
 					<Share className={mobileHiddenCn} />
 					<Favorite isFavorite={isFavorite} className={onlyMobileCn} />
 				</div>
-				<div className="text-[1.4rem] text-white lg:text-[1.6rem]">
+				<div className="text-[1.4rem] text-white lg:max-w-[54.5rem] lg:text-[1.6rem]">
 					{description}
 				</div>
 				<div className="flex flex-col gap-[1.5rem] pt-[2rem] md:flex-row md:gap-[2rem] md:pt-[6rem]">
 					<BasicButton
 						label="리뷰 작성하기"
 						variant="primary"
-						className={clsx("md:w-[24.6rem] lg:w-[34.5rem]", {
-							"md:w-[14rem] lg:w-[18.5rem]": isMyProduct,
+						className={clsx("md:lg:max-w-[34.5rem]", {
+							"lg:max-w-[18.5rem]": isMyProduct,
 						})}
 					/>
+					{/**TODO: 리뷰 작성 모달, 비로그인 시 로그인 요청 모달*/}
 					<BasicButton
 						label="비교하기"
 						variant="secondary"
-						className={clsx("md:w-[12.3rem] lg:w-[18rem]", {
-							"md:w-[10.7rem] lg:w-[16rem]": isMyProduct,
+						className={clsx("md:max-w-[12.3rem] lg:max-w-[18rem]", {
+							"md:max-w-[10.7rem] lg:max-w-[16rem]": isMyProduct,
 						})}
 					/>
+					{/**TODO: 비교상품 없을 경우 alert표시, 하나 있을 경우 확인할지 안할지 모달 표시 확인하면 /compare 이동, 두개 있을 경우 비교 상품 교체 모달 비로그인시 로그인 요청 모달*/}
 					{isMyProduct && (
 						<BasicButton
 							label="편집하기"
 							variant="tertiary"
-							className="md:w-[10.7rem] lg:w-[16rem]"
+							className="md:max-w-[10.7rem] lg:max-w-[16rem]"
 						/>
 					)}
 				</div>
+				{/**TODO: 상품 편집 모달 추가*/}
 			</div>
 		</div>
 	);
@@ -97,6 +100,7 @@ export function Share({ className }: ShareProps) {
 					/>
 				</div>
 			</button>
+			{/**TODO: 카카오공유는 배포이후 추가 가능*/}
 			<button className={buttonCn}>
 				<div className={imageDivCn}>
 					<Image
@@ -107,6 +111,7 @@ export function Share({ className }: ShareProps) {
 					/>
 				</div>
 			</button>
+			{/**TODO: 클립보드 복사 기능 추가*/}
 		</div>
 	);
 }

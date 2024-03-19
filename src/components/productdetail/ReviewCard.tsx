@@ -19,7 +19,7 @@ export default function ReviewCard({ reviewData, isMyReview }: Props) {
 	const starOffIconSrc = "/icons/star_off.svg";
 
 	const handleButtonClick = () => {
-		console.log("TODO:좋아요 개수 증가");
+		console.log("TODO:좋아요 개수 증가 비로그인 시 로그인요청 모달");
 	};
 
 	const reviewerData = {
@@ -29,12 +29,15 @@ export default function ReviewCard({ reviewData, isMyReview }: Props) {
 		followersCount: 162,
 		reviewCount: 37,
 	};
-	//TODO: 유저랭크, 팔로워 카운터, 리뷰카운터를 백엔드에서 제공안해서, api 수정 요청하거나 userId로 유저 정보/랭킹 조회 데이터 가져와야함
+	//TODO: 유저랭크, 팔로워 카운터, 리뷰카운터를 백엔드에서 제공X, qna 확인요청한 상태
 
 	return (
-		<div className="flex flex-col gap-[3rem] rounded-[1.2rem] border border-black-border bg-black-bg p-[2rem] md:flex-row lg:p-[3rem]">
+		<div className="flex min-w-[33.5rem] flex-col  justify-between gap-[3rem] rounded-[1.2rem] border border-black-border bg-black-bg p-[2rem] md:flex-row lg:p-[3rem]">
 			<div className="flex min-w-[17rem] flex-row justify-between md:flex-col md:justify-normal md:gap-[1rem] lg:gap-[1.5rem]">
-				<ReviewerProfile reviewerData={reviewerData} />
+				<button>
+					<ReviewerProfile reviewerData={reviewerData} />
+				</button>
+				{/**TODO: 버튼 클릭 시 유저 프로필화면 이동 /user/{userId} */}
 				<div className="flex items-end md:justify-center">
 					{rateArray.map((index) => (
 						<div
@@ -51,7 +54,7 @@ export default function ReviewCard({ reviewData, isMyReview }: Props) {
 					))}
 				</div>
 			</div>
-			<div className="flex min-w-[29.5rem] flex-col gap-[2rem] lg:min-w-[65rem]">
+			<div className="flex flex-col justify-end gap-[2rem] lg:w-[65rem]">
 				<span className="text-[1.2rem] text-[white] lg:text-[1.6rem]">
 					{content}
 				</span>
@@ -77,6 +80,7 @@ export default function ReviewCard({ reviewData, isMyReview }: Props) {
 							<div className="flex gap-[1rem] font-light text-gray-100 underline">
 								<button>수정</button>
 								<button>삭제</button>
+								{/**TODO: 수정모달 추가, 삭제 alert추가 */}
 							</div>
 						)}
 					</div>
