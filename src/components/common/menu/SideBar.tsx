@@ -9,13 +9,14 @@ type SideBarProps = {
   user?: UserType;
   isSidebarOpen?: boolean;
   className?: string;
+  onCategorySelect: (CategoryId: number | null, categoryName: string | null) => void;
 };
 
 type UserType = {
   id: number;
 };
 
-export const SideBar: React.FC<SideBarProps> = ({ user, isSidebarOpen }) => {
+export const SideBar: React.FC<SideBarProps> = ({ user, isSidebarOpen, onCategorySelect }) => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
 
@@ -34,24 +35,24 @@ export const SideBar: React.FC<SideBarProps> = ({ user, isSidebarOpen }) => {
     fetchCategories();
   }, []);
 
-  const handleCategoryClick = (categoryId: number) => {
-    setSelectedCategory(categoryId);
+  const handleCategoryClick = (categoryId: number, categoryName: string) => {
+    setSelectedCategory(prevCategory => prevCategory === categoryId ? null : categoryId);
+  onCategorySelect(categoryId === selectedCategory ? null : categoryId, categoryName);
   };
 
   return (
     <div className={clsx('flex flex-col gap-[2rem] bg-[#1c1c22] pt-[4.5rem] text-white', !isSidebarOpen ? 'hidden md:block' : 'block')}>
-      <h2 className={'ml-[3rem] text-[1.4rem] font-normal lg:text-[1.6rem]'}>카테고리</h2>
+      <h2 className={'mb-[2rem] ml-[3rem] text-[1.4rem] font-normal lg:text-[1.6rem]'}>카테고리</h2>
       <div className={'mx-[1rem] flex w-[16rem] flex-col gap-[0.4rem] lg:w-[20rem]'}>
         <ul className='flex flex-col'>
           {categories.map((category) => (
-            <Link
-              href="#"
+            <li
               key={category.id}
-              onClick={() => handleCategoryClick(category.id)}
-              className={clsx('h-[4.5rem] w-[100%] rounded-[0.8rem] px-[2rem] py-[1.5rem] text-[1.4rem] font-medium lg:h-[5rem] lg:text-[1.6rem]', selectedCategory === category.id ? 'bg-[#353542] text-white' : 'text-[#6e6e82]')}
+              onClick={() => handleCategoryClick(category.id, category.name)}
+              className={clsx('h-[4.5rem] w-[100%] cursor-pointer rounded-[0.8rem] px-[2rem] py-[1.5rem] text-[1.4rem] font-medium lg:h-[5rem] lg:text-[1.6rem]', selectedCategory === category.id ? 'bg-[#353542] text-white' : 'text-[#6e6e82]')}
             >
               {category.name}
-            </Link>
+            </li>
           ))}
         </ul>
       </div>

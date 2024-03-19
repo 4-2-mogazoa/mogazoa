@@ -11,18 +11,15 @@ const SortData: Item[] = [
   { id: 3, name: "좋아요순" }
 ];
 
-export default function SortDropdown() {
+type SortDropdownProps = {
+  onSelect: (option: string) => void;
+}
+
+export default function SortDropdown({ onSelect }: SortDropdownProps) {
   return (
-    <div>
-      <div className="flex flex-row">
-        <div>
-          전자기기의 모든 상품
-        </div>
-        <Dropdown items={SortData} onSelect={(item) => console.log(item)}>
-          <Dropdown.Button placeholder="최신순" variant={"small"} />
-          <Dropdown.List />
-        </Dropdown>
-      </div>
-    </div>
+    <Dropdown items={SortData} onSelect={(item) => onSelect(item.name)} className="mr-[3rem] md:mr-[8rem] lg:m-0">
+      <Dropdown.Button placeholder="최신순" variant={"small"} />
+      <Dropdown.List />
+    </Dropdown>
   );
 }
