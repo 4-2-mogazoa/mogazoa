@@ -8,7 +8,7 @@ import { emailPattern, passwordPattern } from "@/constants/regExp";
 
 import AuthFormContainer from "./AuthFormContainer";
 
-type ISignupForm = {
+type TSignupForm = {
 	email: string;
 	nickname: string;
 	password: string;
@@ -22,7 +22,7 @@ export default function SignupForm() {
 		formState: { errors },
 		getValues,
 		setError,
-	} = useForm<ISignupForm>({ mode: "onBlur" });
+	} = useForm<TSignupForm>({ mode: "onBlur" });
 
 	const emailValidationSchema = {
 		required: "이메일은 필수 입력입니다.",
@@ -52,7 +52,7 @@ export default function SignupForm() {
 		},
 	};
 
-	const passwordCkdValidationSchema = {
+	const passwordCheckedValidationSchema = {
 		required: "비밀번호 확인을 입력해주세요.",
 		validate: {
 			matchesPreviousPassword: (value: string) => {
@@ -88,9 +88,9 @@ export default function SignupForm() {
 					errors={errors}
 				/>
 				<Input
-					inputType="passwordCkd"
+					inputType="passwordChecked"
 					register={register}
-					validationSchema={passwordCkdValidationSchema}
+					validationSchema={passwordCheckedValidationSchema}
 					errors={errors}
 				/>
 			</div>

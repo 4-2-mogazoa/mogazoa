@@ -8,10 +8,10 @@ import { emailPattern } from "@/constants/regExp";
 import OAuthLayout from "../OAuthLayout";
 import AuthFormContainer from "./AuthFormContainer";
 
-interface ISignInForm {
+type TSignInForm = {
 	email: string;
 	password: string;
-}
+};
 
 export default function SignInForm() {
 	const {
@@ -19,7 +19,7 @@ export default function SignInForm() {
 		handleSubmit,
 		setError,
 		formState: { errors },
-	} = useForm<ISignInForm>({ mode: "onBlur" });
+	} = useForm<TSignInForm>({ mode: "onBlur" });
 
 	const emailValidationSchema = {
 		required: "이메일은 필수 입력입니다.",

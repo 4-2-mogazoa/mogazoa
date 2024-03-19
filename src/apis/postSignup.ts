@@ -3,10 +3,10 @@ import axios from "axios";
 const url = "https://mogazoa-api.vercel.app/2-2/auth/signUp";
 
 type TUserData = {
-	email?: string;
-	nickname?: string;
-	password?: string;
-	passwordCkd?: string;
+	email: string;
+	nickname: string;
+	password: string;
+	passwordChecked: string;
 };
 
 export const postSignup = async (
@@ -18,7 +18,7 @@ export const postSignup = async (
 		email: data.email,
 		nickname: data.nickname,
 		password: data.password,
-		passwordConfirmation: data.passwordCkd,
+		passwordConfirmation: data.passwordChecked,
 	};
 
 	try {
@@ -29,10 +29,9 @@ export const postSignup = async (
 
 		const errorMessage = error.response?.data.message;
 
-		if (errorMessage === "이미 사용중인 닉네임입니다.") {
-			setError("nickname", { message: errorMessage }, { shouldFocus: true });
-		} else if (errorMessage === "이미 사용중인 이메일입니다.") {
+		errorMessage === "이미 사용중인 이메일입니다." &&
 			setError("email", { message: errorMessage }, { shouldFocus: true });
-		}
+		errorMessage === "이미 사용중인 닉네임입니다." &&
+			setError("nickname", { message: errorMessage }, { shouldFocus: true });
 	}
 };
