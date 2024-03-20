@@ -36,7 +36,7 @@ function ModalWrapper({ children, id, onRemove }: Props) {
 				>
 					{/* 백드롭 */}
 					<div
-						className="absolute inset-0 backdrop-blur-sm backdrop-brightness-75"
+						className="absolute inset-0 backdrop-blur-sm backdrop-brightness-50"
 						onClick={() => onRemove(id)}
 					></div>
 					{/* 모달 */}
