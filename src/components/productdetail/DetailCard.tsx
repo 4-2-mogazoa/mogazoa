@@ -21,32 +21,28 @@ type FavoriteProps = {
 	className: string;
 };
 
-const imageCn = "object-cover";
-
 export default function DetailCard({ productData, isMyProduct }: Props) {
 	const { name, description, image, isFavorite, category } = productData;
-	const mobileHiddenCn = "hidden md:flex";
-	const onlyMobileCn = "flex md:hidden";
 
 	return (
 		<div className="flex min-w-[33.5rem] flex-col items-center md:flex-row lg:justify-between">
 			<div className="relative min-h-[19.7rem] min-w-[28rem] lg:ml-[3rem]">
-				<Image src={image} fill alt={name} className={imageCn} />
+				<Image src={image} fill alt={name} className="object-cover" />
 			</div>
 			<div className="flex flex-col">
 				<div className="flex justify-between">
 					<CategoryBadge size="small" category={category.name} />
-					<Share className={onlyMobileCn} />
+					<Share className="flex md:hidden" />
 				</div>
 				<div className="flex flex-row justify-between pb-[2rem] pt-[1.1rem] md:pb-[5.15rem] md:pt-[1.25rem] lg:pb-[4.9rem] lg:pt-[1rem]">
 					<div className="flex items-center md:gap-[1.5rem]">
 						<span className="text-[2rem] font-semibold text-white lg:text-[2.4rem]">
 							{name}
 						</span>
-						<Favorite isFavorite={isFavorite} className={mobileHiddenCn} />
+						<Favorite isFavorite={isFavorite} className="hidden md:flex" />
 					</div>
-					<Share className={mobileHiddenCn} />
-					<Favorite isFavorite={isFavorite} className={onlyMobileCn} />
+					<Share className="hidden md:flex" />
+					<Favorite isFavorite={isFavorite} className="flex md:hidden" />
 				</div>
 				<div className="text-[1.4rem] text-white lg:max-w-[54.5rem] lg:text-[1.6rem]">
 					{description}
@@ -96,7 +92,7 @@ export function Share({ className }: ShareProps) {
 						src={kakaoShareIconSrc}
 						alt="카카오_공유"
 						fill
-						className={imageCn}
+						className="object-cover"
 					/>
 				</div>
 			</button>
@@ -107,7 +103,7 @@ export function Share({ className }: ShareProps) {
 						src={shareIconSrc}
 						alt="클립보드_공유"
 						fill
-						className={imageCn}
+						className="object-cover"
 					/>
 				</div>
 			</button>
@@ -126,7 +122,7 @@ export function Favorite({ isFavorite, className }: FavoriteProps) {
 					src={isFavorite ? heartOnIconSrc : heartOffIconSrc}
 					alt="찜"
 					fill
-					className={imageCn}
+					className="object-cover"
 				/>
 			</div>
 		</button>
