@@ -34,7 +34,7 @@ export default function CompareInput(props: CompareInputProps) {
 				{label}
 			</label>
 			{/* todo: md 사이즈에서 input width가 늘어나지 않고 고정되어 있는 문제 */}
-			<div className="relative flex h-[5.5rem] w-full items-center justify-center rounded-[0.8rem] bg-black-border p-px focus-within:bg-main-gradient lg:h-[7rem] lg:w-[35rem]">
+			<div className="relative flex h-[5.5rem] w-full items-center justify-center rounded-[0.8rem] bg-black-border p-px focus-within:bg-main-gradient lg:h-[7rem]">
 				<div className="flex size-full items-center rounded-[0.8rem] bg-black-bg px-[2rem] py-[2.3rem] text-[1.4rem] text-white lg:text-[1.6rem] lg:leading-[2.2.rem]">
 					{product?.name ? (
 						<ProductNameTag
