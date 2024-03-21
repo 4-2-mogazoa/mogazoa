@@ -2,9 +2,10 @@ import { ChangeEvent, TextareaHTMLAttributes, useState } from "react";
 
 export default function TextBox({
 	maxLength,
+	defaultValue,
 	...props
 }: TextareaHTMLAttributes<HTMLTextAreaElement>) {
-	const [count, setCount] = useState(0);
+	const [count, setCount] = useState(String(defaultValue)?.length);
 	const [isFocused, setIsFocused] = useState(false);
 
 	const handleOnTextarea = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -22,6 +23,7 @@ export default function TextBox({
 				onFocus={() => setIsFocused(true)}
 				onBlur={() => setIsFocused(false)}
 				maxLength={maxLength}
+				defaultValue={defaultValue}
 				{...props}
 			/>
 
