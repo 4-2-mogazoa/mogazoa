@@ -1,6 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 
+import { postSignIn } from "@/apis/postSignin";
 import BasicButton from "@/components/common/button/BasicButton";
 import Input from "@/components/common/inputs/Input";
 import { emailPattern } from "@/constants/regExp";
@@ -34,7 +35,11 @@ export default function SignInForm() {
 	};
 
 	return (
-		<AuthFormContainer handleSubmit={handleSubmit} setError={setError}>
+		<AuthFormContainer
+			handleSubmit={handleSubmit}
+			setError={setError}
+			api={postSignIn}
+		>
 			<div className="mb-[6rem] flex flex-col gap-[3rem] md:gap-[4rem]">
 				<Input
 					inputType="email"

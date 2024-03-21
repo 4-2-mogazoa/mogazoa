@@ -9,7 +9,7 @@ type TUserData = {
 	password: string;
 };
 
-export const postSignup = async (
+export const postSignIn = async (
 	data: TUserData,
 	setError: any,
 	router: any,
@@ -27,7 +27,11 @@ export const postSignup = async (
 
 		const errorMessage = error.response?.data.message;
 
-		errorMessage === "이메일 혹은 비밀번호를 확인해주세요." &&
-			setError("email", { message: errorMessage }, { shouldFocus: true });
+		errorMessage &&
+			setError(
+				"email",
+				{ message: "이메일 혹은 비밀번호를 확인해주세요." },
+				{ shouldFocus: true },
+			);
 	}
 };
