@@ -1,4 +1,4 @@
-import { Product, ProductsResponse } from "@/types/product";
+import { ProductDetail, ProductsResponse } from "@/types/product";
 
 import instance from "./axiosInstance";
 
@@ -18,7 +18,7 @@ export async function getProducts(
 }
 
 export async function getProductDetail(productId: number) {
-	const res = await instance.get<Product>(`products/${productId}`);
+	const res = await instance.get<ProductDetail>(`products/${productId}`);
 	const data = res.data;
 
 	return data;
