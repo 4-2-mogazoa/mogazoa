@@ -128,3 +128,4 @@ export function Favorite({ isFavorite, className }: FavoriteProps) {
 		</button>
 	);
 }
+

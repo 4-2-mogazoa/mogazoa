@@ -95,3 +95,4 @@ export default function ReviewCard({ reviewData, isMyReview }: Props) {
 		</div>
 	);
 }
+
