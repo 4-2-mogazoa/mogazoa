@@ -1,6 +1,4 @@
-
 import { CategoryList, Response } from "./common";
-
 
 export type ProductDetail = {
 	id: number;
@@ -18,6 +16,11 @@ export type ProductDetail = {
 	category: {
 		id: number;
 		name: CategoryList;
+	};
+	categoryMetric: {
+		rating: number;
+		favoriteCount: number;
+		reviewCount: number;
 	};
 };
 

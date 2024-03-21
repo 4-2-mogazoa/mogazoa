@@ -3,8 +3,6 @@ import { Dispatch, SetStateAction } from "react";
 import useCompareInputState from "@/hooks/compare/useCompareInputState";
 
 import ProductNameTag from "../common/productNameTag/ProductNameTag";
-import CompareDropdown from "./CompareDropdown";
-import productListDummy from "./dummydata";
 
 export type CompareInputProps = {
 	position: "firstProduct" | "secondProduct";

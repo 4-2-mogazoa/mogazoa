@@ -8,14 +8,11 @@ export async function getProducts(
 	order?: "recent" | "rating" | "reviewCount",
 	cursor?: number,
 ) {
-	const keywordQuery = keyword ? `&keyword=${keyword}` : "";
-	const categoryQuery = categoryId ? `&category=${categoryId}` : "";
-	const orderQuery = order ? `&order=${order}` : "";
-	const cursorQuery = cursor ? `&cursor=${cursor}` : "";
+	const params = { keyword, categoryId, order, cursor };
 
-	const query = `?${keywordQuery}${categoryQuery}${orderQuery}${cursorQuery}`;
-
-	const res = await instance.get<ProductsResponse>(`products${query}`);
+	const res = await instance.get<ProductsResponse>("products", {
+		params,
+	});
 
 	return res.data;
 }

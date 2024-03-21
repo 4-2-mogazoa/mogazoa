@@ -27,7 +27,6 @@ const initialState = {
 };
 
 const useCompareStore = create(
-	// 기본적으로는 localStorage에 저장됨
 	persist<State & Action>(
 		(set, get) => ({
 			numberOfProducts: 0,
@@ -48,16 +47,12 @@ const useCompareStore = create(
 			},
 
 			addProduct: (newProducts, position) => {
-				// Q: 아래 if문 2개는 같은 걸 의미하는데, 뭐가 더 좋을까?
-				if (get().products.firstProduct && get().products.secondProduct) return;
-				if (get().numberOfProducts >= 2) return;
+				if (Object.values(get().products).every(Boolean)) return;
 
 				const emptyPosition = position ? position : get().getEmptyPosition();
 
-				// Q: 이미 위에서 if 문으로 null인 position이 있다는 걸 확인했으니, 필요없을 수도 있지만 혹시 모르니까..?
 				if (!emptyPosition) return;
 
-				// Q: 파라미터 네이밍 prev ? state ?
 				set((prev) => ({
 					products: { ...prev.products, [emptyPosition]: newProducts },
 					numberOfProducts: prev.numberOfProducts++,
