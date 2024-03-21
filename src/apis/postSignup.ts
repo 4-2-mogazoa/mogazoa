@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const url = "https://mogazoa-api.vercel.app/2-2/auth/signUp";
+import instance from "./axiosInstance";
+
+const url = "auth/signUp";
 
 type TUserData = {
 	email: string;
@@ -22,7 +24,7 @@ export const postSignup = async (
 	};
 
 	try {
-		const res = await axios.post(url, userData);
+		const res = await instance.post(url, userData);
 		router.push("/");
 	} catch (error) {
 		if (!axios.isAxiosError(error)) return;
