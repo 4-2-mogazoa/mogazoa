@@ -33,7 +33,7 @@ export default function HomeLayout() {
 
   return (
     <div className="h-screen bg-[#1c1c22]">
-      <Header toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
+      <Header toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} headerType="homeHeader" />
       <div className="w-[100%] overflow-auto bg-[#1c1c22] pb-[10rem]">
         <div className={clsx('flex flex-row', isWrapPoint ? 'lg:mx-[5rem]' : 'lg:mx-[18rem]')}>
           <SideBar isSidebarOpen={isSidebarOpen} onCategorySelect={handleCategorySelect} />

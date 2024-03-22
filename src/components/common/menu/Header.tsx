@@ -8,17 +8,21 @@ type UserType = {
 	id: number;
 };
 
+type HeaderType = 'homeHeader' | "";
+
 type HeaderProps = {
   user?: UserType;
   isSidebarOpen?: boolean;
   toggleSidebar?: () => void;
+  headerType?: HeaderType;
 };
 
-export default function Header({ user, isSidebarOpen, toggleSidebar }: HeaderProps) {
+export default function Header({ user, isSidebarOpen, toggleSidebar, headerType }: HeaderProps) {
   const currentWidth = useWindowWidth();
 
   const [isSearchVisible, setSearchVisible] = useState(false);
   const [isLogoOverflow, setIsLogoOverflow] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   
   const hamburgerSrc = '/icons/hamburger.svg';
   const logoSrc = '/icons/logo.svg';
@@ -29,18 +33,23 @@ export default function Header({ user, isSidebarOpen, toggleSidebar }: HeaderPro
 		setSearchVisible(!isSearchVisible);
 	};
 
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
   useEffect(() => {
     setIsLogoOverflow(currentWidth < 430);
   }, [currentWidth])
 
   return (
+    <>
     <div className='flex h-[7rem] w-[100%] flex-row justify-between border-b border-black-bg bg-[#1c1c22] align-middle md:h-[8rem] lg:h-[10rem]'>
       <Image
-        src={isSidebarOpen ? closeSrc : hamburgerSrc}
+        src={(isSidebarOpen || isDropdownOpen) ? closeSrc : hamburgerSrc}
         alt='side menu toggle'
         width={24}
         height={24}
-        onClick={toggleSidebar}
+        onClick={headerType === 'homeHeader' ? toggleSidebar : toggleDropdown}
         className='ml-[2rem] block cursor-pointer md:hidden'
       />
       {!(isLogoOverflow && isSearchVisible) && (
@@ -71,5 +80,16 @@ export default function Header({ user, isSidebarOpen, toggleSidebar }: HeaderPro
         </div>
       </div>
     </div>
+    {headerType !== 'homeHeader' && isDropdownOpen && (
+        <div className='flex w-[100%] flex-col items-center gap-[2rem] pt-[3rem] text-[1.4rem] text-white md:hidden'>
+          <Link href={user ? '/compare' : '/signin'} className='cursor-pointer'>
+            {user ? '비교하기' : '로그인'}
+          </Link>
+          <Link href={user ? '/profile/my' : 'signup'} className='cursor-pointer'>
+            {user ? '내 프로필' : '회원가입'}
+          </Link>
+        </div>
+      )}
+    </>
   );
 }
