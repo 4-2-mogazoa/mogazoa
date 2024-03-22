@@ -14,13 +14,8 @@ export const postSignIn = async (
 	setError: any,
 	router: any,
 ) => {
-	const userData = {
-		email: data.email,
-		password: data.password,
-	};
-
 	try {
-		const res = await instance.post(url, userData);
+		const res = await instance.post(url, data);
 		router.push("/");
 	} catch (error) {
 		if (!axios.isAxiosError(error)) return;
