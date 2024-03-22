@@ -2,15 +2,24 @@ import Image from "next/image";
 import React, { useEffect } from "react";
 import { createPortal } from "react-dom";
 
+import { ModalConfig } from "@/store/modal";
+
 type Props = {
 	id: string;
 	children: React.ReactNode;
 	onRemove: (id: string) => void;
+	config: ModalConfig;
 };
 
-function ModalWrapper({ children, id, onRemove }: Props) {
+function ModalWrapper({ children, id, onRemove, config }: Props) {
 	const closeIconSrc = "/icons/close.svg";
 	const modalRoot = document.getElementById("modal-root");
+
+	const handleClickOutside = () => {
+		if (config.isCloseClickOutside) {
+			onRemove(id);
+		}
+	};
 
 	useEffect(() => {
 		const handleKeydownEsc = (e: KeyboardEvent) => {
@@ -19,14 +28,19 @@ function ModalWrapper({ children, id, onRemove }: Props) {
 			}
 		};
 
-		document.addEventListener("keydown", handleKeydownEsc);
+		if (config.isCloseESC) {
+			document.addEventListener("keydown", handleKeydownEsc);
+		}
+
 		document.body.style.overflow = "hidden";
 
 		return () => {
-			document.removeEventListener("keydown", handleKeydownEsc);
+			if (config.isCloseESC) {
+				document.removeEventListener("keydown", handleKeydownEsc);
+			}
 			document.body.style.overflow = "auto";
 		};
-	}, [id, onRemove]);
+	}, [config.isCloseESC, id, onRemove]);
 
 	return modalRoot
 		? createPortal(
@@ -37,7 +51,7 @@ function ModalWrapper({ children, id, onRemove }: Props) {
 					{/* 백드롭 */}
 					<div
 						className="absolute inset-0 backdrop-blur-sm backdrop-brightness-50"
-						onClick={() => onRemove(id)}
+						onClick={handleClickOutside}
 					></div>
 					{/* 모달 */}
 					<div className="z-10 rounded-[1.6rem] bg-[#1C1C22]">

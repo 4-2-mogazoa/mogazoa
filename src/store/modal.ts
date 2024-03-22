@@ -4,12 +4,18 @@ import { create } from "zustand";
 type ModalType = {
 	id: string;
 	content: ReactNode;
+	config: ModalConfig;
+};
+
+export type ModalConfig = {
+	isCloseClickOutside: boolean;
+	isCloseESC: boolean;
 };
 
 type ModalState = {
 	modals: ModalType[];
 	actions: {
-		openModal: (content: ReactNode) => string;
+		openModal: (content: ReactNode, config?: Partial<ModalConfig>) => string;
 		closeModal: (id: string) => void;
 		closeAllModals: () => void;
 	};
@@ -18,9 +24,18 @@ type ModalState = {
 const useModalStore = create<ModalState>((set) => ({
 	modals: [],
 	actions: {
-		openModal: (content) => {
+		openModal: (content, config = {}) => {
 			const id = crypto.randomUUID();
-			set((state) => ({ modals: [...state.modals, { id, content }] }));
+			set((state) => ({
+				modals: [
+					...state.modals,
+					{
+						id,
+						content,
+						config: { isCloseClickOutside: true, isCloseESC: true, ...config },
+					},
+				],
+			}));
 			return id;
 		},
 		closeModal: (id) =>

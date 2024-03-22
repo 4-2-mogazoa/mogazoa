@@ -16,6 +16,7 @@ export default function ProfileCard({ user, isMine = true }: Props) {
 	const handleOpenProfileModifyModal = () => {
 		const modalId = openModal(
 			<ProfileModifyModal user={user} closeModal={() => closeModal(modalId)} />,
+			{ isCloseClickOutside: false },
 		);
 	};
 
