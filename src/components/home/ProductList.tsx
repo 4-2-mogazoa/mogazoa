@@ -133,6 +133,14 @@ export default function ProductList({ type, selectedCategoryId, selectedCategory
         return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
       }
     };
+    const compareByDate = (a: any, b: any, valueKey: string) => {
+      const dateComparison = new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      if (dateComparison !== 0) {
+          return dateComparison;
+      } else {
+          return b[valueKey] - a[valueKey];
+      }
+  };
 
     switch (type) {
       case "rating":
@@ -142,13 +150,13 @@ export default function ProductList({ type, selectedCategoryId, selectedCategory
       case "category":
         switch (sortOption) {
           case "최신순":
-            return products.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+            return products.sort((a, b) => compareByDate(a, b, "rating"));
           case "별점 높은순":
             return products.sort((a, b) => compareByValueOrDate(a, b, "rating"));
           case "좋아요순":
             return products.sort((a, b) => compareByValueOrDate(a, b, "favoriteCount"));
           default:
-            return products.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+            return products.sort((a, b) => compareByDate(a, b, "rating"));
         }
     }
   };
