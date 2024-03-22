@@ -22,6 +22,7 @@
     "react-dom": "^18",
     "react-hook-form": "^7.51.0",
     "tailwind-merge": "^2.2.1",
+    "tailwind-scrollbar-hide": "^1.1.7",
     "zustand": "^4.5.2"
   },
   "devDependencies": {
@@ -50,4 +51,3 @@
     "typescript": "^5"
   }
 }
->>>>>>> 98f21325d40afefd2fd0effb026908950d5bc8d6
