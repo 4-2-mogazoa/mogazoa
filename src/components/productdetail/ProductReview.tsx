@@ -1,22 +1,53 @@
+import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
+import { getReviews } from "@/apis/products";
+import { getUserMe } from "@/apis/review";
 import { filterBy } from "@/constants/filterBy";
 
 import Dropdown from "../common/dropdown/Dropdown";
-import { reviewData } from "./MockData";
 import ReviewCard from "./ReviewCard";
 
-export default function ProductReview() {
-	const [cookieid, setCookieId] = useState<number>(0);
+export default function ProductReview({ id }: { id: number }) {
+	const [order, setOrder] = useState<
+		"recent" | "ratingDesc" | "ratingAsc" | "likeCount"
+	>("recent");
 
-	useEffect(() => {
-		const cookies = Object.fromEntries(
-			document.cookie.split(";").map((cookie) => cookie.trim().split("=")),
-		);
-		setCookieId(Number(cookies["id"]));
-	}, []);
-	//TODO: 쿠키는 아마도 기능구현때 store에서 관리
+	const {
+		data: reviewData,
+		isLoading,
+		isError,
+		isFetching,
+	} = useQuery({
+		queryKey: ["review", id, order],
+		queryFn: () => getReviews(id, order),
+		enabled: !!id,
+	});
+
+	const myData = useQuery({
+		queryKey: ["usersMe"],
+		queryFn: () => getUserMe(),
+	}).data;
+
+	const handleOnSelect = (item: { id: number; name: string }) => {
+		switch (item.id) {
+			case 0:
+				setOrder("recent");
+				break;
+			case 1:
+				setOrder("ratingDesc");
+				break;
+			case 2:
+				setOrder("ratingAsc");
+				break;
+			case 3:
+				setOrder("likeCount");
+				break;
+			default:
+				setOrder("recent");
+		}
+	};
 
 	return (
 		<div className="w-full lg:w-[94rem]">
@@ -28,32 +59,39 @@ export default function ProductReview() {
 				<Dropdown
 					items={filterBy}
 					defaultItem={filterBy[0]}
-					onSelect={(item) => console.log(`선택된 항목: ${item.name}`)}
+					onSelect={(item) => handleOnSelect(item)}
 				>
-					{/**TODO: 선택된 항목 별 정렬 */}
 					<Dropdown.Button variant={"small"} />
 					<Dropdown.List />
 				</Dropdown>
 			</div>
 			<div className="flex flex-col gap-[1.5rem] lg:gap-[2rem]">
-				{reviewData.list.map((data) => (
+				{reviewData?.list.map((data) => (
 					<ReviewCard
 						reviewData={data}
-						isMyReview={data.userId === cookieid}
+						isMyReview={data.userId === myData?.id}
 						key={data.id}
+						order={order}
 					/>
 				))}
 			</div>
+			{(isLoading || isFetching) && <NoneReview type="loading" />}
+			{isError && <NoneReview type="error" />}
 		</div>
 	);
 }
 
 type NoneReviewProps = {
-	type: "none" | "loading";
+	type: "none" | "loading" | "error";
 };
-// 기능 구현 때 데이터가 없거나 로딩중일때 렌더링하도록 컴포넌트 사용할 예정
+
 export function NoneReview({ type }: NoneReviewProps) {
-	const text = type === "none" ? "첫 리뷰를 작성해 보세요!" : "Loading...";
+	const text =
+		type === "none"
+			? "첫 리뷰를 작성해 보세요!"
+			: type === "loading"
+				? "Loading..."
+				: "Error 발생";
 	const noneReviewIconSrc = "/icons/none_review.svg";
 	return (
 		<div className="flex h-[20rem] flex-col items-center justify-center gap-[2rem] md:h-[29.8rem] lg:h-[32rem]">
