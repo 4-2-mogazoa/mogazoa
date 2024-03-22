@@ -10,12 +10,13 @@ import useWindowWidth from "@/hooks/common/useWindowWidth";
 import { Product } from "@/types/product";
 
 type ProductListType = {
-  type: 'rating' | 'review' | 'category';
+  type: 'rating' | 'review' | 'category' | 'search';
   selectedCategoryId?: number | null;
   selectedCategoryName?: string | null;
+  searchKeyword?: string;
 }
 
-export default function ProductList({ type, selectedCategoryId, selectedCategoryName }: ProductListType) {
+export default function ProductList({ type, selectedCategoryId, selectedCategoryName, searchKeyword }: ProductListType) {
   const currentWidth = useWindowWidth();
   const [isWrapPoint, setIsWrapPoint] = useState(false);
   const [products, setProducts] = useState<Product[]>([]);
@@ -37,6 +38,10 @@ export default function ProductList({ type, selectedCategoryId, selectedCategory
     setIsWrapPoint(BREAK_POINT.md < currentWidth && currentWidth < 1787);
   }, [currentWidth]);
 
+  const filterProductsBySearch = (products: any[], query: any) => {
+    return products.filter(product => product.name.toLowerCase().includes(query.toLowerCase()));
+  };
+
   const [sortOption, setSortOption] = useState(() => {
     switch (type) {
       case 'rating':
@@ -45,6 +50,8 @@ export default function ProductList({ type, selectedCategoryId, selectedCategory
         return 'review';
       case 'category':
         return 'category';
+      case 'search':
+        return 'search';
     }
   });
 
@@ -68,9 +75,20 @@ export default function ProductList({ type, selectedCategoryId, selectedCategory
     switch (type) {
       case "rating":
         return products.sort((a, b) => compareByValueOrDate(a, b, "rating"));
-    case "review":
+      case "review":
         return products.sort((a, b) => compareByValueOrDate(a, b, "reviewCount"));
       case "category":
+        switch (sortOption) {
+          case "최신순":
+            return products.sort((a, b) => compareByDate(a, b, "rating"));
+          case "별점 높은순":
+            return products.sort((a, b) => compareByValueOrDate(a, b, "rating"));
+          case "좋아요순":
+            return products.sort((a, b) => compareByValueOrDate(a, b, "favoriteCount"));
+          default:
+            return products.sort((a, b) => compareByDate(a, b, "rating"));
+        }
+      case "search":
         switch (sortOption) {
           case "최신순":
             return products.sort((a, b) => compareByDate(a, b, "rating"));
@@ -90,6 +108,10 @@ export default function ProductList({ type, selectedCategoryId, selectedCategory
     filteredProducts = sortProducts(products).slice(0, 6);
   }
 
+  if (searchKeyword) {
+    filteredProducts = filterProductsBySearch(filteredProducts, searchKeyword);
+  }
+
   return (
     <div className="flex w-[100%] flex-col gap-[3rem] text-[2rem] font-semibold text-white md:max-w-[63rem] lg:mt-[6rem] lg:max-w-[95rem] lg:text-[2.4rem]">
       <div className={clsx('ml-[2rem] md:ml-[4rem] lg:m-0', type === 'category' ? 'flex flex-row justify-between' : '')}>
@@ -100,7 +122,18 @@ export default function ProductList({ type, selectedCategoryId, selectedCategory
         {type === 'category' ?
         <div className="flex w-[100%] flex-col justify-between md:flex-row">
           <div>
-            {selectedCategoryName}의 모든 상품
+            {searchKeyword ? `${selectedCategoryName}의 '${searchKeyword}'로 검색한 상품` : `${selectedCategoryName}의 모든 상품`}
+          </div>
+          <div className="mt-[3rem] flex h-fit w-[100%] flex-row justify-between md:m-0 md:w-fit">
+            <CategoryFilterButton category={selectedCategoryName} />
+            <SortDropdown onSelect={(option) => setSortOption(option)} />
+          </div>
+        </div>
+        : ''}
+        {type === 'search' ?
+        <div className="flex w-[100%] flex-col justify-between md:flex-row">
+          <div>
+            {`'${searchKeyword}'로 검색한 상품`}
           </div>
           <div className="mt-[3rem] flex h-fit w-[100%] flex-row justify-between md:m-0 md:w-fit">
             <CategoryFilterButton category={selectedCategoryName} />

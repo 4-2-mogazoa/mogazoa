@@ -11,6 +11,7 @@ import useWindowWidth from "@/hooks/common/useWindowWidth";
 
 export default function HomeLayout() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [searchKeyword, setSearchKeyword] = useState<string>("");
   const currentWidth = useWindowWidth();
   const [isWrapPoint, setIsWrapPoint] = useState(false);
   const [isOverflow, setIsOverflow] = useState(false);
@@ -19,6 +20,10 @@ export default function HomeLayout() {
 
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
+  };
+
+  const handleSearch = (searchKeyword:string) => {
+    setSearchKeyword(searchKeyword);
   };
 
   const handleCategorySelect = (categoryId: number | null, categoryName: string | null) => {
@@ -33,19 +38,22 @@ export default function HomeLayout() {
 
   return (
     <div className="h-screen bg-[#1c1c22]">
-      <Header toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} headerType="homeHeader" />
+      <Header toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} onSearch={handleSearch} headerType="homeHeader" />
       <div className="w-[100%] overflow-auto bg-[#1c1c22] pb-[10rem]">
         <div className={clsx('flex flex-row', isWrapPoint ? 'lg:mx-[5rem]' : 'lg:mx-[18rem]')}>
           <SideBar isSidebarOpen={isSidebarOpen} onCategorySelect={handleCategorySelect} />
           <div className="hidden lg:mx-auto lg:flex lg:flex-col">
-            {!selectedCategoryId && (
+            {(!selectedCategoryId && !searchKeyword) && (
               <>
                 <ProductList type="review" />
                 <ProductList type="rating" />
               </>
             )}
+            {(!selectedCategoryId && searchKeyword) && (
+              <ProductList type="search" searchKeyword={searchKeyword} />
+            )}
             {selectedCategoryId && (
-              <ProductList type="category" selectedCategoryId={selectedCategoryId} selectedCategoryName={selectedCategoryName} />
+              <ProductList type="category" searchKeyword={searchKeyword} selectedCategoryId={selectedCategoryId} selectedCategoryName={selectedCategoryName} />
             )}
           </div>
           <div className="hidden lg:block">
@@ -53,14 +61,17 @@ export default function HomeLayout() {
           </div>
           <div className={clsx('flex flex-col gap-[6rem] md:w-[60rem] lg:hidden', isOverflow ? 'w-[100%]' : 'mx-auto')}>
             <ReviewerRanking />
-            {!selectedCategoryId && (
+            {(!selectedCategoryId && !searchKeyword) && (
               <>
                 <ProductList type="review" />
                 <ProductList type="rating" />
               </>
             )}
+            {(!selectedCategoryId && searchKeyword) && (
+              <ProductList type="search" searchKeyword={searchKeyword} />
+            )}
             {selectedCategoryId && (
-              <ProductList type="category" selectedCategoryId={selectedCategoryId} selectedCategoryName={selectedCategoryName} />
+              <ProductList type="category" searchKeyword={searchKeyword} selectedCategoryId={selectedCategoryId} selectedCategoryName={selectedCategoryName} />
             )}
           </div>
         </div>
