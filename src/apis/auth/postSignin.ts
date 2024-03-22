@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import instance from "./axiosInstance";
+import instance from "../axiosInstance";
 
 const url = "auth/signIn";
 
