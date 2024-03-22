@@ -1,14 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { getUserFollowees, getUserFollowers } from "@/apis/user";
+import ProfileImage from "@/components/common/profileImage/ProfileImage";
 import {
 	Followee,
 	Follower,
 	UserDetail,
 	UserResponseByVariant,
 } from "@/types/user";
-
-import ProfileImage from "../common/profileImage/ProfileImage";
 
 type Props = {
 	variant: "followee" | "follower";
