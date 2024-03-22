@@ -5,7 +5,9 @@ export default function TextBox({
 	defaultValue,
 	...props
 }: TextareaHTMLAttributes<HTMLTextAreaElement>) {
-	const [count, setCount] = useState(String(defaultValue)?.length);
+	const [count, setCount] = useState(
+		defaultValue ? String(defaultValue).length : 0,
+	);
 	const [isFocused, setIsFocused] = useState(false);
 
 	const handleOnTextarea = (e: ChangeEvent<HTMLTextAreaElement>) => {
