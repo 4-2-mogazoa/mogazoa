@@ -43,28 +43,3 @@ export type Product = {
 };
 
 export type ProductsResponse = Response<Product>;
-
-export type ReviewResponse = Response<Review>;
-
-export type Review = {
-	user: {
-		image: string | null;
-		nickname: string;
-		id: number;
-	};
-	reviewImages: ReviewImages[];
-	productId: number;
-	userId: number;
-	updatedAt: string;
-	createdAt: string;
-	isLiked: boolean;
-	likeCount: number;
-	content: string;
-	rating: number;
-	id: number;
-};
-
-export type ReviewImages = {
-	source: string;
-	id: number;
-};
