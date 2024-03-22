@@ -26,7 +26,7 @@ export default function StatisticsCard({
 			label: "별점 평균",
 			productData: rateData,
 			avgData: rateAvg,
-			icon: "/icons/star.svg",
+			icon: "/icons/star_on.svg",
 			unit: "점",
 			bottomDecription: {
 				higher: "더 높아요!",
@@ -65,7 +65,7 @@ export default function StatisticsCard({
 
 	const result = calculateDifference(productData, avgData, bottomDecription);
 	return (
-		<div className="flex h-[8.2rem] min-w-[33.5rem] flex-col justify-center rounded-[1.2rem] border border-[#353542] bg-[#252530] px-[2rem] md:min-h-[16.9rem] md:min-w-[21.8rem] md:items-center md:gap-[2rem] lg:h-[19rem] lg:w-[30rem] lg:items-center lg:gap-[2rem]">
+		<div className="flex flex-col gap-[0.5rem] rounded-[1.2rem] border border-[#353542] bg-[#252530] p-[2rem] max-[767px]:min-w-[33.5rem] md:w-full md:items-center md:justify-center md:gap-[1.5rem] md:py-[3rem] lg:gap-[2rem]">
 			<div className="flex flex-row gap-[1rem]">
 				<span className="text-[1.4rem] text-white md:text-[1.6rem] lg:text-[1.8rem]">
 					{label}
@@ -102,3 +102,4 @@ export default function StatisticsCard({
 		</div>
 	);
 }
+

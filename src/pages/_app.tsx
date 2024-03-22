@@ -5,7 +5,6 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import type { AppProps } from "next/app";
 import React, { ReactNode } from "react";
 
-import Header from "@/components/common/menu/Header";
 import ModalWrapper from "@/components/common/modal/ModalWrapper";
 import { useModalActions, useModalsStore } from "@/store/modal";
 
@@ -38,7 +37,6 @@ function Providers({ children }: { children: ReactNode }) {
 export default function App({ Component, pageProps }: AppProps) {
 	return (
 		<>
-			<Header />
 			<Providers>
 				<Component {...pageProps} />
 			</Providers>
