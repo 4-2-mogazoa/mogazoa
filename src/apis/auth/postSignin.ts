@@ -16,6 +16,9 @@ export const postSignIn = async (
 ) => {
 	try {
 		const res = await instance.post(url, data);
+		const accessToken = res.data.accessToken;
+		document.cookie = `accessToken=${accessToken}; path=/`;
+
 		router.push("/");
 	} catch (error) {
 		if (!axios.isAxiosError(error)) return;
