@@ -1,6 +1,7 @@
 import clsx from "clsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
+import CategoryFilterButton from "@/components/common/categoryFilterButton/CategoryFilter";
 import ProductCard from "@/components/common/productcard/ProductCard";
 import SortDropdown from "@/components/home/SortDropdown";
 import { BREAK_POINT } from "@/constants/breakPoint";
@@ -107,7 +108,11 @@ type ProductListType = {
 
 export default function ProductList({ type, selectedCategoryId, selectedCategoryName }: ProductListType) {
   const currentWidth = useWindowWidth();
-  const isWrapPoint = BREAK_POINT.md < currentWidth && currentWidth < 1787;
+  const [isWrapPoint, setIsWrapPoint] = useState(false);
+
+  useEffect(() => {
+    setIsWrapPoint(BREAK_POINT.md < currentWidth && currentWidth < 1787);
+  }, [currentWidth]);
 
   const [sortOption, setSortOption] = useState(() => {
     switch (type) {
@@ -121,24 +126,30 @@ export default function ProductList({ type, selectedCategoryId, selectedCategory
   });
 
   const sortProducts = (products: any[]) => {
+    const compareByValueOrDate = (a: any, b: any, valueKey: string) => {
+      if (a[valueKey] !== b[valueKey]) {
+        return b[valueKey] - a[valueKey];
+      } else {
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      }
+    };
+
     switch (type) {
       case "rating":
-        return products.sort((a, b) => b.rating - a.rating);
-      case "review":
-        return products.sort((a, b) => b.reviewCount - a.reviewCount);
+        return products.sort((a, b) => compareByValueOrDate(a, b, "rating"));
+    case "review":
+        return products.sort((a, b) => compareByValueOrDate(a, b, "reviewCount"));
       case "category":
         switch (sortOption) {
           case "최신순":
             return products.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
           case "별점 높은순":
-            return products.sort((a, b) => b.rating - a.rating);
+            return products.sort((a, b) => compareByValueOrDate(a, b, "rating"));
           case "좋아요순":
-            return products.sort((a, b) => b.favoriteCount - a.favoriteCount);
+            return products.sort((a, b) => compareByValueOrDate(a, b, "favoriteCount"));
           default:
             return products.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
         }
-      default:
-        return products;
     }
   };
 
@@ -149,19 +160,27 @@ export default function ProductList({ type, selectedCategoryId, selectedCategory
   }
 
   return (
-    <div className="flex flex-col gap-[3rem] text-[2rem] font-semibold text-white md:max-w-[63rem] lg:mt-[6rem] lg:max-w-[95rem] lg:text-[2.4rem]">
-      <div className={clsx('ml-[2rem] w-[100%] md:ml-[4rem] lg:m-0', type === 'category' ? 'flex flex-row justify-between' : '')}>
-        {type === 'review' ? '지금 핫한 상품' : type === 'rating' ? '별점이 높은 상품' : `${selectedCategoryName}의 모든 상품`} 
+    <div className="flex w-[100%] flex-col gap-[3rem] text-[2rem] font-semibold text-white md:max-w-[63rem] lg:mt-[6rem] lg:max-w-[95rem] lg:text-[2.4rem]">
+      <div className={clsx('ml-[2rem] md:ml-[4rem] lg:m-0', type === 'category' ? 'flex flex-row justify-between' : '')}>
+        {type === 'review' ? '지금 핫한 상품' : type === 'rating' ? '별점이 높은 상품' : ''} 
         {type === 'review' ?
         <span className="ml-[1rem] bg-gradient-to-r from-main_blue to-main_indigo bg-clip-text text-transparent">TOP 6</span>
         : ''}
         {type === 'category' ?
-        <SortDropdown onSelect={(option) => setSortOption(option)} />
-      : ''}
+        <div className="flex w-[100%] flex-col justify-between md:flex-row">
+          <div>
+            {selectedCategoryName}의 모든 상품
+          </div>
+          <div className="mt-[3rem] flex h-fit w-[100%] flex-row justify-between md:m-0 md:w-fit">
+            <CategoryFilterButton category={selectedCategoryName} />
+            <SortDropdown onSelect={(option) => setSortOption(option)} />
+          </div>
+        </div>
+        : ''}
       </div>
-      <div className={clsx('ml-[2rem] grid max-w-[34rem] grid-cols-2 gap-[1.5rem] md:ml-[4rem] md:max-w-[52rem]', isWrapPoint ? 'lg:m-0 lg:min-w-[53rem]' : 'lg:m-0 lg:min-w-[95rem] lg:grid-cols-3 lg:gap-[2rem]')}>
+      <div className={clsx('ml-[2rem] grid max-w-[33rem] grid-cols-2 gap-[1.5rem] md:ml-[4rem] md:max-w-[55rem]', isWrapPoint ? 'lg:m-0 lg:min-w-[53rem]' : 'lg:m-0 lg:min-w-[95rem] lg:grid-cols-3 lg:gap-[2rem]')}>
         {sortProducts(filteredProducts).map((product) => (
-          <div key={product.id} className={clsx(isWrapPoint ? 'w-[25rem] lg:h-[29rem]' :'w-[30rem] lg:h-[29rem]')}>
+          <div key={product.id} className="hover:rounded-[1.2rem] hover:border-[0.01rem] hover:border-main_blue">
             <ProductCard
               productName={product.name}
               imageData={product.image}

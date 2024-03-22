@@ -6,7 +6,7 @@ export default function AddProductButton() {
 	};
 	return (
 		<button
-			className="fixed bottom-[9rem] right-[3rem] rounded-full bg-main-gradient p-[1rem] lg:right-[18rem]"
+			className="fixed bottom-[9rem] right-[3rem] rounded-full bg-main-gradient p-[0.5rem] lg:right-[18rem]"
 			onClick={handleOpenAddProductModal}
 		>
 			<span>

@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
+import useWindowWidth from '@/hooks/common/useWindowWidth';
 
 type UserType = {
   id: number;
@@ -14,8 +15,11 @@ type HeaderProps = {
 };
 
 export default function Header({ user, isSidebarOpen, toggleSidebar }: HeaderProps) {
+  const currentWidth = useWindowWidth();
+
   const [isSearchVisible, setSearchVisible] = useState(false);
-  const [windowWidth, setWindowWidth] = useState(0);
+  const [isLogoOverflow, setIsLogoOverflow] = useState(false);
+  
   const hamburgerSrc = '/icons/hamburger.svg';
   const logoSrc = '/icons/logo.svg';
   const searchSrc = '/icons/search.svg';
@@ -26,27 +30,20 @@ export default function Header({ user, isSidebarOpen, toggleSidebar }: HeaderPro
   };
 
   useEffect(() => {
-    const updateWindowWidth = () => {
-      setWindowWidth(window.innerWidth);
-    };
-    updateWindowWidth();
-    window.addEventListener('resize', updateWindowWidth);
-    return () => {
-      window.removeEventListener('resize', updateWindowWidth);
-    };
-  }, []);
+    setIsLogoOverflow(currentWidth < 430);
+  }, [currentWidth])
 
   return (
-    <div className='flex h-[7rem] w-[100%] min-w-[37.5rem] flex-row justify-between border-b border-black-bg bg-[#1c1c22] align-middle md:h-[8rem] lg:h-[10rem]'>
+    <div className='flex h-[7rem] w-[100%] flex-row justify-between border-b border-black-bg bg-[#1c1c22] align-middle md:h-[8rem] lg:h-[10rem]'>
       <Image
         src={isSidebarOpen ? closeSrc : hamburgerSrc}
-        alt='side menu'
+        alt='side menu toggle'
         width={24}
         height={24}
         onClick={toggleSidebar}
         className='ml-[2rem] block md:hidden'
       />
-      {!(windowWidth < 430 && isSearchVisible) && (
+      {!(isLogoOverflow && isSearchVisible) && (
         <Link
           href='/'
           className='relative my-auto h-[1.8rem] w-[11.2rem] md:ml-[3rem] md:h-[2.4rem] md:w-[13.8rem] lg:ml-[12rem] lg:h-[2.8rem] lg:w-[16.6rem]'>
