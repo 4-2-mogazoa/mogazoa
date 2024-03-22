@@ -1,104 +1,13 @@
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 
+import { getProducts } from "@/apis/products";
 import CategoryFilterButton from "@/components/common/categoryFilterButton/CategoryFilter";
 import ProductCard from "@/components/common/productcard/ProductCard";
 import SortDropdown from "@/components/home/SortDropdown";
 import { BREAK_POINT } from "@/constants/breakPoint";
 import useWindowWidth from "@/hooks/common/useWindowWidth";
-
-const tempProductData = [
-  {
-    id: 1,
-    categoryId: 7,
-    name: "다이슨 슈퍼소닉 블루",
-    image: "/images/supersonic.svg",
-    reviewCount: 129,
-    favoriteCount: 34,
-    rating: 4.7,
-    createdAt: "2024-03-19T02:24:31.233Z",
-  },
-  {
-    id: 2,
-    categoryId: 7,
-    name: "Apple Watch 7",
-    image: "/images/appleWatch.svg",
-    reviewCount: 4961,
-    favoriteCount: 162,
-    rating: 3.5,
-    createdAt: "2024-03-17T02:24:31.233Z",
-  },
-  {
-    id: 3,
-    categoryId: 8,
-    name: "헤라 블랙쿠션",
-    image: "/images/heraBlack.svg",
-    reviewCount: 432,
-    favoriteCount: 57,
-    rating: 3.9,
-    createdAt: "2024-03-18T02:24:31.233Z",
-  },
-  {
-    id: 4,
-    categoryId: 9,
-    name: "우스티드 울 폴로 셔츠",
-    image: "/images/poloShirt.svg",
-    reviewCount: 318,
-    favoriteCount: 44,
-    rating: 4.7,
-    createdAt: "2024-03-09T02:24:31.233Z",
-  },
-  {
-    id: 5,
-    categoryId: 5,
-    name: "돌화분",
-    image: "/images/flowerpot.svg",
-    reviewCount: 274,
-    favoriteCount: 35,
-    rating: 4.8,
-    createdAt: "2024-03-05T02:24:31.233Z",
-  },
-  {
-    id: 6,
-    categoryId: 9,
-    name: "아디다스 퍼피렛 코어 블랙",
-    image: "/images/adidas.svg",
-    reviewCount: 738,
-    favoriteCount: 94,
-    rating: 2.9,
-    createdAt: "2024-03-15T02:24:31.233Z",
-  },
-  {
-    id: 7,
-    categoryId: 7,
-    name: "Huawei-AI 스피커2",
-    image: "/images/speaker.svg",
-    reviewCount: 432,
-    favoriteCount: 57,
-    rating: 5.0,
-    createdAt: "2024-02-19T02:24:31.233Z",
-  },
-  {
-    id: 8,
-    categoryId: 7,
-    name: "Apple TV1",
-    image: "/images/appleTv.svg",
-    reviewCount: 274,
-    favoriteCount: 35,
-    rating: 1.9,
-    createdAt: "2024-03-01T02:24:31.233Z",
-  },
-  {
-    id: 9,
-    categoryId: 7,
-    name: "Canon 디지털 카메라",
-    image: "/images/camera.svg",
-    reviewCount: 5438,
-    favoriteCount: 94,
-    rating: 2.5,
-    createdAt: "2024-03-13T02:24:31.233Z",
-  },
-]
+import { Product } from "@/types/product";
 
 type ProductListType = {
   type: 'rating' | 'review' | 'category';
@@ -109,6 +18,20 @@ type ProductListType = {
 export default function ProductList({ type, selectedCategoryId, selectedCategoryName }: ProductListType) {
   const currentWidth = useWindowWidth();
   const [isWrapPoint, setIsWrapPoint] = useState(false);
+  const [products, setProducts] = useState<Product[]>([]);
+  
+  const getProductList = async () => {
+    try {
+      const data = await getProducts();
+      setProducts(data.list);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
+
+  useEffect(() => {
+    getProductList();
+  }, [selectedCategoryId]);
 
   useEffect(() => {
     setIsWrapPoint(BREAK_POINT.md < currentWidth && currentWidth < 1787);
@@ -161,10 +84,10 @@ export default function ProductList({ type, selectedCategoryId, selectedCategory
     }
   };
 
-  let filteredProducts = selectedCategoryId ? tempProductData.filter(product => product.categoryId === selectedCategoryId) : tempProductData;
+  let filteredProducts = selectedCategoryId ? products.filter(product => product.categoryId === selectedCategoryId) : products;
 
   if (!selectedCategoryId) {
-    filteredProducts = sortProducts(tempProductData).slice(0, 6);
+    filteredProducts = sortProducts(products).slice(0, 6);
   }
 
   return (

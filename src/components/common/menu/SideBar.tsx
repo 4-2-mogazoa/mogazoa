@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 
+import { getCategories } from '@/apis/categories';
 import { Category } from '@/types/common';
 
 type SideBarProps = {
@@ -23,8 +24,8 @@ export const SideBar: React.FC<SideBarProps> = ({ user, isSidebarOpen, onCategor
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get('https://mogazoa-api.vercel.app/4-2/categories');
-        setCategories(response.data);
+        const response = await getCategories();
+        setCategories(response);
       } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
           alert(`카테고리를 불러오는 데 실패하였습니다: ${error.response}`);
@@ -57,10 +58,10 @@ export const SideBar: React.FC<SideBarProps> = ({ user, isSidebarOpen, onCategor
         </ul>
       </div>
       <div className={'ml-[1rem] flex w-[16rem] flex-col gap-[0.4rem] lg:w-[20rem]'}>
-        <Link href='#' className={'h-[4.5rem] w-[100%] px-[2rem] py-[1.5rem] text-[1.4rem] font-medium lg:h-[5rem] lg:text-[1.6rem]'}>
+        <Link href={user ? '/compare' : '/signin'} className={'h-[4.5rem] w-[100%] px-[2rem] py-[1.5rem] text-[1.4rem] font-medium lg:h-[5rem] lg:text-[1.6rem]'}>
           {user ? '비교하기' : '로그인'}
         </Link>
-        <Link href='#' className={'mb-[4.5rem] h-[4.5rem] w-[100%] px-[2rem] py-[1.5rem] text-[1.4rem] font-medium lg:h-[5rem] lg:text-[1.6rem]'}>
+        <Link href={user ? '/profile/my' : '/signup'} className={'mb-[4.5rem] h-[4.5rem] w-[100%] px-[2rem] py-[1.5rem] text-[1.4rem] font-medium lg:h-[5rem] lg:text-[1.6rem]'}>
           {user ? '내 프로필' : '회원가입'}
         </Link>
       </div>
