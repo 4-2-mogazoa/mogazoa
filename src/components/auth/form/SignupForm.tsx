@@ -1,13 +1,14 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 
+import { postSignup } from "@/apis/postSignup";
 import BasicButton from "@/components/common/button/BasicButton";
 import Input from "@/components/common/inputs/Input";
 import { emailPattern, passwordPattern } from "@/constants/regExp";
 
 import AuthFormContainer from "./AuthFormContainer";
 
-type ISignupForm = {
+type TSignupForm = {
 	email: string;
 	nickname: string;
 	password: string;
@@ -20,7 +21,8 @@ export default function SignupForm() {
 		handleSubmit,
 		formState: { errors },
 		getValues,
-	} = useForm<ISignupForm>({ mode: "onBlur" });
+		setError,
+	} = useForm<TSignupForm>({ mode: "onBlur" });
 
 	const emailValidationSchema = {
 		required: "이메일은 필수 입력입니다.",
@@ -50,7 +52,7 @@ export default function SignupForm() {
 		},
 	};
 
-	const passwordCkdValidationSchema = {
+	const passwordCheckedValidationSchema = {
 		required: "비밀번호 확인을 입력해주세요.",
 		validate: {
 			matchesPreviousPassword: (value: string) => {
@@ -61,7 +63,11 @@ export default function SignupForm() {
 	};
 
 	return (
-		<AuthFormContainer handleSubmit={handleSubmit}>
+		<AuthFormContainer
+			handleSubmit={handleSubmit}
+			api={postSignup}
+			setError={setError}
+		>
 			<div className="mb-[6rem] flex flex-col gap-[3rem] md:gap-[4rem]">
 				<Input
 					inputType="email"
@@ -82,9 +88,9 @@ export default function SignupForm() {
 					errors={errors}
 				/>
 				<Input
-					inputType="passwordCkd"
+					inputType="passwordChecked"
 					register={register}
-					validationSchema={passwordCkdValidationSchema}
+					validationSchema={passwordCheckedValidationSchema}
 					errors={errors}
 				/>
 			</div>

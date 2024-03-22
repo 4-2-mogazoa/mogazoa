@@ -41,7 +41,7 @@ export default function ActivityCard({
 	const DataList: DataListType = {
 		rate: {
 			label: ["남긴", "별점 평균"],
-			img: "/icons/star.svg",
+			img: "/icons/star_on.svg",
 			data: myRateAvg?.toFixed(1),
 		},
 		review: {

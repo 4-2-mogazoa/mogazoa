@@ -1,4 +1,4 @@
-import { Response } from "./common";
+import { CategoryList, Response } from "./common";
 
 export type ProductDetail = {
 	id: number;
@@ -15,19 +15,29 @@ export type ProductDetail = {
 	isFavorite: boolean;
 	category: {
 		id: number;
-		name:
-			| "음악"
-			| "영화/드라마"
-			| "강의/책"
-			| "호텔"
-			| "가구/인테리어"
-			| "식당"
-			| "전자기기"
-			| "화장품"
-			| "의류/잡화"
-			| "앱";
+		name: CategoryList;
+	};
+	categoryMetric: {
+		rating: number;
+		favoriteCount: number;
+		reviewCount: number;
 	};
 };
+
+export type Product = {
+	id: number;
+	name: string;
+	image: string;
+	rating: number;
+	reviewCount: number;
+	favoriteCount: number;
+	categoryId: number;
+	createdAt: string;
+	updatedAt: string;
+	writerId: number;
+};
+
+export type ProductsResponse = Response<Product>;
 
 export type ReviewResponse = Response<Review>;
 

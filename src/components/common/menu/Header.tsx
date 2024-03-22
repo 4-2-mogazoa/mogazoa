@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import useWindowWidth from '@/hooks/common/useWindowWidth';
 
 type UserType = {
-  id: number;
+	id: number;
 };
 
 type HeaderProps = {
@@ -25,9 +25,9 @@ export default function Header({ user, isSidebarOpen, toggleSidebar }: HeaderPro
   const searchSrc = '/icons/search.svg';
   const closeSrc = '/icons/close.svg';
 
-  const toggleSearch = () => {
-    setSearchVisible(!isSearchVisible);
-  };
+	const toggleSearch = () => {
+		setSearchVisible(!isSearchVisible);
+	};
 
   useEffect(() => {
     setIsLogoOverflow(currentWidth < 430);

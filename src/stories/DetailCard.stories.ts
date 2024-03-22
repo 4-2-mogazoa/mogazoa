@@ -35,6 +35,11 @@ export const Product: Story = {
 				id: 1,
 				name: "전자기기",
 			},
+			categoryMetric: {
+				rating: 4.5,
+				favoriteCount: 1000,
+				reviewCount: 100,
+			},
 		},
 		isMyProduct: false,
 	},
@@ -59,6 +64,11 @@ export const MyProduct: Story = {
 			category: {
 				id: 1,
 				name: "전자기기",
+			},
+			categoryMetric: {
+				rating: 4.5,
+				favoriteCount: 1000,
+				reviewCount: 100,
 			},
 		},
 		isMyProduct: true,

@@ -28,7 +28,12 @@ const InputVariants = cva(
 
 type InputProps = InputHTMLAttributes<HTMLInputElement> &
 	VariantProps<typeof InputVariants> & {
-		inputType: "email" | "password" | "nickname" | "textfield" | "passwordCkd";
+		inputType:
+			| "email"
+			| "password"
+			| "nickname"
+			| "textfield"
+			| "passwordChecked";
 		register?: any;
 		validationSchema?: any;
 		errors?: any;
@@ -64,7 +69,7 @@ export default function Input({
 			labelValue: "",
 			placeholderValue: "상품명",
 		},
-		passwordCkd: {
+		passwordChecked: {
 			type: isVisibility ? "text" : "password",
 			labelValue: "비밀번호 확인",
 			placeholderValue: "비밀번호를 한번 더 입력해 주세요",
@@ -94,7 +99,7 @@ export default function Input({
 						{...register(inputType, validationSchema)}
 					/>
 
-					{(inputType === "password" || inputType === "passwordCkd") && (
+					{(inputType === "password" || inputType === "passwordChecked") && (
 						<div className="absolute bottom-1/2 right-[2rem] size-[2.2rem] translate-y-1/2 cursor-pointer">
 							<Image
 								src={isVisibility ? visibilityOnIconSrc : visibilityOffIconSrc}

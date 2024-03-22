@@ -1,11 +1,31 @@
+import { useRouter } from "next/router";
 import React, { ReactNode } from "react";
-import { FieldValues, SubmitHandler } from "react-hook-form";
+import {
+	FieldValues,
+	SubmitHandler,
+	UseFormHandleSubmit,
+} from "react-hook-form";
 
-type Props = { children: ReactNode; handleSubmit: any };
+type Props = {
+	children: ReactNode;
+	handleSubmit: UseFormHandleSubmit<FieldValues>;
+	setError?: any;
+	api?: any;
+};
 
-export default function AuthFormContainer({ children, handleSubmit }: Props) {
-	const onSubmit: SubmitHandler<FieldValues> = (data) => {
-		console.log("데이터 :", data);
+export default function AuthFormContainer({
+	children,
+	handleSubmit,
+	api,
+	setError,
+}: Props) {
+	const router = useRouter();
+	const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+		try {
+			await api(data, setError, router);
+		} catch (e) {
+			console.log(e);
+		}
 	};
 
 	return (
