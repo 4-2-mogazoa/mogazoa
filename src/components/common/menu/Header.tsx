@@ -41,7 +41,7 @@ export default function Header({ user, isSidebarOpen, toggleSidebar }: HeaderPro
         width={24}
         height={24}
         onClick={toggleSidebar}
-        className='ml-[2rem] block md:hidden'
+        className='ml-[2rem] block cursor-pointer md:hidden'
       />
       {!(isLogoOverflow && isSearchVisible) && (
         <Link

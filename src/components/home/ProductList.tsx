@@ -180,7 +180,7 @@ export default function ProductList({ type, selectedCategoryId, selectedCategory
       </div>
       <div className={clsx('ml-[2rem] grid max-w-[33rem] grid-cols-2 gap-[1.5rem] md:ml-[4rem] md:max-w-[55rem]', isWrapPoint ? 'lg:m-0 lg:min-w-[53rem]' : 'lg:m-0 lg:min-w-[95rem] lg:grid-cols-3 lg:gap-[2rem]')}>
         {sortProducts(filteredProducts).map((product) => (
-          <div key={product.id} className="hover:rounded-[1.2rem] hover:border-[0.01rem] hover:border-main_blue">
+          <div key={product.id} className="hover:rounded-[1.2rem] hover:border-[0.01rem] hover:border-main_blue md:max-w-[24.7rem] lg:max-w-[30rem]">
             <ProductCard
               productName={product.name}
               imageData={product.image}
