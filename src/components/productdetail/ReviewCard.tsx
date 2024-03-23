@@ -3,10 +3,12 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 
 import { deleteReviewLike, postReviewLike } from "@/apis/review";
+import { useModalActions } from "@/store/modal";
 import { Review, ReviewImages } from "@/types/review";
 
 import ProfileImage from "../common/profileImage/ProfileImage";
 import Thumbs from "../common/thumbs/Thumbs";
+import ReviewModal from "./ReviewModal";
 
 type Props = {
 	reviewData: Review;
@@ -44,6 +46,17 @@ export default function ReviewCard({ reviewData, isMyReview }: Props) {
 			return;
 		}
 		toggleLike();
+	};
+
+	const { openModal, closeModal } = useModalActions();
+	const handleReviewModifyButton = () => {
+		const reviewModify = openModal(
+			<ReviewModal type="modify" closeModal={() => closeModal(reviewModify)} />,
+			{
+				isCloseClickOutside: true,
+				isCloseESC: true,
+			},
+		);
 	};
 
 	return (
@@ -102,9 +115,9 @@ export default function ReviewCard({ reviewData, isMyReview }: Props) {
 						</div>
 						{isMyReview && (
 							<div className="flex gap-[1rem] font-light text-gray-100 underline">
-								<button>수정</button>
+								<button onClick={handleReviewModifyButton}>수정</button>
 								<button>삭제</button>
-								{/**TODO: 수정모달 추가, 삭제 alert추가 */}
+								{/**TODO: 삭제 alert추가 */}
 							</div>
 						)}
 					</div>
