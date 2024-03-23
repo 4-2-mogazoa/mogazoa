@@ -29,8 +29,6 @@ export default function AddImageBox() {
 		setEditorData({ file: null });
 	};
 
-	console.log(editorData);
-
 	return (
 		<label
 			htmlFor="fileInput"
