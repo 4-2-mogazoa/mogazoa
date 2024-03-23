@@ -32,15 +32,8 @@ export default function ReviewCard({ reviewData, isMyReview, order }: Props) {
 	const starOnIconSrc = "/icons/star_on.svg";
 	const starOffIconSrc = "/icons/star_off.svg";
 
-	const { mutate: getLike } = useMutation({
-		mutationFn: () => postReviewLike(id),
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ["review"] });
-		},
-	});
-
-	const { mutate: unLike } = useMutation({
-		mutationFn: () => deleteReviewLike(id),
+	const { mutate: toggleLike } = useMutation({
+		mutationFn: () => (isLiked ? deleteReviewLike(id) : postReviewLike(id)),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["review"] });
 		},
@@ -51,8 +44,7 @@ export default function ReviewCard({ reviewData, isMyReview, order }: Props) {
 			alert("자신의 리뷰는 추천할 수 없습니다!");
 			return;
 		}
-
-		isLiked ? unLike() : getLike();
+		toggleLike();
 	};
 
 	return (
