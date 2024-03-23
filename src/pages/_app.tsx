@@ -16,17 +16,17 @@ function Providers({ children }: { children: ReactNode }) {
 
 	return (
 		<>
-			{modals.map((modal) => (
-				<ModalWrapper
-					id={modal.id}
-					key={modal.id}
-					onRemove={() => closeModal(modal.id)}
-					config={modal.config}
-				>
-					{modal.content}
-				</ModalWrapper>
-			))}
 			<QueryClientProvider client={queryClient}>
+				{modals.map((modal) => (
+					<ModalWrapper
+						id={modal.id}
+						key={modal.id}
+						onRemove={() => closeModal(modal.id)}
+						config={modal.config}
+					>
+						{modal.content}
+					</ModalWrapper>
+				))}
 				{children}
 				<ReactQueryDevtools initialIsOpen={false} />
 			</QueryClientProvider>

@@ -2,9 +2,9 @@ import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-import { getUsersRanking } from "@/apis/usersRanking";
+import { getUsersRanking } from "@/apis/user";
 import ReviewerProfile from "@/components/common/reviewerProfile/ReviewerProfile";
-import { UsersRanking } from "@/types/usersRanking";
+import { UsersRanking } from "@/types/user";
 
 export default function ReviewerRanking() {
   const [rankingData, setRankingData] = useState<UsersRanking[]>([]);

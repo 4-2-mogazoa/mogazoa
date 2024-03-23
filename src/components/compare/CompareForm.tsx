@@ -24,7 +24,7 @@ export default function CompareForm() {
 
 	return (
 		<form
-			className="flex w-full flex-col gap-[1.2rem] md:w-full md:flex-row md:items-center md:justify-center md:gap-[2rem]"
+			className="flex w-full flex-col gap-[1.2rem] md:grid md:grid-cols-[repeat(2,minmax(0,1fr))_164px] md:items-center md:gap-[2rem] lg:grid-cols-[repeat(2,minmax(0,1fr))_200px]"
 			onSubmit={handleFormSubmit}
 		>
 			<CompareInput
@@ -41,7 +41,6 @@ export default function CompareForm() {
 				tagColor="pink"
 				setIsError={setIsError}
 			/>
-			{/* TODO: 버튼 내부 text가 w-full일 때, 가운데 정렬이 안되고 있음 */}
 			<BasicButton
 				label="비교하기"
 				className="_flex-center h-[5.5rem] w-full md:mt-2 md:w-[16.4rem] lg:h-[7rem] lg:w-[20rem]"

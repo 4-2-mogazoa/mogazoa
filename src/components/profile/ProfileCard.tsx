@@ -3,6 +3,7 @@ import ProfileImage from "@/components/common/profileImage/ProfileImage";
 import { useModalActions } from "@/store/modal";
 import { UserDetail } from "@/types/user";
 
+import FollowUsersModal from "./FollowUsersModal";
 import ProfileModifyModal from "./ProfileModifyModal";
 
 type Props = {
@@ -20,6 +21,14 @@ export default function ProfileCard({ user, isMine = true }: Props) {
 		);
 	};
 
+	const handleOpenFolloweesModal = () => {
+		openModal(<FollowUsersModal variant="followee" owner={user} />);
+	};
+
+	const handleOpenFollowersModal = () => {
+		openModal(<FollowUsersModal variant="follower" owner={user} />);
+	};
+
 	return (
 		<section className="_flex-col-center w-[33.5rem] gap-[3rem] rounded-[1.2rem] border border-black-border bg-black-bg px-[2rem] py-[3rem] md:w-[50.9rem] lg:w-[34rem]">
 			<h2 className="sr-only">기본 정보</h2>
@@ -34,14 +43,14 @@ export default function ProfileCard({ user, isMine = true }: Props) {
 				<p className="text-[1.4rem] text-gray-200">{user.description}</p>
 			</div>
 			<div className="flex w-full justify-evenly">
-				<button className="_flex-col-center">
+				<button className="_flex-col-center" onClick={handleOpenFolloweesModal}>
 					<span className="text-[1.8rem] font-semibold text-white">
 						{user.followeesCount}
 					</span>
 					<span className="text-[1.4rem] text-gray-100">팔로워</span>
 				</button>
 				<div className="h-[4.8rem] w-[1px] bg-black-border"></div>
-				<button className="_flex-col-center">
+				<button className="_flex-col-center" onClick={handleOpenFollowersModal}>
 					<span className="text-[1.8rem] font-semibold text-white">
 						{user.followersCount}
 					</span>
