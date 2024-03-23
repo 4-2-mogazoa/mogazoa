@@ -48,7 +48,6 @@ export default function ProductReview({ id }: { id: number }) {
 				setOrder("recent");
 		}
 	};
-
 	return (
 		<div className="w-full lg:w-[94rem]">
 			{/**TODO: 리뷰 목록 무한 스크롤 구현 */}
@@ -75,6 +74,7 @@ export default function ProductReview({ id }: { id: number }) {
 					/>
 				))}
 			</div>
+			{reviewData?.list.length === 0 && <NoneReview type="none" />}
 			{(isLoading || isFetching) && <NoneReview type="loading" />}
 			{isError && <NoneReview type="error" />}
 		</div>
