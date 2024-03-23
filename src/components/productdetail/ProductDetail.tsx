@@ -4,13 +4,18 @@ import { getProductDetail } from "@/apis/products";
 import { getUserMe } from "@/apis/review";
 
 import DetailCard from "./DetailCard";
+import NoneReview from "./NoneReview";
 
 export default function ProductDetail({ id }: { id: number }) {
-	const productData = useQuery({
+	const {
+		data: productData,
+		isFetching,
+		isLoading,
+	} = useQuery({
 		queryKey: ["productDetail", id],
 		queryFn: () => getProductDetail(id),
 		enabled: !!id,
-	}).data;
+	});
 	const myData = useQuery({
 		queryKey: ["usersMe"],
 		queryFn: () => getUserMe(),
@@ -24,6 +29,7 @@ export default function ProductDetail({ id }: { id: number }) {
 					isMyProduct={productData.writerId === myData?.id}
 				/>
 			)}
+			{(isLoading || isFetching) && <NoneReview type="loading" />}
 		</div>
 	);
 }

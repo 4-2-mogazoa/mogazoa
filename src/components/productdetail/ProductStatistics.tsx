@@ -3,13 +3,18 @@ import { useQuery } from "@tanstack/react-query";
 import { getProductDetail } from "@/apis/products";
 
 import StatisticsCard from "../common/statisticscard/StatisticsCard";
+import NoneReview from "./NoneReview";
 
 export default function ProductStatistics({ id }: { id: number }) {
-	const productData = useQuery({
+	const {
+		data: productData,
+		isLoading,
+		isFetching,
+	} = useQuery({
 		queryKey: ["productDetail", id],
 		queryFn: () => getProductDetail(id),
 		enabled: !!id,
-	}).data;
+	});
 
 	return (
 		<div className="flex w-full flex-col lg:w-[94rem] lg:pt-[2rem]">
@@ -35,6 +40,7 @@ export default function ProductStatistics({ id }: { id: number }) {
 					/>
 				</div>
 			)}
+			{(isLoading || isFetching) && <NoneReview type="loading" />}
 		</div>
 	);
 }
