@@ -3,11 +3,13 @@ import clsx from "clsx";
 import Image from "next/image";
 
 import { deleteFavorite, postFavorite } from "@/apis/products";
+import { useModalActions } from "@/store/modal";
 import { ProductDetail } from "@/types/product";
 import cn from "@/utils/cn";
 
 import BasicButton from "../common/button/BasicButton";
 import CategoryBadge from "../common/categoryBadge/CategoryBadge";
+import ReviewModal from "./ReviewModal";
 
 type Props = {
 	productData: ProductDetail;
@@ -27,6 +29,17 @@ type FavoriteProps = {
 
 export default function DetailCard({ productData, isMyProduct }: Props) {
 	const { name, description, image, isFavorite, category, id } = productData;
+	const { openModal, closeModal } = useModalActions();
+
+	const handleReviewCreateButton = () => {
+		const reviewCreate = openModal(
+			<ReviewModal type="create" closeModal={() => closeModal(reviewCreate)} />,
+			{
+				isCloseClickOutside: true,
+				isCloseESC: true,
+			},
+		);
+	};
 
 	return (
 		<div className="flex min-w-[33.5rem] flex-col items-center md:flex-row lg:justify-between">
@@ -68,8 +81,8 @@ export default function DetailCard({ productData, isMyProduct }: Props) {
 						className={clsx("lg:max-w-[34.5rem]", {
 							"lg:max-w-[18.5rem]": isMyProduct,
 						})}
+						onClick={handleReviewCreateButton}
 					/>
-					{/**TODO: 리뷰 작성 모달, 비로그인 시 로그인 요청 모달*/}
 					<BasicButton
 						label="비교하기"
 						variant="secondary"
