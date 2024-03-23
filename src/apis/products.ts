@@ -25,12 +25,16 @@ export async function getProductDetail(productId: number) {
 	return data;
 }
 
-export async function getReviews(
-	productId: number,
-	order?: "recent" | "ratingDesc" | "ratingAsc" | "likeCount",
-	cursor?: number,
-) {
-	const params = { order, cursor };
+export async function getReviews({
+	productId,
+	order,
+	cursor,
+}: {
+	productId: number;
+	order?: "recent" | "ratingDesc" | "ratingAsc" | "likeCount";
+	cursor?: number | null;
+}) {
+	const params = { productId, order, cursor };
 
 	const res = await instance.get<ReviewResponse>(
 		`products/${productId}/reviews`,
