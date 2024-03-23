@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 
 import useCompareQueries from "@/hooks/compare/useCompareQueries";
 
@@ -13,11 +13,12 @@ export default function CompareForm() {
 		refetchAll,
 	} = useCompareQueries();
 
-	const [isError, setIsError] = useState(false);
+	const [isFormError, setIsFormError] = useState(false);
 
-	const handleFormSubmit = () => {
-		// 모달 띄우기?
-		if (isError) return;
+	const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		// TODO: 모달 띄우기 ? - 어차피 인풋에 에러메시지를 보여주니까, 필요없을까?
+		if (isFormError) return;
 
 		refetchAll();
 	};
@@ -32,14 +33,14 @@ export default function CompareForm() {
 				label="상품 1"
 				product={firstProduct}
 				tagColor="green"
-				setIsError={setIsError}
+				setIsFormError={setIsFormError}
 			/>
 			<CompareInput
 				position="secondProduct"
 				label="상품 2"
 				product={secondProduct}
 				tagColor="pink"
-				setIsError={setIsError}
+				setIsFormError={setIsFormError}
 			/>
 			<BasicButton
 				label="비교하기"
