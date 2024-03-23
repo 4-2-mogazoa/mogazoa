@@ -137,15 +137,8 @@ export function Favorite({
 	const heartOnIconSrc = "/icons/heart_on.svg";
 	const heartOffIconSrc = "/icons/heart_off.svg";
 	const queryClient = useQueryClient();
-	const { mutate: favorite } = useMutation({
-		mutationFn: () => postFavorite(id),
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ["productDetail", id] });
-		},
-	});
-
-	const { mutate: unfavorite } = useMutation({
-		mutationFn: () => deleteFavorite(id),
+	const { mutate: toggleFavorite } = useMutation({
+		mutationFn: () => (isFavorite ? deleteFavorite(id) : postFavorite(id)),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["productDetail", id] });
 		},
@@ -156,7 +149,7 @@ export function Favorite({
 			alert("내 상품은 찜할 수 없어요!");
 			return;
 		}
-		isFavorite ? unfavorite() : favorite();
+		toggleFavorite();
 	};
 	return (
 		<button className={className} onClick={handleButtonOnclick}>
