@@ -11,16 +11,17 @@ import { productDetailData } from "./MockData";
 
 type Props = {
 	type: "create" | "modify";
+	closeModal: () => void;
 };
 
-export default function ReviewModal({ type }: Props) {
+export default function ReviewModal({ type, closeModal }: Props) {
 	const [rating, setRating] = useState(0);
 	const [hover, setHover] = useState(0);
 	const buttonLabel = type === "create" ? "작성하기" : "수정하기";
 	const { rateArray, starOnIconSrc, starOffIconSrc } = starRate;
 
 	return (
-		<div className="flex flex-col gap-[2rem] px-[2rem] pb-[2rem] pt-[4rem] md:gap-[4rem] md:px-[4rem] md:pb-[5.023rem] lg:pb-[4rem] lg:pt-[6rem]">
+		<div className="flex h-[46.8rem] w-[29.5rem] flex-col gap-[2rem]  md:h-[55.2rem] md:w-[51rem] md:gap-[4rem] lg:h-[59.8rem] lg:w-[54rem]">
 			<div className="flex flex-col gap-[1rem]">
 				<CategoryBadge
 					size="small"
