@@ -1,12 +1,15 @@
-import { useQuery } from "@tanstack/react-query";
-import Image from "next/image";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 import { getReviews } from "@/apis/products";
 import { getUserMe } from "@/apis/review";
 import { filterBy } from "@/constants/filterBy";
+import { useIntersectionObserver } from "@/hooks/common/useIntersectionObserver";
+import useThrottle from "@/hooks/common/useThrottle";
+import { ReviewResponse } from "@/types/review";
 
 import Dropdown from "../common/dropdown/Dropdown";
+import NoneReview from "./NoneReview";
 import ReviewCard from "./ReviewCard";
 
 export default function ProductReview({ id }: { id: number }) {
@@ -17,12 +20,28 @@ export default function ProductReview({ id }: { id: number }) {
 	const {
 		data: reviewData,
 		isLoading,
-		isError,
 		isFetching,
-	} = useQuery({
+		fetchNextPage,
+		hasNextPage,
+	} = useInfiniteQuery({
 		queryKey: ["review", id, order],
-		queryFn: () => getReviews(id, order),
+		queryFn: ({ pageParam = 0 }) =>
+			getReviews({ cursor: pageParam, productId: id, order }),
+		getNextPageParam: (lastPage: ReviewResponse) => {
+			if (lastPage.list.length === 0) {
+				return undefined;
+			}
+			return lastPage.nextCursor;
+		},
+		initialPageParam: null,
 		enabled: !!id,
+	});
+
+	const fetchNextPageThrottled = useThrottle(fetchNextPage, 200);
+
+	const { setTarget } = useIntersectionObserver({
+		hasNextPage,
+		fetchNextPage: fetchNextPageThrottled,
 	});
 
 	const myData = useQuery({
@@ -50,7 +69,6 @@ export default function ProductReview({ id }: { id: number }) {
 	};
 	return (
 		<div className="w-full lg:w-[94rem]">
-			{/**TODO: 리뷰 목록 무한 스크롤 구현 */}
 			<div className="flex min-w-[33.5rem] items-center justify-between pb-[3rem] ">
 				<span className="text-[1.8rem] text-white md:text-[1.6rem] lg:text-[2rem]">
 					상품 리뷰
@@ -64,48 +82,20 @@ export default function ProductReview({ id }: { id: number }) {
 					<Dropdown.List />
 				</Dropdown>
 			</div>
-			<div className="flex flex-col gap-[1.5rem] lg:gap-[2rem]">
-				{reviewData?.list.map((data) => (
-					<ReviewCard
-						reviewData={data}
-						isMyReview={data.userId === myData?.id}
-						key={data.id}
-						order={order}
-					/>
-				))}
-			</div>
-			{reviewData?.list.length === 0 && <NoneReview type="none" />}
+			{reviewData?.pages.map((page, index) => (
+				<div key={index} className="flex flex-col gap-[1.5rem] lg:gap-[2rem]">
+					{page.list.map((review) => (
+						<ReviewCard
+							reviewData={review}
+							isMyReview={review.userId === myData?.id}
+							key={review.id}
+						/>
+					))}
+				</div>
+			))}
+			{reviewData?.pages.length === 0 && <NoneReview type="none" />}
 			{(isLoading || isFetching) && <NoneReview type="loading" />}
-			{isError && <NoneReview type="error" />}
-		</div>
-	);
-}
-
-type NoneReviewProps = {
-	type: "none" | "loading" | "error";
-};
-
-export function NoneReview({ type }: NoneReviewProps) {
-	const text =
-		type === "none"
-			? "첫 리뷰를 작성해 보세요!"
-			: type === "loading"
-				? "Loading..."
-				: "Error 발생";
-	const noneReviewIconSrc = "/icons/none_review.svg";
-	return (
-		<div className="flex h-[20rem] flex-col items-center justify-center gap-[2rem] md:h-[29.8rem] lg:h-[32rem]">
-			<div className="relative h-[3.2rem] w-[3.92rem] lg:h-[4rem] lg:w-[4.9rem]">
-				<Image
-					src={noneReviewIconSrc}
-					fill
-					className="object-cover"
-					alt="none"
-				/>
-			</div>
-			<span className=" flex flex-row text-[1.8rem] text-gray-200 lg:text-[2rem]">
-				{text}
-			</span>
+			<div ref={setTarget}></div>
 		</div>
 	);
 }
