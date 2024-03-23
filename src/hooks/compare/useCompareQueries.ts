@@ -4,9 +4,6 @@ import { useCallback } from "react";
 import { getProductDetail } from "@/apis/products";
 import useCompareStore from "@/store/compare";
 
-// Q: 이 함수를 필요한 컴포넌트마다 호출하면, 그 때마다 함수가 다시 실행될텐데 비효율적인가..?
-
-// TODO: 테스트 아직..
 export default function useCompareQueries() {
 	const state = useCompareStore((state) => state);
 
@@ -33,6 +30,8 @@ export default function useCompareQueries() {
 	const secondProduct = data?.[1];
 
 	const refetchAll = useCallback(() => {
+		console.log(refetchFnArray);
+
 		refetchFnArray.forEach((refetch) => refetch());
 	}, [refetchFnArray]);
 
