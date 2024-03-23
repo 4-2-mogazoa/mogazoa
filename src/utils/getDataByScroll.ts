@@ -11,12 +11,12 @@ import { RefObject } from "react";
  * @param endpoint 사용자가 어느 정도 스크롤 했을 때, 다음 데이터를 불러오고 싶은지 설정
  * @returns void
  */
-export const getDataByScroll = (
+export default function getDataByScroll(
 	ref: RefObject<HTMLElement>,
 	nextCursor: number | undefined,
 	handleLoadMoreData: (nextCursor: number) => void,
 	endpoint: number = 1,
-) => {
+) {
 	if (!nextCursor) return;
 
 	const scrollTop = ref.current?.scrollTop;
@@ -28,4 +28,4 @@ export const getDataByScroll = (
 	if (Math.abs(scrollHeight - clientHeight - scrollTop) <= endpoint) {
 		nextCursor && handleLoadMoreData(nextCursor);
 	}
-};
+}
