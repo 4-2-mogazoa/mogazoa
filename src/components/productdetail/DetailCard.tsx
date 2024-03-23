@@ -22,6 +22,7 @@ type FavoriteProps = {
 	isFavorite: boolean;
 	className: string;
 	id: number;
+	isMyProduct: boolean;
 };
 
 export default function DetailCard({ productData, isMyProduct }: Props) {
@@ -42,22 +43,20 @@ export default function DetailCard({ productData, isMyProduct }: Props) {
 						<span className="text-[2rem] font-semibold text-white lg:text-[2.4rem]">
 							{name}
 						</span>
-						{!isMyProduct && (
-							<Favorite
-								isFavorite={isFavorite}
-								className="hidden md:flex"
-								id={id}
-							/>
-						)}
-					</div>
-					<Share className="hidden md:flex" />
-					{!isMyProduct && (
 						<Favorite
 							isFavorite={isFavorite}
-							className="flex md:hidden"
+							className="hidden md:flex"
 							id={id}
+							isMyProduct={isMyProduct}
 						/>
-					)}
+					</div>
+					<Share className="hidden md:flex" />
+					<Favorite
+						isFavorite={isFavorite}
+						className="flex md:hidden"
+						id={id}
+						isMyProduct={isMyProduct}
+					/>
 				</div>
 				<div className="text-[1.4rem] text-white lg:text-[1.6rem]">
 					{description}
@@ -129,7 +128,12 @@ export function Share({ className }: ShareProps) {
 	);
 }
 
-export function Favorite({ isFavorite, className, id }: FavoriteProps) {
+export function Favorite({
+	isFavorite,
+	className,
+	id,
+	isMyProduct,
+}: FavoriteProps) {
 	const heartOnIconSrc = "/icons/heart_on.svg";
 	const heartOffIconSrc = "/icons/heart_off.svg";
 	const queryClient = useQueryClient();
@@ -148,6 +152,10 @@ export function Favorite({ isFavorite, className, id }: FavoriteProps) {
 	});
 
 	const handleButtonOnclick = () => {
+		if (isMyProduct) {
+			alert("내 상품은 찜할 수 없어요!");
+			return;
+		}
 		isFavorite ? unfavorite() : favorite();
 	};
 	return (
