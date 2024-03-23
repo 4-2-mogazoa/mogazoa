@@ -11,10 +11,9 @@ import Thumbs from "../common/thumbs/Thumbs";
 type Props = {
 	reviewData: Review;
 	isMyReview: boolean;
-	order: "recent" | "ratingDesc" | "ratingAsc" | "likeCount";
 };
 
-export default function ReviewCard({ reviewData, isMyReview, order }: Props) {
+export default function ReviewCard({ reviewData, isMyReview }: Props) {
 	const router = useRouter();
 	const queryClient = useQueryClient();
 	const {
