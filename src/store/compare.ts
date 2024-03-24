@@ -15,7 +15,12 @@ type State = {
 
 type Action = {
 	getEmptyPosition: () => string;
-	addProduct: (newProducts: ProductInfo, position?: Position) => void;
+	isAlreadyStoredProduct: (id: number) => boolean;
+	getCurrentProductPosition: (id: number) => string | undefined;
+	addProduct: (
+		newProducts: ProductInfo,
+		position?: Position,
+	) => string | undefined;
 	deleteProduct: (position: Position) => void;
 	changeProduct: (newProducts: ProductInfo, position: Position) => void;
 	clearProducts: () => void;
@@ -37,32 +42,44 @@ const useCompareStore = create(
 
 				if (get().products.firstProduct === null) {
 					emptyPosition = "firstProduct";
-				}
-
-				if (get().products.secondProduct === null) {
+				} else if (get().products.secondProduct === null) {
 					emptyPosition = "secondProduct";
 				}
 
 				return emptyPosition;
 			},
 
-			addProduct: (newProducts, position) => {
-				if (Object.values(get().products).every(Boolean)) return;
+			isAlreadyStoredProduct: (id: number) =>
+				Object.values(get().products).some((product) => product?.id === id),
+
+			getCurrentProductPosition: (id: number) => {
+				for (const [position, product] of Object.entries(get().products)) {
+					if (product?.id === id) return position;
+				}
+				return undefined;
+			},
+
+			addProduct: (newProduct, position) => {
+				if (Object.values(get().products).every(Boolean))
+					return "상품은 2개까지만 비교 가능합니다.";
+
+				if (get().isAlreadyStoredProduct(newProduct.id))
+					return "이미 비교하기에 담긴 상품입니다.";
 
 				const emptyPosition = position ? position : get().getEmptyPosition();
 
-				if (!emptyPosition) return;
+				if (!emptyPosition) return "상품은 2개까지만 비교 가능합니다.";
 
 				set((prev) => ({
-					products: { ...prev.products, [emptyPosition]: newProducts },
-					numberOfProducts: prev.numberOfProducts++,
+					products: { ...prev.products, [emptyPosition]: newProduct },
+					numberOfProducts: (prev.numberOfProducts += 1),
 				}));
 			},
 
 			deleteProduct: (position) =>
 				set((prev) => ({
 					products: { ...prev.products, [position]: null },
-					numberOfProducts: prev.numberOfProducts--,
+					numberOfProducts: (prev.numberOfProducts -= 1),
 				})),
 
 			changeProduct: (newProducts, position) =>
