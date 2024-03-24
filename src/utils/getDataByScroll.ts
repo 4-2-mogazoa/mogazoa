@@ -1,6 +1,5 @@
 import { RefObject } from "react";
 
-// TODO: 테스트는 아직 못했습니다.
 // TODO: ref에 제네릭 타입 지정 어떻게 하죠?
 
 /**

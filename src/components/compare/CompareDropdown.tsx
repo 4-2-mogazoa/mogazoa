@@ -1,7 +1,7 @@
 import { RefObject, useEffect, useRef } from "react";
 
 import { ProductsResponse } from "@/types/product";
-import { getDataByScroll } from "@/utils/getDataByScroll";
+import getDataByScroll from "@/utils/getDataByScroll";
 
 type Props = {
 	productList?: ProductsResponse;
@@ -19,6 +19,8 @@ export default function CompareDropdown({
 }: Props) {
 	const scrollRef = useRef<HTMLUListElement>(null);
 
+	const nextCursor = productList?.nextCursor;
+
 	useEffect(() => {
 		if (scrollRef.current) {
 			scrollRef.current.addEventListener("scroll", handleScroll);
@@ -29,15 +31,10 @@ export default function CompareDropdown({
 				scrollRef.current.removeEventListener("scroll", handleScroll);
 			}
 		};
-	}, []);
+	}, [nextCursor]);
 
 	const handleScroll = () =>
-		getDataByScroll(
-			scrollRef,
-			productList?.nextCursor,
-			handleLoadMoreProducts,
-			10,
-		);
+		getDataByScroll(scrollRef, nextCursor, handleLoadMoreProducts);
 
 	return (
 		<div ref={dropdownRef}>
