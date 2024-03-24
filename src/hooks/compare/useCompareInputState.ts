@@ -99,7 +99,7 @@ export default function useCompareInputState(
 
 	// 드롭박스 - 스크롤
 	const handleLoadMoreProducts = async (nextCursor: number) => {
-		const data = await getProducts(keyword);
+		const data = await getProducts(keyword, undefined, undefined, nextCursor);
 
 		if (data) {
 			setProductList(
