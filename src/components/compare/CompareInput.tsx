@@ -1,5 +1,3 @@
-import { Dispatch, SetStateAction } from "react";
-
 import useCompareInputState from "@/hooks/compare/useCompareInputState";
 
 import ProductNameTag from "../common/productNameTag/ProductNameTag";
@@ -10,7 +8,6 @@ type Props = {
 	label: "상품 1" | "상품 2";
 	product?: { id: number; name: string } | null;
 	tagColor: "green" | "pink";
-	setIsFormError: Dispatch<SetStateAction<boolean>>;
 };
 
 export default function CompareInput({
@@ -18,7 +15,6 @@ export default function CompareInput({
 	label,
 	product,
 	tagColor,
-	setIsFormError,
 }: Props) {
 	const {
 		data: { productList, errorMessage, isDropdownOpen, dropdownRef },
@@ -29,7 +25,7 @@ export default function CompareInput({
 			handleDeleteProduct,
 			handleLoadMoreProducts,
 		},
-	} = useCompareInputState(position, setIsFormError);
+	} = useCompareInputState(position);
 
 	return (
 		<div className="flex flex-col gap-4">

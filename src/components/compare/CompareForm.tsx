@@ -8,17 +8,16 @@ import CompareInput from "./CompareInput";
 export default function CompareForm() {
 	const {
 		state: {
+			numberOfProducts,
 			products: { firstProduct, secondProduct },
 		},
 		refetchAll,
 	} = useCompareQueries();
 
-	const [isFormError, setIsFormError] = useState(false);
-
 	const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		// TODO: 모달 띄우기 ? - 어차피 인풋에 에러메시지를 보여주니까, 필요없을까?
-		if (isFormError) return;
+		if (numberOfProducts !== 2) return;
 
 		refetchAll();
 	};
@@ -33,14 +32,12 @@ export default function CompareForm() {
 				label="상품 1"
 				product={firstProduct}
 				tagColor="green"
-				setIsFormError={setIsFormError}
 			/>
 			<CompareInput
 				position="secondProduct"
 				label="상품 2"
 				product={secondProduct}
 				tagColor="pink"
-				setIsFormError={setIsFormError}
 			/>
 			<BasicButton
 				label="비교하기"

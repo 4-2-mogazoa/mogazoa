@@ -1,4 +1,4 @@
-import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
+import { ChangeEvent, useState } from "react";
 
 import { getProducts } from "@/apis/products";
 import useCompareStore from "@/store/compare";
@@ -8,7 +8,6 @@ import useOutsideClick from "../common/useOutsideClick";
 
 export default function useCompareInputState(
 	position: "firstProduct" | "secondProduct",
-	setIsFormError: Dispatch<SetStateAction<boolean>>,
 ) {
 	const { products, addProduct, deleteProduct } = useCompareStore();
 
@@ -46,7 +45,6 @@ export default function useCompareInputState(
 
 		if (!keyword) {
 			setErrorMessage("상품 이름을 입력해 주세요.");
-			setIsFormError(true);
 			return;
 		}
 
@@ -54,7 +52,6 @@ export default function useCompareInputState(
 
 		if (!product) {
 			setErrorMessage("상품 이름을 다시 확인해 주세요.");
-			setIsFormError(true);
 			return;
 		}
 
@@ -63,19 +60,16 @@ export default function useCompareInputState(
 
 		if (errorMessage) {
 			setErrorMessage(errorMessage);
-			setIsFormError(true);
 			return;
 		}
 
 		setErrorMessage("");
-		setIsFormError(false);
 		setIsDropdownOpen(false);
 	};
 
 	// nameTag - delete 버튼
 	const handleDeleteProduct = () => {
 		setErrorMessage("");
-		setIsFormError(false);
 		deleteProduct(position);
 	};
 
@@ -89,12 +83,10 @@ export default function useCompareInputState(
 
 		if (errorMessage) {
 			setErrorMessage(errorMessage);
-			setIsFormError(true);
 			return;
 		}
 
 		setErrorMessage("");
-		setIsFormError(false);
 	};
 
 	// 드롭박스 - 스크롤
