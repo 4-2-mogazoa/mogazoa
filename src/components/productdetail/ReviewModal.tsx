@@ -64,7 +64,7 @@ export default function ReviewModal({ type, closeModal, productId }: Props) {
 	// 		queryClient.invalidateQueries({ queryKey: ["review", productId] }),
 	// }); 수정 기능 미완성
 
-	const handleOnClick = async () => {
+	const handleOnClick = () => {
 		rating ? setRateErrMsg("") : setRateErrMsg("별점으로 상품을 평가해주세요.");
 		for (let i = 0; i <= 2; i++) {
 			getImage(i);
