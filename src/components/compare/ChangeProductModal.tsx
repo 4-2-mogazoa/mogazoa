@@ -19,7 +19,7 @@ type State = {
 	product: StoredProductInfo;
 };
 
-export default function ChageProductModal({
+export default function ChangeProductModal({
 	currentId,
 	currentName,
 	closeModal: closeChangeProductModal,

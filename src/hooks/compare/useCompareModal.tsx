@@ -1,4 +1,4 @@
-import ChageProductModal from "@/components/compare/ChageProductModal";
+import ChangeProductModal from "@/components/compare/ChangeProductModal";
 import MovingPageModal from "@/components/compare/MovingPageModal";
 import useCompareStore from "@/store/compare";
 import { useModalActions } from "@/store/modal";
@@ -65,7 +65,7 @@ export default function useCompareModal(
 		case 2:
 			return () => {
 				const modalId = openModal(
-					<ChageProductModal
+					<ChangeProductModal
 						currentId={id}
 						currentName={name}
 						closeModal={() => closeModal(modalId)}
