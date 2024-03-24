@@ -15,7 +15,7 @@ type State = {
 
 type Action = {
 	getEmptyPosition: () => string;
-	isAlreadyStoredProduct: (newProduct: ProductInfo) => boolean;
+	isAlreadyStoredProduct: (id: number) => boolean;
 	addProduct: (
 		newProducts: ProductInfo,
 		position?: Position,
@@ -50,16 +50,14 @@ const useCompareStore = create(
 				return emptyPosition;
 			},
 
-			isAlreadyStoredProduct: (newProduct: ProductInfo) =>
-				Object.values(get().products).some(
-					(product) => product?.id === newProduct.id,
-				),
+			isAlreadyStoredProduct: (id: number) =>
+				Object.values(get().products).some((product) => product?.id === id),
 
 			addProduct: (newProduct, position) => {
 				if (Object.values(get().products).every(Boolean))
 					return "상품은 2개까지만 비교 가능합니다.";
 
-				if (get().isAlreadyStoredProduct(newProduct))
+				if (get().isAlreadyStoredProduct(newProduct.id))
 					return "이미 비교하기에 담긴 상품입니다.";
 
 				const emptyPosition = position ? position : get().getEmptyPosition();
