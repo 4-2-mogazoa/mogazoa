@@ -8,6 +8,7 @@ import { Review, ReviewImages } from "@/types/review";
 
 import ProfileImage from "../common/profileImage/ProfileImage";
 import Thumbs from "../common/thumbs/Thumbs";
+import ReviewDeleteModal from "./ReviewDeleteModal";
 import ReviewModal from "./ReviewModal";
 
 type Props = {
@@ -27,6 +28,7 @@ export default function ReviewCard({ reviewData, isMyReview }: Props) {
 		content,
 		rating,
 		id,
+		productId,
 	} = reviewData;
 	const MAX_RATE = 5;
 	const rateArray = Array.from({ length: MAX_RATE }, (_, i) => i + 1);
@@ -51,7 +53,25 @@ export default function ReviewCard({ reviewData, isMyReview }: Props) {
 	const { openModal, closeModal } = useModalActions();
 	const handleReviewModifyButton = () => {
 		const reviewModify = openModal(
-			<ReviewModal type="modify" closeModal={() => closeModal(reviewModify)} />,
+			<ReviewModal
+				type="modify"
+				closeModal={() => closeModal(reviewModify)}
+				productId={productId}
+			/>,
+			{
+				isCloseClickOutside: true,
+				isCloseESC: true,
+			},
+		);
+	};
+
+	const handleReviewDeleteButton = () => {
+		const reviewDelete = openModal(
+			<ReviewDeleteModal
+				closeModal={() => closeModal(reviewDelete)}
+				reviewId={id}
+				productId={productId}
+			/>,
 			{
 				isCloseClickOutside: true,
 				isCloseESC: true,
@@ -116,8 +136,7 @@ export default function ReviewCard({ reviewData, isMyReview }: Props) {
 						{isMyReview && (
 							<div className="flex gap-[1rem] font-light text-gray-100 underline">
 								<button onClick={handleReviewModifyButton}>수정</button>
-								<button>삭제</button>
-								{/**TODO: 삭제 alert추가 */}
+								<button onClick={handleReviewDeleteButton}>삭제</button>
 							</div>
 						)}
 					</div>

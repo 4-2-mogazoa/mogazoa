@@ -33,7 +33,11 @@ export default function DetailCard({ productData, isMyProduct }: Props) {
 
 	const handleReviewCreateButton = () => {
 		const reviewCreate = openModal(
-			<ReviewModal type="create" closeModal={() => closeModal(reviewCreate)} />,
+			<ReviewModal
+				type="create"
+				closeModal={() => closeModal(reviewCreate)}
+				productId={id}
+			/>,
 			{
 				isCloseClickOutside: true,
 				isCloseESC: true,
