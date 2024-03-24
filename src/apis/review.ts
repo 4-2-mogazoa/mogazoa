@@ -3,15 +3,11 @@ import { Images, Me, Review, ReviewDelete } from "@/types/review";
 import instance from "./axiosInstance";
 
 export async function postReviewLike(reviewid: number) {
-	const res = await instance.post<Review>(`reviews/${reviewid}/like`);
-
-	return res.data;
+	await instance.post<Review>(`reviews/${reviewid}/like`);
 }
 
 export async function deleteReviewLike(reviewid: number) {
-	const res = await instance.delete<Review>(`reviews/${reviewid}/like`);
-
-	return res.data;
+	await instance.delete<Review>(`reviews/${reviewid}/like`);
 }
 
 export async function createReview(
@@ -20,28 +16,31 @@ export async function createReview(
 	content: string,
 	rating: number,
 ) {
-	const params = { productId, images, content, rating };
 	const res = await instance.post<Review>("reviews", {
-		params,
+		productId,
+		images,
+		content,
+		rating,
 	});
 
 	return res.data;
 }
 
 export async function deleteReview(reviewid: number) {
-	const res = await instance.delete<ReviewDelete>(`reviews/${reviewid}`);
-
-	return res.data;
+	await instance.delete<ReviewDelete>(`reviews/${reviewid}`);
 }
 
 export async function modifyReview(
 	reviewid: number,
-	images: Images,
+	images: string[],
 	content: string,
 	rating: number,
 ) {
-	const params = { images, content, rating };
-	const res = await instance.patch<Review>(`reviews/${reviewid}`, { params });
+	const res = await instance.patch<Review>(`reviews/${reviewid}`, {
+		images,
+		content,
+		rating,
+	});
 
 	return res.data;
 }

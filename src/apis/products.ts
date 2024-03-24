@@ -47,17 +47,9 @@ export async function getReviews({
 }
 
 export async function postFavorite(productId: number) {
-	const res = await instance.post<ProductDetail>(
-		`products/${productId}/favorite`,
-	);
-
-	return res.data;
+	await instance.post<ProductDetail>(`products/${productId}/favorite`);
 }
 
 export async function deleteFavorite(productId: number) {
-	const res = await instance.delete<ProductDetail>(
-		`products/${productId}/favorite`,
-	);
-
-	return res.data;
+	await instance.delete<ProductDetail>(`products/${productId}/favorite`);
 }
