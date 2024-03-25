@@ -1,6 +1,6 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import Image, { StaticImageData } from "next/image";
-import React from "react";
+import { useState } from "react";
 
 import cn from "@/utils/cn";
 
@@ -21,11 +21,26 @@ type Props = React.HTMLAttributes<HTMLDivElement> &
 	};
 
 export default function ProfileImage({ src, size }: Props) {
+	const [isError, setIsError] = useState(false);
 	const iconSrc = src ? src : "/icons/profile.svg";
 
 	return (
 		<div className={cn(profileImageVariants({ size }))}>
-			<Image src={iconSrc} alt="사용자 프로필 이미지" fill />
+			{isError ? (
+				<Image
+					src={"/icons/profile.svg"}
+					alt="사용자 프로필 이미지"
+					fill
+					onError={() => setIsError(true)}
+				/>
+			) : (
+				<Image
+					src={iconSrc}
+					alt="사용자 프로필 이미지"
+					fill
+					onError={() => setIsError(true)}
+				/>
+			)}
 		</div>
 	);
 }
