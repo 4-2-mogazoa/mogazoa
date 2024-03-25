@@ -2,6 +2,8 @@ import Image from "next/image";
 import React, { Dispatch, SetStateAction, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 
+import { image } from "@/components/productdetail/ReviewModal";
+
 export type ImageData = {
 	id?: string;
 	data?: File | undefined;
@@ -12,9 +14,14 @@ export type ImageData = {
 type Props = {
 	editorData: ImageData[];
 	setEditorData: Dispatch<SetStateAction<ImageData[]>>;
+	setImage: Dispatch<SetStateAction<image[]>>;
 };
 
-export default function AddImageBox({ editorData, setEditorData }: Props) {
+export default function AddImageBox({
+	editorData,
+	setEditorData,
+	setImage,
+}: Props) {
 	const fileRef = useRef<HTMLInputElement>(null);
 
 	const addPhotoIconSrc = "/icons/add_photo.svg";
@@ -37,6 +44,13 @@ export default function AddImageBox({ editorData, setEditorData }: Props) {
 						...newImageData,
 						preview: reader.result as string,
 						ref: React.createRef(),
+					},
+				]);
+				setImage((prevState) => [
+					...prevState,
+					{
+						id: newImageData.id,
+						image: "",
 					},
 				]);
 			};
@@ -67,6 +81,13 @@ export default function AddImageBox({ editorData, setEditorData }: Props) {
 							: imgData,
 					),
 				);
+				setImage((prevState) => [
+					...prevState,
+					{
+						id: id,
+						image: "",
+					},
+				]);
 			};
 		}
 	};
@@ -77,6 +98,7 @@ export default function AddImageBox({ editorData, setEditorData }: Props) {
 	) => {
 		e.preventDefault();
 		setEditorData((prevState) => prevState.filter((data) => data.id !== id));
+		setImage((prevState) => prevState.filter((data) => data.id !== id));
 	};
 
 	return (
