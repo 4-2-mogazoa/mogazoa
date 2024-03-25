@@ -5,15 +5,10 @@ import { postSignup } from "@/apis/auth/postSignup";
 import BasicButton from "@/components/common/button/BasicButton";
 import Input from "@/components/common/inputs/Input";
 import { emailPattern, passwordPattern } from "@/constants/regExp";
+import useAuth from "@/hooks/auth/useAuth";
+import { RegistrationUserData } from "@/types/auth";
 
 import AuthFormContainer from "./AuthFormContainer";
-
-type TSignupForm = {
-	email: string;
-	nickname: string;
-	password: string;
-	passwordChecked: string;
-};
 
 export default function SignupForm() {
 	const {
@@ -22,7 +17,9 @@ export default function SignupForm() {
 		formState: { errors },
 		getValues,
 		setError,
-	} = useForm<TSignupForm>({ mode: "onBlur" });
+	} = useForm<RegistrationUserData>({ mode: "onBlur" });
+
+	const { signUp } = useAuth();
 
 	const emailValidationSchema = {
 		required: "이메일은 필수 입력입니다.",
@@ -65,7 +62,7 @@ export default function SignupForm() {
 	return (
 		<AuthFormContainer
 			handleSubmit={handleSubmit}
-			api={postSignup}
+			api={signUp}
 			setError={setError}
 		>
 			<div className="mb-[6rem] flex flex-col gap-[3rem] md:gap-[4rem]">

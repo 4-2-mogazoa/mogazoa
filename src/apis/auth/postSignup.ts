@@ -1,18 +1,14 @@
 import axios from "axios";
 
+import { RegistrationUserData } from "@/types/auth";
+
 import instance from "../axiosInstance";
+import { postSignIn } from "./postSignin";
 
 const url = "auth/signUp";
 
-type TUserData = {
-	email: string;
-	nickname: string;
-	password: string;
-	passwordChecked: string;
-};
-
 export const postSignup = async (
-	data: TUserData,
+	data: RegistrationUserData,
 	setError: any,
 	router: any,
 ) => {
@@ -25,6 +21,7 @@ export const postSignup = async (
 
 	try {
 		const res = await instance.post(url, userData);
+		await postSignIn({ email: userData.email, password: userData.password });
 		router.push("/");
 	} catch (error) {
 		if (!axios.isAxiosError(error)) return;

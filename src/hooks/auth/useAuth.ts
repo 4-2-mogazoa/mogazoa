@@ -2,32 +2,28 @@
 
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
-import { useState } from "react";
 
 import { postSignIn } from "@/apis/auth/postSignin";
 import { postSignup } from "@/apis/auth/postSignup";
-
-type TUserData = {
-	email: string;
-	nickname: string;
-	password: string;
-	passwordChecked: string;
-};
+import { LoginUserData, RegistrationUserData } from "@/types/auth";
 
 const useAuth = () => {
 	const router = useRouter();
 	const queryClient = useQueryClient();
 
-	const login = async (
-		data: { email: string; password: string },
-		setError: any,
-		router: any,
-	) => {
+	const login = async (data: LoginUserData, setError: any) => {
 		try {
-			const res = await postSignIn(data, setError, router);
-			router.push("/");
+			await postSignIn(data, setError, router);
 		} catch (error) {
-			console.log(error);
+			console.log("error :", error);
+		}
+	};
+
+	const signUp = async (data: RegistrationUserData, setError: any) => {
+		try {
+			await postSignup(data, setError, router);
+		} catch (error) {
+			console.log("error :", error);
 		}
 	};
 
@@ -40,16 +36,7 @@ const useAuth = () => {
 		router.push("/");
 	};
 
-	const register = async (data: TUserData, setError: any, router: any) => {
-		try {
-			const res = await postSignup(data, setError, router);
-			router.push("/");
-		} catch (error) {
-			console.log(error);
-		}
-	};
-
-	return { login, logout, register };
+	return { login, logout, signUp };
 };
 
 export default useAuth;

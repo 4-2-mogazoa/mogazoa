@@ -20,6 +20,7 @@ export default function AuthFormContainer({
 	setError,
 }: Props) {
 	const router = useRouter();
+
 	const onSubmit: SubmitHandler<FieldValues> = async (data) => {
 		try {
 			await api(data, setError, router);

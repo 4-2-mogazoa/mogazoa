@@ -5,14 +5,11 @@ import { postSignIn } from "@/apis/auth/postSignin";
 import BasicButton from "@/components/common/button/BasicButton";
 import Input from "@/components/common/inputs/Input";
 import { emailPattern } from "@/constants/regExp";
+import useAuth from "@/hooks/auth/useAuth";
+import { LoginUserData } from "@/types/auth";
 
 import OAuthLayout from "../OAuthLayout";
 import AuthFormContainer from "./AuthFormContainer";
-
-type TSignInForm = {
-	email: string;
-	password: string;
-};
 
 export default function SignInForm() {
 	const {
@@ -20,7 +17,9 @@ export default function SignInForm() {
 		handleSubmit,
 		setError,
 		formState: { errors },
-	} = useForm<TSignInForm>({ mode: "onBlur" });
+	} = useForm<LoginUserData>({ mode: "onBlur" });
+
+	const { login } = useAuth();
 
 	const emailValidationSchema = {
 		required: "이메일은 필수 입력입니다.",
@@ -38,7 +37,7 @@ export default function SignInForm() {
 		<AuthFormContainer
 			handleSubmit={handleSubmit}
 			setError={setError}
-			api={postSignIn}
+			api={login}
 		>
 			<div className="mb-[6rem] flex flex-col gap-[3rem] md:gap-[4rem]">
 				<Input

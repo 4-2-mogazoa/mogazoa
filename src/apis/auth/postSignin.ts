@@ -1,24 +1,20 @@
 import axios from "axios";
 
+import { LoginUserData } from "@/types/auth";
+
 import instance from "../axiosInstance";
 
 const url = "auth/signIn";
 
-type TUserData = {
-	email: string;
-	password: string;
-};
-
 export const postSignIn = async (
-	data: TUserData,
-	setError: any,
-	router: any,
+	data: LoginUserData,
+	setError?: any,
+	router?: any,
 ) => {
 	try {
 		const res = await instance.post(url, data);
 		const accessToken = res.data.accessToken;
 		document.cookie = `accessToken=${accessToken}; path=/`;
-
 		router.push("/");
 	} catch (error) {
 		if (!axios.isAxiosError(error)) return;
