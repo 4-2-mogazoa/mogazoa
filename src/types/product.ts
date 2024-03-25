@@ -22,6 +22,11 @@ export type ProductDetail = {
 		favoriteCount: number;
 		reviewCount: number;
 	};
+	categoryMetric: {
+		rating: number;
+		favoriteCount: number;
+		reviewCount: number;
+	};
 };
 
 export type Product = {
