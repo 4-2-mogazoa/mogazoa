@@ -22,11 +22,6 @@ export type ProductDetail = {
 		favoriteCount: number;
 		reviewCount: number;
 	};
-	categoryMetric: {
-		rating: number;
-		favoriteCount: number;
-		reviewCount: number;
-	};
 };
 
 export type Product = {
@@ -68,3 +63,8 @@ export type ReviewImages = {
 	source: string;
 	id: number;
 };
+
+export type UserProductType =
+	| "created-products"
+	| "reviewed-products"
+	| "favorite-products";

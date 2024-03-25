@@ -17,7 +17,7 @@ export default function ProfilePageLayout({ user }: Props) {
 
 	return (
 		<>
-			{/* <Header /> */}
+			<Header />
 			<main className="_flex-col-center gap-[6rem] bg-[#1C1C22] px-[2rem] py-[3rem] lg:flex-row lg:items-start lg:p-[6rem]">
 				<h1 className="sr-only">프로필 페이지</h1>
 				<ProfileCard user={user} isMine={isMine} />

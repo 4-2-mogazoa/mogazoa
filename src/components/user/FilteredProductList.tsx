@@ -1,4 +1,5 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
+import Link from "next/link";
 import { Fragment, useEffect, useState } from "react";
 
 import { getUserProducts } from "@/apis/user";
@@ -45,10 +46,39 @@ export default function FilteredProductList({ user }: { user: UserDetail }) {
 			getUserProducts(user.id, currentFilter.type, pageParam),
 		initialPageParam: 0,
 		getNextPageParam: (lastPage) => lastPage.nextCursor,
+		staleTime: 60 * 1000 * 2,
 	});
 
 	const handleSelectFilter = (filter: ProductFilter) => {
 		setFilter(filter);
+	};
+
+	const renderProducts = () => {
+		return !data?.pages[0].list.length ? (
+			<div className="p-[1rem] text-center md:p-[2rem] lg:p-[3rem]">
+				<span className="text-[1.7rem] font-semibold text-gray-200 lg:text-[1.9rem]">
+					상품이 없습니다.
+				</span>
+			</div>
+		) : (
+			<div className="grid grid-cols-2 gap-[1.5rem] lg:grid-cols-3 lg:gap-[2rem]">
+				{data?.pages.map((group, i) => (
+					<Fragment key={i}>
+						{group.list.map((product) => (
+							<Link key={product.id} href={`/productdetail/${product.id}`}>
+								<ProductCard
+									imageData={product.image}
+									likeCount={product.favoriteCount}
+									productName={product.name}
+									rate={product.rating}
+									reviewCount={product.reviewCount}
+								/>
+							</Link>
+						))}
+					</Fragment>
+				))}
+			</div>
+		);
 	};
 
 	useEffect(() => {
@@ -90,22 +120,8 @@ export default function FilteredProductList({ user }: { user: UserDetail }) {
 					<Dropdown.List />
 				</Dropdown>
 			)}
-			<div className="grid grid-cols-2 gap-[1.5rem] lg:grid-cols-3 lg:gap-[2rem]">
-				{data?.pages.map((group, i) => (
-					<Fragment key={i}>
-						{group.list.map((product) => (
-							<ProductCard
-								key={product.id}
-								imageData={product.image}
-								likeCount={product.favoriteCount}
-								productName={product.name}
-								rate={product.rating}
-								reviewCount={product.reviewCount}
-							/>
-						))}
-					</Fragment>
-				))}
-			</div>
+
+			{renderProducts()}
 		</section>
 	);
 }

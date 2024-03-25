@@ -15,7 +15,7 @@ export default function UserPage() {
 	});
 
 	const { data: user, error } = useQuery<UserDetail, AxiosError>({
-		queryKey: ["user", router.query.id],
+		queryKey: ["user", Number(router.query.id)],
 		queryFn: () => getUserDetail(Number(router.query.id)),
 		enabled: !!router.query.id,
 		retry: 1,
@@ -29,7 +29,7 @@ export default function UserPage() {
 
 	useEffect(() => {
 		if (error && axios.isAxiosError<{ message: string }>(error)) {
-			console.log("error", error);
+			console.error("error", error);
 			alert(error.response?.data.message);
 			router.back();
 		}
