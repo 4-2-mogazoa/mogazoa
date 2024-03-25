@@ -5,6 +5,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { getImageURL } from "@/apis/image";
 import { createReview } from "@/apis/review";
 import { starRate } from "@/constants/starRate";
+import { Review } from "@/types/review";
 
 import BasicButton from "../common/button/BasicButton";
 import CategoryBadge from "../common/categoryBadge/CategoryBadge";
@@ -15,6 +16,7 @@ type Props = {
 	type: "create" | "modify";
 	closeModal: () => void;
 	productId: number;
+	reviewData?: Review;
 };
 
 export type image = {
@@ -22,7 +24,12 @@ export type image = {
 	image: string;
 };
 
-export default function ReviewModal({ type, closeModal, productId }: Props) {
+export default function ReviewModal({
+	type,
+	closeModal,
+	productId,
+	reviewData,
+}: Props) {
 	const [rating, setRating] = useState(0);
 	const [hover, setHover] = useState(0);
 	const [content, setContent] = useState("");
@@ -32,10 +39,8 @@ export default function ReviewModal({ type, closeModal, productId }: Props) {
 	const [isFocused, setIsFocused] = useState(false);
 	const [errMsg, setErrMsg] = useState("");
 	const [rateErrMsg, setRateErrMsg] = useState("");
-	const defaultValue = 0;
-	const [count, setCount] = useState(
-		defaultValue ? String(defaultValue).length : 0,
-	);
+	const [count, setCount] = useState(0);
+
 	const queryClient = useQueryClient();
 
 	const MAX_LENGTH = 300;
@@ -67,6 +72,7 @@ export default function ReviewModal({ type, closeModal, productId }: Props) {
 			closeModal();
 		},
 	});
+
 	// const { mutate: modify } = useMutation({
 	// 	mutationFn: () => createReview(productId, image, content, rating),
 	// 	onSuccess: () =>
@@ -80,8 +86,33 @@ export default function ReviewModal({ type, closeModal, productId }: Props) {
 	};
 
 	useEffect(() => {
+		setCount(content.length);
+	}, [content]);
+
+	useEffect(() => {
 		getImages();
 	}, [editorData.length]);
+
+	useEffect(() => {
+		if (type === "modify") {
+			if (reviewData) {
+				setImage(
+					reviewData.reviewImages.map((data) => ({
+						id: data.id.toString(),
+						image: data.source,
+					})),
+				);
+				setEditorData((prev) =>
+					prev.map((data, index) => ({
+						...data,
+						preview: reviewData.reviewImages[index]?.source || null,
+					})),
+				);
+				setContent(reviewData?.content);
+				setRating(reviewData?.rating);
+			}
+		}
+	}, [type]);
 
 	const handleOnClick = () => {
 		rating ? setRateErrMsg("") : setRateErrMsg("별점으로 상품을 평가해주세요.");
@@ -92,7 +123,6 @@ export default function ReviewModal({ type, closeModal, productId }: Props) {
 	};
 
 	const handleOnTextarea = (e: ChangeEvent<HTMLTextAreaElement>) => {
-		setCount(e.target.value.length);
 		setContent(e.target.value);
 	};
 
@@ -162,6 +192,7 @@ export default function ReviewModal({ type, closeModal, productId }: Props) {
 						onFocus={() => setIsFocused(true)}
 						onBlur={handleOnBlur}
 						maxLength={MAX_LENGTH}
+						defaultValue={content}
 					/>
 					<p className="text-right text-[1.4rem] text-[#6E6E82]">
 						<span>{count}</span>
