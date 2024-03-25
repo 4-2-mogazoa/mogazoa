@@ -117,7 +117,7 @@ export default function ProductList({ type, selectedCategoryId, selectedCategory
       <div className={clsx('ml-[2rem] md:ml-[4rem] lg:m-0', type === 'category' ? 'flex flex-row justify-between' : '')}>
         {type === 'review' ? '지금 핫한 상품' : type === 'rating' ? '별점이 높은 상품' : ''} 
         {type === 'review' ?
-        <span className="ml-[1rem] bg-gradient-to-r from-main_blue to-main_indigo bg-clip-text text-transparent">TOP 6</span>
+        <span className="text-main-gradient ml-[1rem]">TOP 6</span>
         : ''}
         {type === 'category' ?
         <div className="flex w-[100%] flex-col justify-between md:flex-row">
