@@ -9,6 +9,7 @@ import cn from "@/utils/cn";
 
 import BasicButton from "../common/button/BasicButton";
 import CategoryBadge from "../common/categoryBadge/CategoryBadge";
+import ReviewAlertModal from "./ReviewAlertModal";
 import ReviewModal from "./ReviewModal";
 
 type Props = {
@@ -110,9 +111,19 @@ export default function DetailCard({ productData, isMyProduct }: Props) {
 }
 
 export function Share({ className }: ShareProps) {
+	const { openModal, closeModal } = useModalActions();
 	const handleCopyClipBoard = () => {
 		navigator.clipboard.writeText(window.location.href);
-		alert("복사 성공!");
+		const clipboardAlert = openModal(
+			<ReviewAlertModal
+				closeModal={() => closeModal(clipboardAlert)}
+				type="clipboard"
+			/>,
+			{
+				isCloseClickOutside: true,
+				isCloseESC: true,
+			},
+		);
 	};
 
 	return (
@@ -154,6 +165,8 @@ export function Favorite({
 	const heartOnIconSrc = "/icons/heart_on.svg";
 	const heartOffIconSrc = "/icons/heart_off.svg";
 	const queryClient = useQueryClient();
+	const { openModal, closeModal } = useModalActions();
+
 	const { mutate: toggleFavorite } = useMutation({
 		mutationFn: () => (isFavorite ? deleteFavorite(id) : postFavorite(id)),
 		onSuccess: () => {
@@ -163,7 +176,16 @@ export function Favorite({
 
 	const handleButtonOnclick = () => {
 		if (isMyProduct) {
-			alert("내 상품은 찜할 수 없어요!");
+			const favoritealert = openModal(
+				<ReviewAlertModal
+					closeModal={() => closeModal(favoritealert)}
+					type="favorite"
+				/>,
+				{
+					isCloseClickOutside: true,
+					isCloseESC: true,
+				},
+			);
 			return;
 		}
 		toggleFavorite();

@@ -3,12 +3,13 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 
 import { deleteReviewLike, postReviewLike } from "@/apis/review";
+import { starRate } from "@/constants/starRate";
 import { useModalActions } from "@/store/modal";
 import { Review, ReviewImages } from "@/types/review";
 
 import ProfileImage from "../common/profileImage/ProfileImage";
 import Thumbs from "../common/thumbs/Thumbs";
-import ReviewDeleteModal from "./ReviewDeleteModal";
+import ReviewAlertModal from "./ReviewAlertModal";
 import ReviewModal from "./ReviewModal";
 
 type Props = {
@@ -30,10 +31,10 @@ export default function ReviewCard({ reviewData, isMyReview }: Props) {
 		id,
 		productId,
 	} = reviewData;
-	const MAX_RATE = 5;
-	const rateArray = Array.from({ length: MAX_RATE }, (_, i) => i + 1);
-	const starOnIconSrc = "/icons/star_on.svg";
-	const starOffIconSrc = "/icons/star_off.svg";
+
+	const { rateArray, starOnIconSrc, starOffIconSrc } = starRate;
+
+	const { openModal, closeModal } = useModalActions();
 
 	const { mutate: toggleLike } = useMutation({
 		mutationFn: () => (isLiked ? deleteReviewLike(id) : postReviewLike(id)),
@@ -44,13 +45,21 @@ export default function ReviewCard({ reviewData, isMyReview }: Props) {
 
 	const handleButtonClick = () => {
 		if (isMyReview) {
-			alert("자신의 리뷰는 추천할 수 없습니다!");
+			const reviewLikeAlert = openModal(
+				<ReviewAlertModal
+					closeModal={() => closeModal(reviewLikeAlert)}
+					type="reviewLike"
+				/>,
+				{
+					isCloseClickOutside: true,
+					isCloseESC: true,
+				},
+			);
 			return;
 		}
 		toggleLike();
 	};
 
-	const { openModal, closeModal } = useModalActions();
 	const handleReviewModifyButton = () => {
 		const reviewModify = openModal(
 			<ReviewModal
@@ -67,10 +76,11 @@ export default function ReviewCard({ reviewData, isMyReview }: Props) {
 
 	const handleReviewDeleteButton = () => {
 		const reviewDelete = openModal(
-			<ReviewDeleteModal
+			<ReviewAlertModal
 				closeModal={() => closeModal(reviewDelete)}
 				reviewId={id}
 				productId={productId}
+				type="delete"
 			/>,
 			{
 				isCloseClickOutside: true,
