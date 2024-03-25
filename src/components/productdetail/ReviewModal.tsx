@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 
 import { getImageURL } from "@/apis/image";
 import { createReview } from "@/apis/review";
@@ -17,39 +17,48 @@ type Props = {
 	productId: number;
 };
 
+export type image = {
+	id: string | undefined;
+	image: string;
+};
+
 export default function ReviewModal({ type, closeModal, productId }: Props) {
 	const [rating, setRating] = useState(0);
 	const [hover, setHover] = useState(0);
 	const [content, setContent] = useState("");
 	const [editorData, setEditorData] = useState<ImageData[]>([]);
-	const [image, setImage] = useState<string[]>([]);
-	const buttonLabel = type === "create" ? "작성하기" : "수정하기";
+	const [image, setImage] = useState<image[]>([]);
 	const { rateArray, starOnIconSrc, starOffIconSrc } = starRate;
+	const [isFocused, setIsFocused] = useState(false);
+	const [errMsg, setErrMsg] = useState("");
+	const [rateErrMsg, setRateErrMsg] = useState("");
 	const defaultValue = 0;
 	const [count, setCount] = useState(
 		defaultValue ? String(defaultValue).length : 0,
 	);
-	const [isFocused, setIsFocused] = useState(false);
-	const maxLength = 300;
-	const handleOnTextarea = (e: ChangeEvent<HTMLTextAreaElement>) => {
-		setCount(e.target.value.length);
-		setContent(e.target.value);
-	};
-	const [errMsg, setErrMsg] = useState("");
-	const [rateErrMsg, setRateErrMsg] = useState("");
 	const queryClient = useQueryClient();
+
+	const MAX_LENGTH = 300;
+	const buttonLabel = type === "create" ? "작성하기" : "수정하기";
 
 	const { mutate: getImage } = useMutation({
 		mutationFn: (index: number) => getImageURL(editorData[index].data),
-		onSuccess: (data) => {
-			if (image.length < 3) {
-				setImage((prev) => [...prev, data.url]);
+		onSuccess: (data, index) => {
+			if (image.length <= 3) {
+				setImage((prev) =>
+					prev.map((img) =>
+						img.id === editorData[index].id ? { ...img, image: data.url } : img,
+					),
+				);
 			}
 		},
 	});
 
 	const { mutate: create, isPending } = useMutation({
-		mutationFn: () => createReview(productId, image, content, rating),
+		mutationFn: () => {
+			const imageUrls = image.map((img) => img.image);
+			return createReview(productId, imageUrls, content, rating);
+		},
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["review", productId] });
 			setRating(0);
@@ -64,16 +73,28 @@ export default function ReviewModal({ type, closeModal, productId }: Props) {
 	// 		queryClient.invalidateQueries({ queryKey: ["review", productId] }),
 	// }); 수정 기능 미완성
 
-	const handleOnClick = () => {
-		rating ? setRateErrMsg("") : setRateErrMsg("별점으로 상품을 평가해주세요.");
+	const getImages = () => {
 		for (let i = 0; i <= 2; i++) {
 			getImage(i);
 		}
-		if (image.length >= 1 && content && rating) {
+	};
+
+	useEffect(() => {
+		getImages();
+	}, [editorData.length]);
+
+	const handleOnClick = () => {
+		rating ? setRateErrMsg("") : setRateErrMsg("별점으로 상품을 평가해주세요.");
+
+		if (rating && image.length >= 1 && count >= 10) {
 			create();
 		}
 	};
-	// create mutate가 바로 실행되지않고있음
+
+	const handleOnTextarea = (e: ChangeEvent<HTMLTextAreaElement>) => {
+		setCount(e.target.value.length);
+		setContent(e.target.value);
+	};
 
 	const handleOnBlur = () => {
 		setIsFocused(false);
@@ -140,11 +161,11 @@ export default function ReviewModal({ type, closeModal, productId }: Props) {
 						onChange={handleOnTextarea}
 						onFocus={() => setIsFocused(true)}
 						onBlur={handleOnBlur}
-						maxLength={maxLength}
+						maxLength={MAX_LENGTH}
 					/>
 					<p className="text-right text-[1.4rem] text-[#6E6E82]">
 						<span>{count}</span>
-						<span>/{maxLength}</span>
+						<span>/{MAX_LENGTH}</span>
 					</p>
 				</div>
 				{errMsg && (
@@ -153,7 +174,11 @@ export default function ReviewModal({ type, closeModal, productId }: Props) {
 					</div>
 				)}
 				<div className="flex gap-[1rem] md:gap-[1.5rem] lg:gap-[2rem]">
-					<AddImageBox editorData={editorData} setEditorData={setEditorData} />
+					<AddImageBox
+						editorData={editorData}
+						setEditorData={setEditorData}
+						setImage={setImage}
+					/>
 				</div>
 			</div>
 			<BasicButton
