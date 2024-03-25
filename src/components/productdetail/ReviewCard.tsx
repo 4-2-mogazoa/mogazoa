@@ -66,6 +66,7 @@ export default function ReviewCard({ reviewData, isMyReview }: Props) {
 				type="modify"
 				closeModal={() => closeModal(reviewModify)}
 				productId={productId}
+				reviewData={reviewData}
 			/>,
 			{
 				isCloseClickOutside: true,
