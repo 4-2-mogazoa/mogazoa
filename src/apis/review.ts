@@ -1,4 +1,4 @@
-import { Images, Me, Review, ReviewDelete } from "@/types/review";
+import { Me, Review, ReviewDelete } from "@/types/review";
 
 import instance from "./axiosInstance";
 
@@ -26,7 +26,7 @@ export async function createReview(
 	return res.data;
 }
 
-export async function deleteReview(reviewid: number) {
+export async function deleteReview(reviewid: number | undefined) {
 	await instance.delete<ReviewDelete>(`reviews/${reviewid}`);
 }
 

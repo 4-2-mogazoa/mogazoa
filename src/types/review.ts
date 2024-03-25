@@ -1,5 +1,3 @@
-import { StringToBoolean } from "class-variance-authority/types";
-
 import { Response } from "./common";
 
 export type ReviewResponse = Response<Review>;
