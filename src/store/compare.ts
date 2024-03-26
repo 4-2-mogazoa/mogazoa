@@ -92,18 +92,5 @@ const useCompareStore = create(
 
 export default useCompareStore;
 
-// 나중에 사용하는 곳에서 로그아웃 시 로컬스토리지를 비우는 함수 작성 ?
-
-// 예시 ?
-// import useCompareStore from "@/store/compare";
-
-// const clearCompareProductsStorage = useCompareStore.persist.clearStorage;
-
-// const handleLogoutButtonClick = async () => {
-// 	const isLogout = await logOut();
-
-// 	if (isLogout) {
-// 		clearProducts();
-//     clearCompareProductsStorage();
-// 	}
-// };
+// TODO: 로그아웃 함수 내에서 실행시켜 주세요.
+export const clearCompareProductsStorage = useCompareStore.persist.clearStorage;
