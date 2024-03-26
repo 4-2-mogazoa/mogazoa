@@ -92,5 +92,4 @@ const useCompareStore = create(
 
 export default useCompareStore;
 
-// TODO: 로그아웃 함수 내에서 실행시켜 주세요.
-export const clearCompareProductsStorage = useCompareStore.persist.clearStorage;
+// export const clearCompareProductsStorage = useCompareStore.persist.clearStorage;
