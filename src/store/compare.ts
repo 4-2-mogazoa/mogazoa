@@ -17,11 +17,11 @@ type Action = {
 	getEmptyPosition: () => string;
 	isAlreadyStoredProduct: (id: number) => boolean;
 	addProduct: (
-		newProducts: ProductInfo,
+		newProduct: ProductInfo,
 		position?: Position,
 	) => string | undefined;
 	deleteProduct: (position: Position) => void;
-	changeProduct: (newProducts: ProductInfo, position: Position) => void;
+	changeProduct: (newProduct: ProductInfo, position: Position) => void;
 	clearProducts: () => void;
 };
 
@@ -76,9 +76,9 @@ const useCompareStore = create(
 					numberOfProducts: (prev.numberOfProducts -= 1),
 				})),
 
-			changeProduct: (newProducts, position) =>
+			changeProduct: (newProduct, position) =>
 				set((prev) => ({
-					products: { ...prev.products, [position]: newProducts },
+					products: { ...prev.products, [position]: newProduct },
 				})),
 
 			clearProducts: () => set({ products: initialState, numberOfProducts: 0 }),
