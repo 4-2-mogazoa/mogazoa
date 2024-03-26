@@ -7,14 +7,14 @@ import { RefObject } from "react";
  * @param ref 무한 스크롤로 불러오고자 하는 리스트를 담고 있는 부모 태그에 부여한 useRef 속성
  * @param nextCursor 목록 api 조회 결과에 포함된 nextCursor 값
  * @param handleLoadMoreData nextCursor 값을 넣어서 추가 데이터를 불러오는 등의 행동을 구현한 함수
- * @param endpoint 사용자가 어느 정도 스크롤 했을 때, 다음 데이터를 불러오고 싶은지 설정
+ * @param threshold 사용자가 어느 정도 스크롤 했을 때, 다음 데이터를 불러오고 싶은지 설정
  * @returns void
  */
 export default function getDataByScroll(
 	ref: RefObject<HTMLElement>,
 	nextCursor: number | undefined,
 	handleLoadMoreData: (nextCursor: number) => void,
-	endpoint: number = 1,
+	threshold: number = 1,
 ) {
 	if (!nextCursor) return;
 
@@ -24,7 +24,7 @@ export default function getDataByScroll(
 
 	if (!scrollTop || !scrollHeight || !clientHeight) return;
 
-	if (Math.abs(scrollHeight - clientHeight - scrollTop) <= endpoint) {
+	if (Math.abs(scrollHeight - clientHeight - scrollTop) <= threshold) {
 		nextCursor && handleLoadMoreData(nextCursor);
 	}
 }
