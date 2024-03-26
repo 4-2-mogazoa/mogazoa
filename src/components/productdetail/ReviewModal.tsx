@@ -39,6 +39,7 @@ export default function ReviewModal({
 	const [errMsg, setErrMsg] = useState("");
 	const [rateErrMsg, setRateErrMsg] = useState("");
 	const [count, setCount] = useState(0);
+	const [trigger, setTrigger] = useState(0);
 
 	const queryClient = useQueryClient();
 
@@ -74,7 +75,6 @@ export default function ReviewModal({
 			closeModal();
 		},
 	});
-	console.log(previousImage);
 	const { mutate: modify } = useMutation({
 		mutationFn: () => {
 			const reviewid = reviewData ? reviewData.id : 0;
@@ -97,7 +97,7 @@ export default function ReviewModal({
 		for (let i = 0; i <= 2; i++) {
 			getImage(i);
 		}
-	}, [editorData.length]);
+	}, [editorData.length, trigger]);
 
 	useEffect(() => {
 		if (type === "modify") {
@@ -220,6 +220,7 @@ export default function ReviewModal({
 						setPreviousImage={setPreviousImage}
 						setImage={setImage}
 						type={type}
+						setTrigger={setTrigger}
 					/>
 				</div>
 			</div>

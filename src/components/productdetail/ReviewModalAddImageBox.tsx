@@ -26,6 +26,7 @@ type Props = {
 	previousImage: ImageType[];
 	setPreviousImage: Dispatch<SetStateAction<ImageType[]>>;
 	setImage: Dispatch<SetStateAction<ImageType[]>>;
+	setTrigger: Dispatch<SetStateAction<number>>;
 };
 
 export default function ReviewModalAddImageBox({
@@ -35,12 +36,14 @@ export default function ReviewModalAddImageBox({
 	previousImage,
 	setPreviousImage,
 	setImage,
+	setTrigger,
 }: Props) {
 	const fileRef = useRef<HTMLInputElement>(null);
 
 	const addPhotoIconSrc = "/icons/add_photo.svg";
 	const closeIconSrc = "/icons/close.svg";
 	const { openModal, closeModal } = useModalActions();
+
 	const handleUploadFile = () => {
 		const fileImg = fileRef?.current?.files?.[0];
 
@@ -159,13 +162,7 @@ export default function ReviewModalAddImageBox({
 							: imgData,
 					),
 				);
-				setImage((prevState) => [
-					...prevState,
-					{
-						id: id,
-						image: "",
-					},
-				]);
+				setTrigger((prev) => prev + 1);
 			};
 		}
 	};
