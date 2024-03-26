@@ -13,6 +13,27 @@ export const getMe = async (): Promise<UserDetail> => {
 	return response.data;
 };
 
+export const patchUpdateMe = async ({
+	nickname,
+	description,
+	// image,
+}: {
+	nickname: string;
+	description: string;
+	// image?: string;
+}) => {
+	const response = await instance.patch<{
+		nickname: string;
+		description: string;
+		image?: string;
+	}>("users/me", {
+		nickname,
+		description,
+		// image,
+	});
+	return response.data;
+};
+
 export const getUserDetail = async (userId: number): Promise<UserDetail> => {
 	const response = await instance.get<UserDetail>(`users/${userId}`);
 	return response.data;
