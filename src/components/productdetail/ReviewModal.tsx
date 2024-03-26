@@ -1,27 +1,25 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
-import { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 
 import { getImageURL } from "@/apis/image";
-import { createReview } from "@/apis/review";
+import { getProductDetail } from "@/apis/products";
+import { createReview, modifyReview } from "@/apis/review";
 import { starRate } from "@/constants/starRate";
 import { Review } from "@/types/review";
 
 import BasicButton from "../common/button/BasicButton";
 import CategoryBadge from "../common/categoryBadge/CategoryBadge";
-import AddImageBox, { ImageData } from "../common/inputs/AddImageBox";
-import { productDetailData } from "./MockData";
+import ReviewModalAddImageBox, {
+	ImageData,
+	ImageType,
+} from "./ReviewModalAddImageBox";
 
 type Props = {
 	type: "create" | "modify";
 	closeModal: () => void;
 	productId: number;
 	reviewData?: Review;
-};
-
-export type image = {
-	id: string | undefined;
-	image: string;
 };
 
 export default function ReviewModal({
@@ -34,7 +32,8 @@ export default function ReviewModal({
 	const [hover, setHover] = useState(0);
 	const [content, setContent] = useState("");
 	const [editorData, setEditorData] = useState<ImageData[]>([]);
-	const [image, setImage] = useState<image[]>([]);
+	const [image, setImage] = useState<ImageType[]>([]);
+	const [previousImage, setPreviousImage] = useState<ImageType[]>([]);
 	const { rateArray, starOnIconSrc, starOffIconSrc } = starRate;
 	const [isFocused, setIsFocused] = useState(false);
 	const [errMsg, setErrMsg] = useState("");
@@ -45,6 +44,12 @@ export default function ReviewModal({
 
 	const MAX_LENGTH = 300;
 	const buttonLabel = type === "create" ? "작성하기" : "수정하기";
+
+	const { data: productData } = useQuery({
+		queryKey: ["productDetail", productId],
+		queryFn: () => getProductDetail(productId),
+		enabled: !!productId,
+	});
 
 	const { mutate: getImage } = useMutation({
 		mutationFn: (index: number) => getImageURL(editorData[index].data),
@@ -66,46 +71,42 @@ export default function ReviewModal({
 		},
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["review", productId] });
-			setRating(0);
-			setImage([]);
-			setContent("");
 			closeModal();
 		},
 	});
-
-	// const { mutate: modify } = useMutation({
-	// 	mutationFn: () => createReview(productId, image, content, rating),
-	// 	onSuccess: () =>
-	// 		queryClient.invalidateQueries({ queryKey: ["review", productId] }),
-	// }); 수정 기능 미완성
-
-	const getImages = () => {
-		for (let i = 0; i <= 2; i++) {
-			getImage(i);
-		}
-	};
+	console.log(previousImage);
+	const { mutate: modify } = useMutation({
+		mutationFn: () => {
+			const reviewid = reviewData ? reviewData.id : 0;
+			const idObjects = previousImage.map((item) => ({ id: Number(item.id) }));
+			const imgObjects = image.map((item) => ({ source: item.image }));
+			const imageUrls = [...idObjects, ...imgObjects];
+			return modifyReview(reviewid, imageUrls, content, rating);
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["review", productId] }),
+				closeModal();
+		},
+	});
 
 	useEffect(() => {
 		setCount(content.length);
 	}, [content]);
 
 	useEffect(() => {
-		getImages();
+		for (let i = 0; i <= 2; i++) {
+			getImage(i);
+		}
 	}, [editorData.length]);
 
 	useEffect(() => {
 		if (type === "modify") {
 			if (reviewData) {
-				setImage(
+				setPreviousImage(
 					reviewData.reviewImages.map((data) => ({
 						id: data.id.toString(),
 						image: data.source,
-					})),
-				);
-				setEditorData((prev) =>
-					prev.map((data, index) => ({
-						...data,
-						preview: reviewData.reviewImages[index]?.source || null,
+						ref: React.createRef(),
 					})),
 				);
 				setContent(reviewData?.content);
@@ -117,8 +118,16 @@ export default function ReviewModal({
 	const handleOnClick = () => {
 		rating ? setRateErrMsg("") : setRateErrMsg("별점으로 상품을 평가해주세요.");
 
-		if (rating && image.length >= 1 && count >= 10) {
+		if (rating && image.length >= 1 && count >= 10 && type === "create") {
 			create();
+		}
+		if (
+			rating &&
+			(image.length >= 1 || previousImage.length >= 1) &&
+			count >= 10 &&
+			type === "modify"
+		) {
+			modify();
 		}
 	};
 
@@ -142,12 +151,11 @@ export default function ReviewModal({
 	return (
 		<div className="flex h-[49.8rem] w-[33.5rem] flex-col gap-[2rem]  md:h-[58.2rem] md:w-[51rem] md:gap-[4rem] lg:h-[62.8rem] lg:w-[54rem]">
 			<div className="flex flex-col gap-[1rem]">
-				<CategoryBadge
-					size="small"
-					category={productDetailData.category.name}
-				/>
+				{productData && (
+					<CategoryBadge size="small" category={productData?.category.name} />
+				)}
 				<div className="text-[2rem] font-semibold text-white lg:text-[2.4rem]">
-					{productDetailData.name}
+					{productData?.name}
 				</div>
 			</div>
 			<div className="flex flex-col gap-[1rem] md:gap-[1.5rem] lg:gap-[2rem]">
@@ -192,7 +200,7 @@ export default function ReviewModal({
 						onFocus={() => setIsFocused(true)}
 						onBlur={handleOnBlur}
 						maxLength={MAX_LENGTH}
-						defaultValue={content}
+						value={isFocused ? (content ? content : "") : content}
 					/>
 					<p className="text-right text-[1.4rem] text-[#6E6E82]">
 						<span>{count}</span>
@@ -205,10 +213,13 @@ export default function ReviewModal({
 					</div>
 				)}
 				<div className="flex gap-[1rem] md:gap-[1.5rem] lg:gap-[2rem]">
-					<AddImageBox
+					<ReviewModalAddImageBox
 						editorData={editorData}
 						setEditorData={setEditorData}
+						previousImage={previousImage}
+						setPreviousImage={setPreviousImage}
 						setImage={setImage}
+						type={type}
 					/>
 				</div>
 			</div>
