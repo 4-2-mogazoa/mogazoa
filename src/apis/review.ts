@@ -1,4 +1,4 @@
-import { Me, Review, ReviewDelete } from "@/types/review";
+import { Images, Me, Review, ReviewDelete } from "@/types/review";
 
 import instance from "./axiosInstance";
 
@@ -32,7 +32,7 @@ export async function deleteReview(reviewid: number | undefined) {
 
 export async function modifyReview(
 	reviewid: number,
-	images: string[],
+	images: Images,
 	content: string,
 	rating: number,
 ) {

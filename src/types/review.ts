@@ -37,14 +37,8 @@ export type ReviewDelete = {
 	id: number;
 };
 
-export type Images = [
-	{
-		id: number;
-	},
-	{
-		source: string;
-	},
-];
+export type img = { id: number } | { source: string };
+export type Images = img[];
 
 export type Me = {
 	id: number;
