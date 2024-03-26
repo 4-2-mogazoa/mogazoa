@@ -93,7 +93,7 @@ export default function ProductReview({ id }: { id: number }) {
 					))}
 				</div>
 			))}
-			{reviewData?.pages.length === 0 && <NoneReview type="none" />}
+			{reviewData?.pages[0].list.length === 0 && <NoneReview type="none" />}
 			{(isLoading || isFetching) && <NoneReview type="loading" />}
 			<div ref={setTarget}></div>
 		</div>
