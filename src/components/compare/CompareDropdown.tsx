@@ -50,7 +50,6 @@ export default function CompareDropdown({
 						<button
 							className="w-full text-start text-[1.4rem] leading-[2rem] text-gray-200 hover:text-white lg:text-[1.6rem] lg:leading-[2.2rem]"
 							onClick={() => handleAddProduct(id, name)}
-							value={id}
 							type="button"
 						>
 							{name}
