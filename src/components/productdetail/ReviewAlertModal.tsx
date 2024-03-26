@@ -3,7 +3,13 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteReview } from "@/apis/review";
 
 type Props = {
-	type: "delete" | "favorite" | "reviewLike" | "clipboard" | "compare";
+	type:
+		| "delete"
+		| "favorite"
+		| "reviewLike"
+		| "clipboard"
+		| "compare"
+		| "fileType";
 	closeModal: () => void;
 	reviewId?: number;
 	productId?: number;
@@ -38,6 +44,9 @@ export default function ReviewAlertModal({
 
 			case "compare":
 				return "상품으로 추가되었습니다!";
+
+			case "fileType":
+				return "이미지 파일만 업로드 해주세요!";
 
 			default:
 				return "정말 삭제 하시겠습니까?";
