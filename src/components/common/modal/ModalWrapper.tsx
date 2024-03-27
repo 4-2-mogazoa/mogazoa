@@ -1,5 +1,6 @@
 import Image from "next/image";
 import React, { useEffect } from "react";
+import { KeyboardEventHandler } from "react";
 import { createPortal } from "react-dom";
 
 import { ModalConfig } from "@/store/modal";
