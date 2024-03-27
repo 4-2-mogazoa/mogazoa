@@ -89,6 +89,7 @@ export default function ProductReview({ id }: { id: number }) {
 							reviewData={review}
 							isMyReview={review.userId === myData?.id}
 							key={review.id}
+							order={order}
 						/>
 					))}
 				</div>

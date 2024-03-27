@@ -15,9 +15,10 @@ import ReviewModal from "./ReviewModal";
 type Props = {
 	reviewData: Review;
 	isMyReview: boolean;
+	order: string;
 };
 
-export default function ReviewCard({ reviewData, isMyReview }: Props) {
+export default function ReviewCard({ reviewData, isMyReview, order }: Props) {
 	const router = useRouter();
 	const queryClient = useQueryClient();
 	const {
@@ -39,7 +40,7 @@ export default function ReviewCard({ reviewData, isMyReview }: Props) {
 	const { mutate: toggleLike } = useMutation({
 		mutationFn: () => (isLiked ? deleteReviewLike(id) : postReviewLike(id)),
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ["review"] });
+			queryClient.invalidateQueries({ queryKey: ["review", productId, order] });
 		},
 	});
 
