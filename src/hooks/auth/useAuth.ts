@@ -31,7 +31,7 @@ const useAuth = () => {
 		document.cookie =
 			"accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 
-		queryClient.removeQueries("userMe");
+		queryClient.removeQueries({ queryKey: ["userMe"] });
 
 		router.push("/");
 	};
