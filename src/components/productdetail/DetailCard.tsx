@@ -179,29 +179,16 @@ export function Favorite({
 			}
 
 			const updateData = () => {
-				if (previous.isFavorite) {
-					return {
-						...previous,
-						isFavorite: false,
-					};
-				}
-				if (!previous.isFavorite) {
-					return {
-						...previous,
-						isFavorite: true,
-					};
-				}
+				return {
+					...previous,
+					isFavorite: !previous.isFavorite,
+				};
 			};
 			queryClient.setQueryData(["productDetail", id], updateData());
 			return previous;
 		},
 		onError: (error, variables, context) => {
-			if (context) {
-				queryClient.setQueryData(["productDetail", id], context);
-			}
-			if (!context) {
-				throw new Error("error!");
-			}
+			queryClient.setQueryData(["productDetail", id], context);
 		},
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["productDetail", id] });
