@@ -1,11 +1,5 @@
 import Image from "next/image";
-import {
-	ChangeEvent,
-	Dispatch,
-	MouseEvent,
-	SetStateAction,
-	useState,
-} from "react";
+import { ChangeEvent, Dispatch, MouseEvent, SetStateAction } from "react";
 
 type Props = {
 	previewImage: string | null;
