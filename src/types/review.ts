@@ -1,5 +1,10 @@
 import { Response } from "./common";
 
+export type ReviewResponsePage = {
+	pageParams: [];
+	pages: ReviewResponse[];
+};
+
 export type ReviewResponse = Response<Review>;
 
 export type Review = {
