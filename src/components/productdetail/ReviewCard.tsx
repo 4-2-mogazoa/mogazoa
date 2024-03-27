@@ -45,9 +45,9 @@ export default function ReviewCard({ reviewData, isMyReview }: Props) {
 
 	const handleButtonClick = () => {
 		if (isMyReview) {
-			const reviewLikeAlert = openModal(
+			const modalId = openModal(
 				<ReviewAlertModal
-					closeModal={() => closeModal(reviewLikeAlert)}
+					closeModal={() => closeModal(modalId)}
 					type="reviewLike"
 				/>,
 				{
@@ -61,10 +61,10 @@ export default function ReviewCard({ reviewData, isMyReview }: Props) {
 	};
 
 	const handleReviewModifyButton = () => {
-		const reviewModify = openModal(
+		const modalId = openModal(
 			<ReviewModal
 				type="modify"
-				closeModal={() => closeModal(reviewModify)}
+				closeModal={() => closeModal(modalId)}
 				productId={productId}
 				reviewData={reviewData}
 			/>,
@@ -76,9 +76,9 @@ export default function ReviewCard({ reviewData, isMyReview }: Props) {
 	};
 
 	const handleReviewDeleteButton = () => {
-		const reviewDelete = openModal(
+		const modalId = openModal(
 			<ReviewAlertModal
-				closeModal={() => closeModal(reviewDelete)}
+				closeModal={() => closeModal(modalId)}
 				reviewId={id}
 				productId={productId}
 				type="delete"

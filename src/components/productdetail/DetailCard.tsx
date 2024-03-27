@@ -33,10 +33,10 @@ export default function DetailCard({ productData, isMyProduct }: Props) {
 	const { openModal, closeModal } = useModalActions();
 
 	const handleReviewCreateButton = () => {
-		const reviewCreate = openModal(
+		const modalId = openModal(
 			<ReviewModal
 				type="create"
-				closeModal={() => closeModal(reviewCreate)}
+				closeModal={() => closeModal(modalId)}
 				productId={id}
 			/>,
 			{
@@ -114,9 +114,9 @@ export function Share({ className }: ShareProps) {
 	const { openModal, closeModal } = useModalActions();
 	const handleCopyClipBoard = () => {
 		navigator.clipboard.writeText(window.location.href);
-		const clipboardAlert = openModal(
+		const modalId = openModal(
 			<ReviewAlertModal
-				closeModal={() => closeModal(clipboardAlert)}
+				closeModal={() => closeModal(modalId)}
 				type="clipboard"
 			/>,
 			{
@@ -176,9 +176,9 @@ export function Favorite({
 
 	const handleButtonOnclick = () => {
 		if (isMyProduct) {
-			const favoritealert = openModal(
+			const modalId = openModal(
 				<ReviewAlertModal
-					closeModal={() => closeModal(favoritealert)}
+					closeModal={() => closeModal(modalId)}
 					type="favorite"
 				/>,
 				{

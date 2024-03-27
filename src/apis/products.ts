@@ -34,7 +34,7 @@ export async function getReviews({
 	order?: "recent" | "ratingDesc" | "ratingAsc" | "likeCount";
 	cursor?: number | null;
 }) {
-	const params = { productId, order, cursor };
+	const params = { order, cursor };
 
 	const res = await instance.get<ReviewResponse>(
 		`products/${productId}/reviews`,

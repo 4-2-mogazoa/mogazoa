@@ -31,12 +31,12 @@ export async function deleteReview(reviewid: number | undefined) {
 }
 
 export async function modifyReview(
-	reviewid: number,
+	reviewId: number,
 	images: Images,
 	content: string,
 	rating: number,
 ) {
-	const res = await instance.patch<Review>(`reviews/${reviewid}`, {
+	const res = await instance.patch<Review>(`reviews/${reviewId}`, {
 		images,
 		content,
 		rating,

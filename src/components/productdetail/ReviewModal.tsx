@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import React, { ChangeEvent, useEffect, useState } from "react";
 
-import { getImageURL } from "@/apis/image";
+import { getImageURL } from "@/apis/getImage";
 import { getProductDetail } from "@/apis/products";
 import { createReview, modifyReview } from "@/apis/review";
 import { starRate } from "@/constants/starRate";
