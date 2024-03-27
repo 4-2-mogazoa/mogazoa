@@ -1,5 +1,3 @@
-import { ImageData } from "@/components/common/inputs/AddImageBox";
-
 import instance from "./axiosInstance";
 
 type image = {
