@@ -4,13 +4,19 @@ export type User = Base & {
 	teamId: string;
 	nickname: string;
 	image: string;
+	description: string;
 };
 
 export type UserDetail = User & {
+	mostFavoriteCategory: {
+		name: string;
+		id: number;
+	};
+	averageRating: number;
+	reviewCount: number;
 	followeesCount: number;
 	followersCount: number;
 	isFollowing: boolean;
-	description: string;
 };
 
 export type Followee = {

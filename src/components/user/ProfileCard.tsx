@@ -1,3 +1,7 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useCallback } from "react";
+
+import { deleteFollow, postFollow } from "@/apis/follow";
 import BasicButton from "@/components/common/button/BasicButton";
 import ProfileImage from "@/components/common/profileImage/ProfileImage";
 import { useModalActions } from "@/store/modal";
@@ -12,7 +16,16 @@ type Props = {
 };
 
 export default function ProfileCard({ user, isMine = true }: Props) {
+	const queryClient = useQueryClient();
 	const { openModal, closeModal } = useModalActions();
+
+	const followMutation = useMutation({
+		mutationFn: (userId: number) =>
+			user.isFollowing ? deleteFollow(userId) : postFollow(userId),
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["user", user.id] });
+		},
+	});
 
 	const handleOpenProfileModifyModal = () => {
 		const modalId = openModal(
@@ -29,30 +42,31 @@ export default function ProfileCard({ user, isMine = true }: Props) {
 		openModal(<FollowUsersModal variant="follower" owner={user} />);
 	};
 
+	const handleClickFollow = useCallback(() => {
+		followMutation.mutate(user.id);
+	}, [followMutation, user.id]);
+
 	return (
 		<section className="_flex-col-center w-[33.5rem] gap-[3rem] rounded-[1.2rem] border border-black-border bg-black-bg px-[2rem] py-[3rem] md:w-[50.9rem] lg:w-[34rem]">
 			<h2 className="sr-only">기본 정보</h2>
-			<ProfileImage
-				size="large"
-				src={"https://github.com/pmndrs/zustand/raw/main/bear.jpg"}
-			/>
+			<ProfileImage size="large" src={user.image} />
 			<div className="flex w-full flex-col gap-[1rem]">
 				<strong className="self-center text-[2rem] font-semibold text-white">
-					{user.nickname}
+					{user?.nickname}
 				</strong>
-				<p className="text-[1.4rem] text-gray-200">{user.description}</p>
+				<p className="text-[1.4rem] text-gray-200">{user?.description}</p>
 			</div>
 			<div className="flex w-full justify-evenly">
 				<button className="_flex-col-center" onClick={handleOpenFolloweesModal}>
 					<span className="text-[1.8rem] font-semibold text-white">
-						{user.followeesCount}
+						{user?.followeesCount}
 					</span>
 					<span className="text-[1.4rem] text-gray-100">팔로워</span>
 				</button>
 				<div className="h-[4.8rem] w-[1px] bg-black-border"></div>
 				<button className="_flex-col-center" onClick={handleOpenFollowersModal}>
 					<span className="text-[1.8rem] font-semibold text-white">
-						{user.followersCount}
+						{user?.followersCount}
 					</span>
 					<span className="text-[1.4rem] text-gray-100">팔로잉</span>
 				</button>
@@ -68,8 +82,9 @@ export default function ProfileCard({ user, isMine = true }: Props) {
 				</div>
 			) : (
 				<BasicButton
-					label={user.isFollowing ? "팔로우 취소" : "팔로우"}
-					variant={user.isFollowing ? "tertiary" : "primary"}
+					label={user?.isFollowing ? "팔로우 취소" : "팔로우"}
+					variant={user?.isFollowing ? "tertiary" : "primary"}
+					onClick={handleClickFollow}
 				/>
 			)}
 		</section>

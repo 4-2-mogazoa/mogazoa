@@ -16,7 +16,7 @@ export default function EachResult({
 	winningProductIdForEachProperty,
 	color,
 }: Props) {
-	const displayData = product[property];
+	const displayData = parseFloat(product[property].toFixed(1));
 
 	const isWinner = winningProductIdForEachProperty[property] === product.id;
 
