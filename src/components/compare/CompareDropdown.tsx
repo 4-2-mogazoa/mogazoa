@@ -34,7 +34,7 @@ export default function CompareDropdown({
 	}, [nextCursor]);
 
 	const handleScroll = () =>
-		getDataByScroll(scrollRef, nextCursor, handleLoadMoreProducts);
+		getDataByScroll(scrollRef, nextCursor, handleLoadMoreProducts, 10);
 
 	return (
 		<div ref={dropdownRef}>

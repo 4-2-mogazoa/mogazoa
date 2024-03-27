@@ -29,7 +29,8 @@ export default function ScrollTest() {
 		setData((prev) => [...prev, ...test.slice(nextIndex, nextIndex + 3)]);
 	};
 
-	const handleScroll = () => getDataByScroll(ref, index, handleLoadMoreData);
+	const handleScroll = () =>
+		getDataByScroll(ref, index, handleLoadMoreData, 10);
 
 	return (
 		<div>

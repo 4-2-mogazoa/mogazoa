@@ -14,17 +14,15 @@ export default function getDataByScroll(
 	ref: RefObject<HTMLElement>,
 	nextCursor: number | undefined,
 	handleLoadMoreData: (nextCursor: number) => void,
-	threshold: number = 1,
+	threshold: number = 100,
 ) {
 	if (!nextCursor) return;
 
-	const scrollTop = ref.current?.scrollTop;
-	const scrollHeight = ref.current?.scrollHeight;
-	const clientHeight = ref.current?.clientHeight;
+	const { scrollTop, scrollHeight, clientHeight } = ref.current ?? {};
 
 	if (!scrollTop || !scrollHeight || !clientHeight) return;
 
 	if (Math.abs(scrollHeight - clientHeight - scrollTop) <= threshold) {
-		nextCursor && handleLoadMoreData(nextCursor);
+		handleLoadMoreData(nextCursor);
 	}
 }
