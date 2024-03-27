@@ -65,7 +65,7 @@ export default function ReviewModal({
 		},
 	});
 
-	const { mutate: create, isPending } = useMutation({
+	const { mutate: create, isPending: createPending } = useMutation({
 		mutationFn: () => {
 			const imageUrls = image.map((img) => img.image);
 			return createReview(productId, imageUrls, content, rating);
@@ -75,7 +75,7 @@ export default function ReviewModal({
 			closeModal();
 		},
 	});
-	const { mutate: modify } = useMutation({
+	const { mutate: modify, isPending: modifyPending } = useMutation({
 		mutationFn: () => {
 			const reviewid = reviewData ? reviewData.id : 0;
 			const idObjects = previousImage.map((item) => ({ id: Number(item.id) }));
@@ -229,7 +229,7 @@ export default function ReviewModal({
 				variant="primary"
 				label={buttonLabel}
 				onClick={handleOnClick}
-				disabled={isPending}
+				disabled={createPending || modifyPending}
 			/>
 		</div>
 	);
