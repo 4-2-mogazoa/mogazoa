@@ -38,7 +38,6 @@ export default function ReviewModal({
 	const [isFocused, setIsFocused] = useState(false);
 	const [errMsg, setErrMsg] = useState("");
 	const [rateErrMsg, setRateErrMsg] = useState("");
-	const [count, setCount] = useState(0);
 	const [trigger, setTrigger] = useState(0);
 
 	const queryClient = useQueryClient();
@@ -91,10 +90,6 @@ export default function ReviewModal({
 	});
 
 	useEffect(() => {
-		setCount(content.length);
-	}, [content]);
-
-	useEffect(() => {
 		for (let i = 0; i <= 2; i++) {
 			getImage(i);
 		}
@@ -119,13 +114,18 @@ export default function ReviewModal({
 	const handleOnClick = () => {
 		rating ? setRateErrMsg("") : setRateErrMsg("별점으로 상품을 평가해주세요.");
 
-		if (rating && image.length >= 1 && count >= 10 && type === "create") {
+		if (
+			rating &&
+			image.length >= 1 &&
+			content.length >= 10 &&
+			type === "create"
+		) {
 			create();
 		}
 		if (
 			rating &&
 			(image.length >= 1 || previousImage.length >= 1) &&
-			count >= 10 &&
+			content.length >= 10 &&
 			type === "modify"
 		) {
 			modify();
@@ -138,13 +138,13 @@ export default function ReviewModal({
 
 	const handleOnBlur = () => {
 		setIsFocused(false);
-		if (count === 0) {
+		if (content.length === 0) {
 			setErrMsg("리뷰 내용을 입력해주세요.");
 		}
 		if (content) {
 			setErrMsg("");
 		}
-		if (count >= 1 && count < 10) {
+		if (content.length >= 1 && content.length < 10) {
 			setErrMsg("최소 10자 이상 적어주세요.");
 		}
 	};
@@ -204,7 +204,7 @@ export default function ReviewModal({
 						value={isFocused ? (content ? content : "") : content}
 					/>
 					<p className="text-right text-[1.4rem] text-[#6E6E82]">
-						<span>{count}</span>
+						<span>{content.length}</span>
 						<span>/{MAX_LENGTH}</span>
 					</p>
 				</div>
