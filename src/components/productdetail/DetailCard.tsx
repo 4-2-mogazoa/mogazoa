@@ -167,14 +167,52 @@ export function Favorite({
 	const queryClient = useQueryClient();
 	const { openModal, closeModal } = useModalActions();
 
-	const { mutate: toggleFavorite } = useMutation({
+	const { mutate: toggleFavorite, error } = useMutation({
 		mutationFn: () => (isFavorite ? deleteFavorite(id) : postFavorite(id)),
+		onMutate: () => {
+			const previous: ProductDetail | undefined = queryClient.getQueryData([
+				"productDetail",
+				id,
+			]);
+			if (!previous) {
+				throw new Error("error!");
+			}
+
+			const updateData = () => {
+				if (previous.isFavorite) {
+					return {
+						...previous,
+						isFavorite: false,
+					};
+				}
+				if (!previous.isFavorite) {
+					return {
+						...previous,
+						isFavorite: true,
+					};
+				}
+			};
+			queryClient.setQueryData(["productDetail", id], updateData());
+			return previous;
+		},
+		onError: (error, variables, context) => {
+			if (context) {
+				queryClient.setQueryData(["productDetail", id], context);
+			}
+			if (!context) {
+				throw new Error("error!");
+			}
+		},
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["productDetail", id] });
 		},
 	});
-
 	const handleButtonOnclick = () => {
+		if (error?.message === "Request failed with status code 401") {
+			alert("로그인해주세요!");
+			return;
+		}
+
 		if (isMyProduct) {
 			const modalId = openModal(
 				<ReviewAlertModal
