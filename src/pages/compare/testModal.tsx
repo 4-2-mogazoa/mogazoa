@@ -1,7 +1,6 @@
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 
 import useCompareModal from "@/hooks/compare/useCompareModal";
-import useCompareStore from "@/store/compare";
 
 export async function getServerSideProps({ req }: GetServerSidePropsContext) {
 	const accessToken: string = req.cookies.accessToken || "";
