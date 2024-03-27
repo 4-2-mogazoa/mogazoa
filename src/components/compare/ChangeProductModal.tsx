@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { useState } from "react";
+import { forwardRef, useState } from "react";
 
 import useCompareStore from "@/store/compare";
 import { useModalActions } from "@/store/modal";
@@ -12,6 +12,7 @@ type Props = {
 	currentId: number;
 	currentName: string;
 	closeModal: () => void;
+	focusableElements: React.MutableRefObject<null[] | HTMLElement[]>;
 };
 
 type State = {
@@ -23,6 +24,7 @@ export default function ChangeProductModal({
 	currentId,
 	currentName,
 	closeModal: closeChangeProductModal,
+	focusableElements,
 }: Props) {
 	const [selectedProduct, setSelectedProduct] = useState<State>({
 		position: undefined,
@@ -70,6 +72,7 @@ export default function ChangeProductModal({
 				description="비교 상품이 교체되었습니다. 바로 확인해 보시겠어요?"
 				closeModal={() => closeMovePageModal(modalId)}
 				url="/compare"
+				focusableElements={focusableElements}
 			/>,
 		);
 	};
@@ -86,12 +89,14 @@ export default function ChangeProductModal({
 					position={compareStatePositionArray[0]}
 					selected={selectedProduct.product.id === firstProduct.id}
 					handleSelectProduct={handleSelectProduct}
+					ref={(el: HTMLButtonElement) => (focusableElements.current[1] = el)}
 				/>
 				<ProductBox
 					product={secondProduct}
 					position={compareStatePositionArray[1]}
 					selected={selectedProduct.product.id === secondProduct.id}
 					handleSelectProduct={handleSelectProduct}
+					ref={(el: HTMLButtonElement) => (focusableElements.current[2] = el)}
 				/>
 			</div>
 			<BasicButton
@@ -99,17 +104,14 @@ export default function ChangeProductModal({
 				variant="primary"
 				disabled={secondProduct.id === 0}
 				onClick={handleChangeProduct}
+				className="w-full"
+				ref={(el) => (focusableElements.current[3] = el)}
 			/>
 		</section>
 	);
 }
 
-function ProductBox({
-	product,
-	position,
-	selected,
-	handleSelectProduct,
-}: {
+type ProductBoxProps = {
 	product: StoredProductInfo;
 	position: CompareStatePosition;
 	selected: boolean;
@@ -117,9 +119,14 @@ function ProductBox({
 		position: CompareStatePosition,
 		product: StoredProductInfo,
 	) => void;
-}) {
+};
+
+const ProductBox = forwardRef(function ProductBox(
+	{ product, position, selected, handleSelectProduct }: ProductBoxProps,
+	ref?: React.LegacyRef<HTMLButtonElement> | undefined,
+) {
 	return (
-		<div
+		<button
 			className={clsx(
 				"_flex-center w-full cursor-pointer rounded-[0.8rem] border border-solid p-[2.4rem] text-[1.6rem] font-semibold lg:text-[1.8rem]",
 				selected
@@ -127,8 +134,10 @@ function ProductBox({
 					: "border-black-border text-gray-200",
 			)}
 			onClick={() => handleSelectProduct(position, product)}
+			ref={ref}
+			type="button"
 		>
 			{product.name}
-		</div>
+		</button>
 	);
-}
+});

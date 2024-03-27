@@ -1,17 +1,20 @@
 import Image from "next/image";
-import React, { useEffect } from "react";
+import React, { JSXElementConstructor, ReactElement, useEffect } from "react";
 import { createPortal } from "react-dom";
 
+import useTrapFocus from "@/hooks/common/useTrapFocus";
 import { ModalConfig } from "@/store/modal";
 
 type Props = {
 	id: string;
-	children: React.ReactNode;
+	children: ReactElement<any, string | JSXElementConstructor<any>>;
 	onRemove: (id: string) => void;
 	config: ModalConfig;
 };
 
 function ModalWrapper({ children, id, onRemove, config }: Props) {
+	const { focusableElements, handleModalTrapFocus } = useTrapFocus();
+
 	const closeIconSrc = "/icons/close.svg";
 	const modalRoot = document.getElementById("modal-root");
 
@@ -42,6 +45,16 @@ function ModalWrapper({ children, id, onRemove, config }: Props) {
 		};
 	}, [config.isCloseESC, id, onRemove]);
 
+	useEffect(() => {
+		focusableElements.current[0]?.focus();
+
+		document.addEventListener("keydown", handleModalTrapFocus);
+
+		return () => {
+			document.removeEventListener("keydown", handleModalTrapFocus);
+		};
+	}, []);
+
 	return modalRoot
 		? createPortal(
 				<div
@@ -59,13 +72,16 @@ function ModalWrapper({ children, id, onRemove, config }: Props) {
 							<div className="px-[1.5rem] pt-[1.5rem] md:px-[2rem] md:pt-[2rem]">
 								<button
 									onClick={() => onRemove(id)}
+									ref={(el: HTMLButtonElement) =>
+										(focusableElements.current[0] = el)
+									}
 									className="relative size-[2.4rem] md:size-[3.6rem] lg:size-[4rem]"
 								>
 									<Image src={closeIconSrc} alt="모달 닫기" fill />
 								</button>
 							</div>
 							<div className="px-[2rem] pb-[2rem] md:px-[4rem] md:pb-[4rem]">
-								{children}
+								{React.cloneElement(children, { focusableElements })}
 							</div>
 						</div>
 					</div>

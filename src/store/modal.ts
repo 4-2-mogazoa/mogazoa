@@ -1,9 +1,9 @@
-import { ReactNode } from "react";
+import { JSXElementConstructor, ReactElement, ReactNode } from "react";
 import { create } from "zustand";
 
 type ModalType = {
 	id: string;
-	content: ReactNode;
+	content: ReactElement<any, string | JSXElementConstructor<any>>;
 	config: ModalConfig;
 };
 
@@ -15,7 +15,10 @@ export type ModalConfig = {
 type ModalState = {
 	modals: ModalType[];
 	actions: {
-		openModal: (content: ReactNode, config?: Partial<ModalConfig>) => string;
+		openModal: (
+			content: ReactElement<any, string | JSXElementConstructor<any>>,
+			config?: Partial<ModalConfig>,
+		) => string;
 		closeModal: (id: string) => void;
 		closeAllModals: () => void;
 	};
