@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useState } from "react";
 
-import LoginModal from "../modal/LoginModal";
+import LoginModal from "@/components/common/modal/LoginModal";
 
 type UserType = {
 	id: number;
