@@ -53,6 +53,31 @@ button {
 	-webkit-box-orient: vertical;
 }
 
+._scrollbar {
+	overflow-y: auto;
+}
+
+._scrollbar::-webkit-scrollbar {
+	width: 0.8rem;
+	height: 6.4rem;
+}
+
+._scrollbar::-webkit-scrollbar-track {
+	background-color: #252530;
+}
+
+._scrollbar::-webkit-scrollbar-thumb {
+	border-radius: 4rem;
+	background-color: #6e6e82;
+
+	background-clip: padding-box;
+	border: 2px solid transparent;
+}
+
+._scrollbar::-webkit-scrollbar-thumb:hover {
+	background-color: #9fa6b2;
+}
+
 @font-face {
 	font-family: "Pretendard";
 	font-weight: 100;

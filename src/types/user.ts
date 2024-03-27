@@ -30,3 +30,14 @@ export type UserResponseByVariant = {
 	followee: FolloweesResponse;
 	follower: FollowersResponse;
 };
+
+export type UsersRanking = {
+  id: number;
+  nickname: string;
+  image: string | null;
+  teamId: string;
+  followersCount: number;
+  reviewCount: number;
+  createdAt: string;
+  rank: number;
+};

@@ -18,6 +18,8 @@ export default function ProductCard({
 	rate,
 }: Props) {
 	const starIconSrc = "/icons/star_on.svg";
+	const roundedRate = parseFloat(rate.toFixed(2));
+	
 	return (
 		<div className="flex max-h-[18.3rem] max-w-[16rem] grow flex-col rounded-[1.2rem] border border-black-border bg-black-bg md:max-h-[25.6rem] md:max-w-[24.7rem] lg:max-h-[30.8rem] lg:max-w-[30rem]">
 			<div className="relative h-[14rem] max-w-[14rem] md:h-[22.7rem] md:max-w-[22.7rem] lg:h-[18.4rem] lg:max-w-[28.4rem]">
@@ -47,7 +49,7 @@ export default function ProductCard({
 							/>
 						</div>
 						<div className="text-[1.2rem] text-gray-100 md:text-[1.4rem] lg:text-[1.6rem]">
-							{rate}
+							{roundedRate}
 						</div>
 					</div>
 				</div>

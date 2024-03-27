@@ -18,11 +18,11 @@ type Action = {
 	isAlreadyStoredProduct: (id: number) => boolean;
 	getCurrentProductPosition: (id: number) => string | undefined;
 	addProduct: (
-		newProducts: ProductInfo,
+		newProduct: ProductInfo,
 		position?: Position,
 	) => string | undefined;
 	deleteProduct: (position: Position) => void;
-	changeProduct: (newProducts: ProductInfo, position: Position) => void;
+	changeProduct: (newProduct: ProductInfo, position: Position) => void;
 	clearProducts: () => void;
 };
 
@@ -82,9 +82,9 @@ const useCompareStore = create(
 					numberOfProducts: (prev.numberOfProducts -= 1),
 				})),
 
-			changeProduct: (newProducts, position) =>
+			changeProduct: (newProduct, position) =>
 				set((prev) => ({
-					products: { ...prev.products, [position]: newProducts },
+					products: { ...prev.products, [position]: newProduct },
 				})),
 
 			clearProducts: () => set({ products: initialState, numberOfProducts: 0 }),
@@ -98,18 +98,4 @@ const useCompareStore = create(
 
 export default useCompareStore;
 
-// 나중에 사용하는 곳에서 로그아웃 시 로컬스토리지를 비우는 함수 작성 ?
-
-// 예시 ?
-// import useCompareStore from "@/store/compare";
-
-// const clearCompareProductsStorage = useCompareStore.persist.clearStorage;
-
-// const handleLogoutButtonClick = async () => {
-// 	const isLogout = await logOut();
-
-// 	if (isLogout) {
-// 		clearProducts();
-//     clearCompareProductsStorage();
-// 	}
-// };
+// export const clearCompareProductsStorage = useCompareStore.persist.clearStorage;
