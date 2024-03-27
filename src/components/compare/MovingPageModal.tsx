@@ -6,12 +6,14 @@ type Props = {
 	description: string;
 	closeModal: () => void;
 	url: string;
+	focusableElements: React.MutableRefObject<null[] | HTMLElement[]>;
 };
 
 export default function MovingPageModal({
 	description,
 	closeModal,
 	url,
+	focusableElements,
 }: Props) {
 	const router = useRouter();
 
@@ -35,7 +37,13 @@ export default function MovingPageModal({
 					<>{description}</>
 				)}
 			</div>
-			<BasicButton variant="primary" label="확인" onClick={handleButtonClick} />
+			<BasicButton
+				variant="primary"
+				label="확인"
+				onClick={handleButtonClick}
+				className="w-full"
+				ref={(el) => (focusableElements.current[1] = el)}
+			/>
 		</form>
 	);
 }
