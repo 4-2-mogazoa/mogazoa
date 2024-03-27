@@ -3,7 +3,7 @@ import React, { ComponentType, useEffect } from "react";
 
 import getCookies from "@/utils/getCookies";
 
-const withLogin = (WrappedComponent: ComponentType) => {
+export default function withLogin(WrappedComponent: ComponentType) {
 	const RedirectComponent = ({ props }: { props: any }) => {
 		const router = useRouter();
 
@@ -17,6 +17,4 @@ const withLogin = (WrappedComponent: ComponentType) => {
 	};
 
 	return RedirectComponent;
-};
-
-export default withLogin;
+}
