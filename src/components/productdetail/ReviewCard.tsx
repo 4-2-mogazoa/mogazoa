@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { deleteReviewLike, postReviewLike } from "@/apis/review";
 import { starRate } from "@/constants/starRate";
 import { useModalActions } from "@/store/modal";
-import { Review, ReviewImages } from "@/types/review";
+import { Review, ReviewImages, ReviewResponsePage } from "@/types/review";
 
 import ProfileImage from "../common/profileImage/ProfileImage";
 import Thumbs from "../common/thumbs/Thumbs";
@@ -37,14 +37,57 @@ export default function ReviewCard({ reviewData, isMyReview, order }: Props) {
 
 	const { openModal, closeModal } = useModalActions();
 
-	const { mutate: toggleLike } = useMutation({
+	const { mutate: toggleLike, error } = useMutation({
 		mutationFn: () => (isLiked ? deleteReviewLike(id) : postReviewLike(id)),
+		onMutate: () => {
+			const previous: ReviewResponsePage | undefined = queryClient.getQueryData(
+				["review", productId, order],
+			);
+			if (!previous) {
+				throw new Error("error!");
+			}
+
+			const updateData = () => {
+				const updatedList = previous.pages[0].list.map((prev) =>
+					prev.id === id
+						? {
+								...prev,
+								isLiked: !prev.isLiked,
+								likeCount: prev.isLiked
+									? prev.likeCount - 1
+									: prev.likeCount + 1,
+							}
+						: prev,
+				);
+
+				return {
+					...previous,
+					pages: [
+						{
+							...previous.pages[0],
+							list: updatedList,
+						},
+						...previous.pages.slice(1),
+					],
+				};
+			};
+			queryClient.setQueryData(["review", productId, order], updateData());
+			return previous;
+		},
+		onError: (error, variables, context) => {
+			queryClient.setQueryData(["review", productId, order], context);
+		},
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["review", productId, order] });
 		},
 	});
 
 	const handleButtonClick = () => {
+		if (error?.message === "Request failed with status code 401") {
+			alert("로그인해주세요!");
+			return;
+		}
+
 		if (isMyReview) {
 			const modalId = openModal(
 				<ReviewAlertModal
