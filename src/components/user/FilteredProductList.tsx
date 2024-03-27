@@ -6,6 +6,7 @@ import { getUserProducts } from "@/apis/user";
 import Dropdown from "@/components/common/dropdown/Dropdown";
 import ProductCard from "@/components/common/productcard/ProductCard";
 import { BREAK_POINT } from "@/constants/breakPoint";
+import { useIntersect } from "@/hooks/common/useIntersect";
 import useWindowWidth from "@/hooks/common/useWindowWidth";
 import { UserProductType } from "@/types/product";
 import { UserDetail } from "@/types/user";
@@ -40,7 +41,7 @@ export default function FilteredProductList({ user }: { user: UserDetail }) {
 	const [isLarge, setIsLarge] = useState(false);
 	const currentWidth = useWindowWidth();
 
-	const { data } = useInfiniteQuery({
+	const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery({
 		queryKey: ["products", user?.id, currentFilter.type],
 		queryFn: ({ pageParam }) =>
 			getUserProducts(user.id, currentFilter.type, pageParam),
@@ -48,6 +49,16 @@ export default function FilteredProductList({ user }: { user: UserDetail }) {
 		getNextPageParam: (lastPage) => lastPage.nextCursor,
 		staleTime: 60 * 1000 * 2,
 	});
+
+	const intersectRef = useIntersect(
+		async (entry, observer) => {
+			observer.unobserve(entry.target);
+			if (hasNextPage && !isFetching) {
+				fetchNextPage();
+			}
+		},
+		{ rootMargin: "200px" },
+	);
 
 	const handleSelectFilter = (filter: ProductFilter) => {
 		setFilter(filter);
@@ -64,17 +75,21 @@ export default function FilteredProductList({ user }: { user: UserDetail }) {
 			<div className="grid grid-cols-2 gap-[1.5rem] lg:grid-cols-3 lg:gap-[2rem]">
 				{data?.pages.map((group, i) => (
 					<Fragment key={i}>
-						{group.list.map((product) => (
-							<Link key={product.id} href={`/productdetail/${product.id}`}>
-								<ProductCard
-									imageData={product.image}
-									likeCount={product.favoriteCount}
-									productName={product.name}
-									rate={product.rating}
-									reviewCount={product.reviewCount}
-								/>
-							</Link>
-						))}
+						{group.list.map((product, idx, arr) => {
+							const isLastItem = idx === arr.length - 1;
+							return (
+								<Link key={product.id} href={`/productdetail/${product.id}`}>
+									<ProductCard
+										ref={isLastItem ? intersectRef : null}
+										imageData={product.image}
+										likeCount={product.favoriteCount}
+										productName={product.name}
+										rate={product.rating}
+										reviewCount={product.reviewCount}
+									/>
+								</Link>
+							);
+						})}
 					</Fragment>
 				))}
 			</div>
