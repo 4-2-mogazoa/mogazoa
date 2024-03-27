@@ -9,14 +9,6 @@ import ReviewerRanking from "@/components/home/ReviewerRanking";
 import { BREAK_POINT } from "@/constants/breakPoint";
 import useWindowWidth from "@/hooks/common/useWindowWidth";
 
-type UserType = {
-	id: number;
-};
-
-const user: UserType = {
-  id: 123,
-}
-
 export default function HomeLayout() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState<string>("");
@@ -46,7 +38,7 @@ export default function HomeLayout() {
 
   return (
     <div className="h-screen bg-[#1c1c22]">
-      <Header user={user} toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} onSearch={handleSearch} headerType="homeHeader" />
+      <Header toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} onSearch={handleSearch} headerType="homeHeader" />
       <div className="w-[100%] overflow-auto bg-[#1c1c22] pb-[10rem]">
         <div className={clsx('flex flex-row', isWrapPoint ? 'lg:mx-[5rem]' : 'lg:mx-[18rem]')}>
           <SideBar isSidebarOpen={isSidebarOpen} onCategorySelect={handleCategorySelect} />
