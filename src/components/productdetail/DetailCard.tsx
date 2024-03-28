@@ -3,9 +3,11 @@ import clsx from "clsx";
 import Image from "next/image";
 
 import { deleteFavorite, postFavorite } from "@/apis/products";
+import useCompareModal from "@/hooks/compare/useCompareModal";
 import { useModalActions } from "@/store/modal";
 import { ProductDetail } from "@/types/product";
 import cn from "@/utils/cn";
+import getCookies from "@/utils/getCookies";
 
 import BasicButton from "../common/button/BasicButton";
 import CategoryBadge from "../common/categoryBadge/CategoryBadge";
@@ -45,6 +47,14 @@ export default function DetailCard({ productData, isMyProduct }: Props) {
 			},
 		);
 	};
+
+	const cookie = getCookies();
+	const accessToken = cookie["accessToken"];
+
+	const { compareButtonText, handleCompareButtonClick } = useCompareModal(
+		productData,
+		accessToken,
+	);
 
 	return (
 		<div className="flex min-w-[33.5rem] flex-col items-center md:flex-row lg:justify-between">
@@ -89,13 +99,13 @@ export default function DetailCard({ productData, isMyProduct }: Props) {
 						onClick={handleReviewCreateButton}
 					/>
 					<BasicButton
-						label="비교하기"
+						label={compareButtonText}
 						variant="secondary"
 						className={clsx("md:max-w-[12.3rem] lg:max-w-[18rem]", {
 							"md:max-w-[10.7rem] lg:max-w-[16rem]": isMyProduct,
 						})}
+						onClick={handleCompareButtonClick}
 					/>
-					{/**TODO: 비교상품 없을 경우 alert표시, 하나 있을 경우 확인할지 안할지 모달 표시 확인하면 /compare 이동, 두개 있을 경우 비교 상품 교체 모달 비로그인시 로그인 요청 모달*/}
 					{isMyProduct && (
 						<BasicButton
 							label="편집하기"
@@ -128,7 +138,7 @@ export function Share({ className }: ShareProps) {
 
 	return (
 		<div className={cn("flex gap-[1rem]", className)}>
-			<button className="flex size-[2.4rem] items-center justify-center rounded-[0.6rem] bg-black-bg lg:size-[2.8rem]">
+			<button className="bg-black-bg flex size-[2.4rem] items-center justify-center rounded-[0.6rem] lg:size-[2.8rem]">
 				<div className="relative size-[1.4rem] lg:size-[1.8rem]">
 					<Image
 						src="/icons/kakaotalk.svg"
@@ -140,7 +150,7 @@ export function Share({ className }: ShareProps) {
 			</button>
 			{/**TODO: 카카오공유는 배포이후 추가 가능*/}
 			<button
-				className="flex size-[2.4rem] items-center justify-center rounded-[0.6rem] bg-black-bg lg:size-[2.8rem]"
+				className="bg-black-bg flex size-[2.4rem] items-center justify-center rounded-[0.6rem] lg:size-[2.8rem]"
 				onClick={handleCopyClipBoard}
 			>
 				<div className="relative size-[1.4rem] lg:size-[1.8rem]">

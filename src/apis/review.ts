@@ -1,4 +1,4 @@
-import { Images, Me, Review, ReviewDelete } from "@/types/review";
+import { Images, Review, ReviewDelete } from "@/types/review";
 
 import instance from "./axiosInstance";
 
@@ -41,12 +41,6 @@ export async function modifyReview(
 		content,
 		rating,
 	});
-
-	return res.data;
-}
-
-export async function getUserMe() {
-	const res = await instance.get<Me>("users/me");
 
 	return res.data;
 }
