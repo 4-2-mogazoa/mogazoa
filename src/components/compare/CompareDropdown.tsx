@@ -21,10 +21,15 @@ export default function CompareDropdown({
 	handleLoadMoreProducts,
 }: Props) {
 	const scrollRef = useRef<HTMLUListElement>(null);
+	const focusRef = useRef<HTMLButtonElement>(null);
 
 	const nextCursor = productList?.nextCursor;
 
 	useEffect(() => {
+		setTimeout(() =>
+			focusRef.current?.scrollIntoView({ block: "center", behavior: "smooth" }),
+		);
+
 		if (scrollRef.current) {
 			scrollRef.current.addEventListener("scroll", handleScroll);
 		}
@@ -34,10 +39,10 @@ export default function CompareDropdown({
 				scrollRef.current.removeEventListener("scroll", handleScroll);
 			}
 		};
-	}, [nextCursor]);
+	}, [focusIndex, nextCursor]);
 
 	const handleScroll = () =>
-		getDataByScroll(scrollRef, nextCursor, handleLoadMoreProducts, 10);
+		getDataByScroll(scrollRef, nextCursor, handleLoadMoreProducts);
 
 	return (
 		<div ref={dropdownRef}>
@@ -54,6 +59,7 @@ export default function CompareDropdown({
 							)}
 							onClick={() => handleAddProduct(id, name)}
 							type="button"
+							ref={focusIndex === index ? focusRef : undefined}
 						>
 							{name}
 						</button>
