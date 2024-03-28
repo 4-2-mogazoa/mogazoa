@@ -96,7 +96,6 @@ export default function Input({
 						placeholder={placeholderValue}
 						className={cn(InputVariants({ variant: variant }))}
 						id={labelValue}
-						{...register(inputType, validationSchema)}
 					/>
 
 					{(inputType === "password" || inputType === "passwordChecked") && (

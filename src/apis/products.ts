@@ -23,3 +23,8 @@ export async function getProductDetail(productId: number) {
 
 	return data;
 }
+
+export async function patchProductDetail(productId: number) {
+	const res = await instance.patch<ProductDetail>(`products/${productId}`);
+	return res.data;
+}

@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { KeyboardEvent,useEffect, useState } from 'react';
 
 import useWindowWidth from '@/hooks/common/useWindowWidth';
@@ -20,6 +21,7 @@ type HeaderProps = {
 
 export default function Header({ user, isSidebarOpen, toggleSidebar, headerType, onSearch }: HeaderProps) {
   const currentWidth = useWindowWidth();
+  const router = useRouter();
 
   const [isSearchVisible, setSearchVisible] = useState(false);
   const [isLogoOverflow, setIsLogoOverflow] = useState(false);
@@ -42,12 +44,16 @@ export default function Header({ user, isSidebarOpen, toggleSidebar, headerType,
   const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
     if(e.key === "Enter") {
       handleSearch();
+      router.push('/');
+      router.push({ pathname: '/', query: { search: searchValue } });
     }
   };
 
   const handleSearch = () => {
     if(onSearch) {
       onSearch(searchValue);
+      router.push('/');
+      router.push({ pathname: '/', query: { search: searchValue } });
     }
   };
 

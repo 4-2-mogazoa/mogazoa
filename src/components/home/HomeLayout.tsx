@@ -9,6 +9,14 @@ import ReviewerRanking from "@/components/home/ReviewerRanking";
 import { BREAK_POINT } from "@/constants/breakPoint";
 import useWindowWidth from "@/hooks/common/useWindowWidth";
 
+type UserType = {
+	id: number;
+};
+
+const user: UserType = {
+  id: 123,
+}
+
 export default function HomeLayout() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState<string>("");
@@ -75,7 +83,7 @@ export default function HomeLayout() {
             )}
           </div>
         </div>
-        <AddProductButton />
+        <AddProductButton user={user} selectedCategoryName={selectedCategoryName} />
       </div>
     </div>
   );
