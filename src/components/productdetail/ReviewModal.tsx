@@ -91,7 +91,12 @@ export default function ReviewModal({
 
 	useEffect(() => {
 		for (let i = 0; i <= 2; i++) {
-			getImage(i);
+			const existingImage = image.find(
+				(img) => img.id === editorData[i]?.id && img.image,
+			);
+			if (!existingImage) {
+				getImage(i);
+			}
 		}
 	}, [editorData.length, trigger]);
 
