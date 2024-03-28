@@ -68,6 +68,7 @@ export default function AddImageBox({
 					id="fileInput"
 					className="hidden "
 					onChange={handleUploadFile}
+					accept="image/jpeg, image/png, image/jpg"
 				/>
 			)}
 		</label>
