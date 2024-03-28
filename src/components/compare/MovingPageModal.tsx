@@ -24,12 +24,12 @@ export default function MovingPageModal({
 	const descriptionText = description.split(". ");
 
 	return (
-		<form className="_flex-col-center w-[29.5rem] gap-12 md:w-[50rem] md:gap-[4.5rem] lg:gap-16">
-			<div className="_flex-col-center text-[2rem] font-semibold leading-[2.8rem] text-white lg:text-[2.4rem] lg:leading-normal">
+		<form className="_flex-col-center w-[29.5rem] gap-12 md:w-[50rem] md:gap-16">
+			<div className="_flex-col-center gap-4 text-[2rem] font-semibold leading-[2.8rem] text-white lg:gap-6 lg:text-[2.4rem] lg:leading-normal">
 				{descriptionText.length > 1 ? (
 					<>
 						<p>{`${descriptionText[0]}.`}</p>
-						<p>{`${descriptionText[1]}`}</p>
+						<p className="text-[1.6rem] font-medium lg:text-[2rem]">{`${descriptionText[1]}`}</p>
 					</>
 				) : (
 					<>{description}</>
