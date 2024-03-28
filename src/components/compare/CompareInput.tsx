@@ -42,7 +42,6 @@ export default function CompareInput({
 							color={tagColor}
 							productName={product.name}
 							handleDeleteButtonClick={handleDeleteProduct}
-							//TODO: text overflow 처리 좀 더 좋은 방법
 							className="md:truncate"
 						/>
 					) : (
