@@ -1,14 +1,21 @@
 import { ProductDetail } from "@/types/product";
 
+import CategoryBadge from "../common/categoryBadge/CategoryBadge";
+
 type Props = {
 	product: ProductDetail;
 };
 
 export default function EachResultTitle({ product }: Props) {
-	const { name, description } = product;
+	const {
+		name,
+		description,
+		category: { name: categoryName },
+	} = product;
 
 	return (
-		<div className="_flex-col-center gap-3">
+		<div className="_flex-col-center mt-2 gap-3">
+			<CategoryBadge size="small" category={categoryName} />
 			<p className="text-center text-[1.8rem] text-white lg:text-[2.4rem]">
 				{name}
 			</p>

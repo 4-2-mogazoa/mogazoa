@@ -21,18 +21,20 @@ type Props = React.HTMLAttributes<HTMLDivElement> &
 		color: "green" | "pink";
 		productName: string;
 		handleDeleteButtonClick: () => void;
+		className?: string;
 	};
 
 export default function ProductNameTag({
 	color,
 	productName,
 	handleDeleteButtonClick,
+	className,
 }: Props) {
 	const deleteIconSrc = "/icons/close.svg";
 
 	return (
 		<button
-			className={cn(productNameTagVariants({ color }))}
+			className={cn(productNameTagVariants({ color, className }))}
 			onClick={handleDeleteButtonClick}
 		>
 			{productName}

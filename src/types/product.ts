@@ -38,3 +38,9 @@ export type Product = {
 };
 
 export type ProductsResponse = Response<Product>;
+
+export type UserProductType =
+	| "created-products"
+	| "reviewed-products"
+	| "favorite-products";
+

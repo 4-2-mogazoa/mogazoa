@@ -11,3 +11,10 @@ export type WinningProduct = {
 	numberOfWins: number;
 	tagColor: "white" | "green" | "pink";
 };
+
+export type StoredProductInfo = {
+	id: number;
+	name: string;
+};
+
+export type CompareStatePosition = "firstProduct" | "secondProduct";
