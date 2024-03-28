@@ -1,4 +1,5 @@
 import axios from "axios";
+import { UseFormSetError } from "react-hook-form";
 
 import { RegistrationUserData } from "@/types/auth";
 
@@ -9,8 +10,7 @@ const url = "auth/signUp";
 
 export const postSignup = async (
 	data: RegistrationUserData,
-	setError: any,
-	router: any,
+	setError: UseFormSetError<RegistrationUserData>,
 ) => {
 	const userData = {
 		email: data.email,
@@ -20,9 +20,13 @@ export const postSignup = async (
 	};
 
 	try {
-		const res = await instance.post(url, userData);
+		await instance.post(url, userData);
+
+		// 회원가입 성공시 회원가입 데이터로 로그인 진행
 		await postSignIn({ email: userData.email, password: userData.password });
-		router.push("/");
+
+		// 리다이렉트용
+		window.location.href = "/";
 	} catch (error) {
 		if (!axios.isAxiosError(error)) return;
 
