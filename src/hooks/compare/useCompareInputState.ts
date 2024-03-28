@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, KeyboardEvent, useState } from "react";
 
 import { getProducts } from "@/apis/products";
 import useCompareStore from "@/store/compare";
@@ -15,6 +15,7 @@ export default function useCompareInputState(
 	const [productList, setProductList] = useState<ProductsResponse>();
 	const [errorMessage, setErrorMessage] = useState("");
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+	const [focusIndex, setFocusIndex] = useState(-1);
 
 	const dropdownRef = useOutsideClick<HTMLDivElement>(() =>
 		setIsDropdownOpen(false),
@@ -24,12 +25,14 @@ export default function useCompareInputState(
 	const handleKeyWordChange = async (e: ChangeEvent<HTMLInputElement>) => {
 		const keyword = e.target.value;
 
-		if (!keyword) {
+		setKeyword(keyword);
+
+		if (keyword === "") {
 			setIsDropdownOpen(false);
+			setProductList(undefined);
+			setFocusIndex(-1);
 			return;
 		}
-
-		setKeyword(keyword);
 
 		const data = await getProducts(keyword);
 
@@ -58,6 +61,8 @@ export default function useCompareInputState(
 		const { id, name } = product;
 		const errorMessage = addProduct({ id, name }, position);
 
+		setKeyword("");
+
 		if (errorMessage) {
 			setErrorMessage(errorMessage);
 			return;
@@ -80,6 +85,8 @@ export default function useCompareInputState(
 		const errorMessage = addProduct(product, position);
 
 		setIsDropdownOpen(false);
+		setKeyword("");
+		setFocusIndex(-1);
 
 		if (errorMessage) {
 			setErrorMessage(errorMessage);
@@ -104,14 +111,77 @@ export default function useCompareInputState(
 		}
 	};
 
+	// 드롭박스 - 상하 방향키로 이동
+	const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+		if (!productList?.list) return;
+
+		if (e.key === "Escape") {
+			setFocusIndex(-1);
+
+			return;
+		}
+
+		if (e.key === "Enter") {
+			if (keyword.trim() === "") return;
+
+			const { id, name } = productList.list[focusIndex];
+
+			handleAddProduct(id, name);
+			setFocusIndex(-1);
+			setKeyword("");
+
+			return;
+		}
+
+		if (e.key === "ArrowDown") {
+			if (focusIndex >= productList.list.length - 1) {
+				setFocusIndex(() => 0);
+				setKeyword(productList.list[0]["name"]);
+			} else {
+				setFocusIndex((prev) => prev + 1);
+				setKeyword(productList.list[focusIndex + 1]["name"]);
+			}
+		}
+
+		if (e.key === "ArrowUp") {
+			if (focusIndex === -1) return;
+
+			if (focusIndex === 0) {
+				setFocusIndex(productList.list.length - 1);
+				setKeyword(productList.list[productList.list.length - 1]["name"]);
+			} else {
+				setFocusIndex((prev) => prev - 1);
+				setKeyword(productList.list[focusIndex - 1]["name"]);
+			}
+		}
+
+		if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+			const keywordLength = keyword.length + 20;
+			const input = e.target as HTMLInputElement;
+
+			setTimeout(() => {
+				input.setSelectionRange(keywordLength, keywordLength);
+				input.scrollLeft = keywordLength * 20;
+			});
+		}
+	};
+
 	return {
-		data: { keyword, productList, errorMessage, isDropdownOpen, dropdownRef },
+		data: {
+			keyword,
+			productList,
+			errorMessage,
+			isDropdownOpen,
+			dropdownRef,
+			focusIndex,
+		},
 		handlerFn: {
 			handleKeyWordChange,
 			handleAddProduct,
 			handleInputBlur,
 			handleDeleteProduct,
 			handleLoadMoreProducts,
+			handleKeyDown,
 		},
 	};
 }
