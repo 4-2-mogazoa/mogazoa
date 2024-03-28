@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { getProductDetail } from "@/apis/products";
-import { getUserMe } from "@/apis/review";
+import { getMe } from "@/apis/user";
 
 import DetailCard from "./DetailCard";
 import NoneReview from "./NoneReview";
@@ -17,8 +17,8 @@ export default function ProductDetail({ id }: { id: number }) {
 		enabled: !!id,
 	});
 	const myData = useQuery({
-		queryKey: ["usersMe"],
-		queryFn: () => getUserMe(),
+		queryKey: ["me"],
+		queryFn: () => getMe(),
 	}).data;
 
 	return (
