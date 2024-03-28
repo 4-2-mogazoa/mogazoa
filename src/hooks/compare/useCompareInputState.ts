@@ -29,6 +29,7 @@ export default function useCompareInputState(
 
 		if (keyword === "") {
 			setIsDropdownOpen(false);
+			setProductList(undefined);
 			setFocusIndex(-1);
 			return;
 		}
