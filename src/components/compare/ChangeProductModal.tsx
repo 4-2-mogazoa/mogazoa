@@ -12,6 +12,7 @@ type Props = {
 	currentId: number;
 	currentName: string;
 	closeModal: () => void;
+	changeCompareButtonText: () => void;
 };
 
 type State = {
@@ -23,6 +24,7 @@ export default function ChangeProductModal({
 	currentId,
 	currentName,
 	closeModal: closeChangeProductModal,
+	changeCompareButtonText,
 }: Props) {
 	const [selectedProduct, setSelectedProduct] = useState<State>({
 		position: undefined,
@@ -63,6 +65,7 @@ export default function ChangeProductModal({
 		if (!changePosition) return;
 
 		changeProduct(newProduct, changePosition);
+		changeCompareButtonText();
 		closeChangeProductModal();
 
 		const modalId = openModal(

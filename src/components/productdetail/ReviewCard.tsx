@@ -1,42 +1,151 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
-import { Review } from "@/types/product";
+import { deleteReviewLike, postReviewLike } from "@/apis/review";
+import { starRate } from "@/constants/starRate";
+import { useModalActions } from "@/store/modal";
+import { Review, ReviewImages, ReviewResponsePage } from "@/types/review";
 
 import ProfileImage from "../common/profileImage/ProfileImage";
-import ReviewerProfile from "../common/reviewerProfile/ReviewerProfile";
 import Thumbs from "../common/thumbs/Thumbs";
+import ReviewAlertModal from "./ReviewAlertModal";
+import ReviewModal from "./ReviewModal";
 
 type Props = {
 	reviewData: Review;
 	isMyReview: boolean;
+	order: string;
 };
 
-export default function ReviewCard({ reviewData, isMyReview }: Props) {
-	const { user, reviewImages, createdAt, isLiked, likeCount, content, rating } =
-		reviewData;
-	const MAX_RATE = 5;
-	const rateArray = Array.from({ length: MAX_RATE }, (_, i) => i + 1);
-	const starOnIconSrc = "/icons/star_on.svg";
-	const starOffIconSrc = "/icons/star_off.svg";
+export default function ReviewCard({ reviewData, isMyReview, order }: Props) {
+	const router = useRouter();
+	const queryClient = useQueryClient();
+	const {
+		user,
+		reviewImages,
+		createdAt,
+		isLiked,
+		likeCount,
+		content,
+		rating,
+		id,
+		productId,
+	} = reviewData;
+
+	const { rateArray, starOnIconSrc, starOffIconSrc } = starRate;
+
+	const { openModal, closeModal } = useModalActions();
+
+	const { mutate: toggleLike, error } = useMutation({
+		mutationFn: () => (isLiked ? deleteReviewLike(id) : postReviewLike(id)),
+		onMutate: () => {
+			const previous: ReviewResponsePage | undefined = queryClient.getQueryData(
+				["review", productId, order],
+			);
+			if (!previous) {
+				throw new Error("error!");
+			}
+
+			const updateData = () => {
+				const updatedList = previous.pages[0].list.map((prev) =>
+					prev.id === id
+						? {
+								...prev,
+								isLiked: !prev.isLiked,
+								likeCount: prev.isLiked
+									? prev.likeCount - 1
+									: prev.likeCount + 1,
+							}
+						: prev,
+				);
+
+				return {
+					...previous,
+					pages: [
+						{
+							...previous.pages[0],
+							list: updatedList,
+						},
+						...previous.pages.slice(1),
+					],
+				};
+			};
+			queryClient.setQueryData(["review", productId, order], updateData());
+			return previous;
+		},
+		onError: (error, variables, context) => {
+			queryClient.setQueryData(["review", productId, order], context);
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["review", productId, order] });
+		},
+	});
 
 	const handleButtonClick = () => {
-		console.log("TODO:좋아요 개수 증가 비로그인 시 로그인요청 모달");
+		if (error?.message === "Request failed with status code 401") {
+			alert("로그인해주세요!");
+			return;
+		}
+
+		if (isMyReview) {
+			const modalId = openModal(
+				<ReviewAlertModal
+					closeModal={() => closeModal(modalId)}
+					type="reviewLike"
+				/>,
+				{
+					isCloseClickOutside: true,
+					isCloseESC: true,
+				},
+			);
+			return;
+		}
+		toggleLike();
 	};
 
-	//TODO: 유저랭크, 팔로워 카운터, 리뷰카운터를 백엔드에서 제공X, qna 확인요청한 상태
+	const handleReviewModifyButton = () => {
+		const modalId = openModal(
+			<ReviewModal
+				type="modify"
+				closeModal={() => closeModal(modalId)}
+				productId={productId}
+				reviewData={reviewData}
+			/>,
+			{
+				isCloseClickOutside: true,
+				isCloseESC: true,
+			},
+		);
+	};
+
+	const handleReviewDeleteButton = () => {
+		const modalId = openModal(
+			<ReviewAlertModal
+				closeModal={() => closeModal(modalId)}
+				reviewId={id}
+				productId={productId}
+				type="delete"
+			/>,
+			{
+				isCloseClickOutside: true,
+				isCloseESC: true,
+			},
+		);
+	};
 
 	return (
 		<div className="flex min-w-[33.5rem] flex-col rounded-[1.2rem] border border-black-border bg-black-bg p-[2rem] md:flex-row lg:p-[3rem]">
 			<div className="flex min-w-[11rem] max-[767px]:mb-[2rem] md:mr-[2rem] lg:mr-[3rem]">
-				<div className="flex h-[5rem] items-center gap-[1rem]">
-					<button>
-						<ProfileImage src={reviewData.user.image} size="small" />
-					</button>
+				<button
+					className="flex h-[5rem] items-center gap-[1rem]"
+					onClick={() => router.push(`/profile/${user.id}`)}
+				>
+					<ProfileImage src={user.image} size="small" />
 					<div className="text-[1.4rem] text-white lg:text-[1.6rem]">
-						{reviewData.user.nickname}
+						{user.nickname}
 					</div>
-				</div>
-				{/**TODO: 버튼 클릭 시 유저 프로필화면 이동 /user/{userId} */}
+				</button>
 			</div>
 			<div className="flex w-full flex-col gap-[2rem]">
 				<div className="flex gap-[3rem]">
@@ -60,7 +169,7 @@ export default function ReviewCard({ reviewData, isMyReview }: Props) {
 					{content}
 				</div>
 				<div className="flex gap-[1rem] lg:gap-[2rem]">
-					{reviewImages.map((data) => (
+					{reviewImages.map((data: ReviewImages) => (
 						<div
 							key={data.id}
 							className="relative size-[6rem] md:size-[8rem] lg:size-[10rem]"
@@ -76,12 +185,13 @@ export default function ReviewCard({ reviewData, isMyReview }: Props) {
 				</div>
 				<div className="flex justify-between">
 					<div className="flex items-center gap-[1.5rem] text-[1.2rem] md:gap-[2rem] md:text-[1.4rem]">
-						<div className=" text-gray-200">{createdAt}</div>
+						<div className=" text-gray-200">
+							{createdAt.substring(0, createdAt.indexOf("T"))}
+						</div>
 						{isMyReview && (
 							<div className="flex gap-[1rem] font-light text-gray-100 underline">
-								<button>수정</button>
-								<button>삭제</button>
-								{/**TODO: 수정모달 추가, 삭제 alert추가 */}
+								<button onClick={handleReviewModifyButton}>수정</button>
+								<button onClick={handleReviewDeleteButton}>삭제</button>
 							</div>
 						)}
 					</div>
@@ -95,4 +205,3 @@ export default function ReviewCard({ reviewData, isMyReview }: Props) {
 		</div>
 	);
 }
-
