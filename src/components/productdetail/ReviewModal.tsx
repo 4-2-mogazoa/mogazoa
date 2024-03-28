@@ -130,12 +130,7 @@ export default function ReviewModal({
 		if (rating && content.length >= 10 && type === "create") {
 			create();
 		}
-		if (
-			rating &&
-			(image.length >= 1 || previousImage.length >= 1) &&
-			content.length >= 10 &&
-			type === "modify"
-		) {
+		if (rating && content.length >= 10 && type === "modify") {
 			modify();
 		}
 	};
