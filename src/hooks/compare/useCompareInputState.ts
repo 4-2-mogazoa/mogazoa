@@ -143,6 +143,8 @@ export default function useCompareInputState(
 		}
 
 		if (e.key === "ArrowUp") {
+			if (focusIndex === -1) return;
+
 			if (focusIndex === 0) {
 				setFocusIndex(productList.list.length - 1);
 				setKeyword(productList.list[productList.list.length - 1]["name"]);
@@ -152,13 +154,15 @@ export default function useCompareInputState(
 			}
 		}
 
-		const keywordLength = keyword.length + 20;
-		const input = e.target as HTMLInputElement;
+		if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+			const keywordLength = keyword.length + 20;
+			const input = e.target as HTMLInputElement;
 
-		setTimeout(() => {
-			input.setSelectionRange(keywordLength, keywordLength);
-			input.scrollLeft = keywordLength * 20;
-		});
+			setTimeout(() => {
+				input.setSelectionRange(keywordLength, keywordLength);
+				input.scrollLeft = keywordLength * 20;
+			});
+		}
 	};
 
 	return {
