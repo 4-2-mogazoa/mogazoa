@@ -29,7 +29,7 @@ export default function useCompareInputState(
 
 		if (keyword === "") {
 			setIsDropdownOpen(false);
-			setFocusIndex(() => -1);
+			setFocusIndex(-1);
 			return;
 		}
 
@@ -111,52 +111,48 @@ export default function useCompareInputState(
 	};
 
 	// 드롭박스 - 상하 방향키로 이동
-	// TODO: 모든 경우에 동작하는지는 테스트 못 함.
-	// TODO: 무한 스크롤 시에도 동작하는지 테스트하기.
 	const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
 		if (!productList?.list) return;
 
 		if (e.key === "Escape") {
+			setFocusIndex(-1);
+
+			return;
+		}
+
+		if (e.key === "Enter") {
+			if (keyword.trim() === "") return;
+
+			const { id, name } = productList.list[focusIndex];
+
+			handleAddProduct(id, name);
 			setFocusIndex(-1);
 			setKeyword("");
 
 			return;
 		}
 
-		if (e.key === "Enter") {
-			if (keyword === "") return;
-
-			const { id, name } = productList.list[focusIndex];
-
-			handleAddProduct(id, name);
-			setFocusIndex(() => -1);
-			setKeyword("");
-
-			return;
-		}
-
 		if (e.key === "ArrowDown") {
-			focusIndex >= productList.list.length - 1
-				? setFocusIndex(() => 0)
-				: setFocusIndex((prev) => prev + 1);
-			focusIndex >= productList.list.length - 1
-				? setKeyword(() => productList.list[0]["name"])
-				: setKeyword(() => productList.list[focusIndex + 1]["name"]);
+			if (focusIndex >= productList.list.length - 1) {
+				setFocusIndex(() => 0);
+				setKeyword(productList.list[0]["name"]);
+			} else {
+				setFocusIndex((prev) => prev + 1);
+				setKeyword(productList.list[focusIndex + 1]["name"]);
+			}
 		}
 
 		if (e.key === "ArrowUp") {
-			focusIndex === 0
-				? setFocusIndex(productList.list.length - 1)
-				: setFocusIndex((prev) => prev - 1);
-			focusIndex === 0
-				? setKeyword(
-						() => productList.list[productList.list.length - 1]["name"],
-					)
-				: setKeyword(() => productList.list[focusIndex - 1]["name"]);
+			if (focusIndex === 0) {
+				setFocusIndex(productList.list.length - 1);
+				setKeyword(productList.list[productList.list.length - 1]["name"]);
+			} else {
+				setFocusIndex((prev) => prev - 1);
+				setKeyword(productList.list[focusIndex - 1]["name"]);
+			}
 		}
 
-		// input에 커서가 항상 맨 끝에 있도록 하는 역할 (안해주면 방향키 움직일 때마다 커서가 앞 뒤로 이동함)
-		const keywordLength = keyword.length;
+		const keywordLength = keyword.length + 20;
 		const input = e.target as HTMLInputElement;
 
 		setTimeout(() => {
