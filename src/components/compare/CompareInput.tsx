@@ -42,7 +42,6 @@ export default function CompareInput({
 							color={tagColor}
 							productName={product.name}
 							handleDeleteButtonClick={handleDeleteProduct}
-							//TODO: text overflow 처리 좀 더 좋은 방법
 							className="md:truncate"
 						/>
 					) : (
@@ -53,6 +52,7 @@ export default function CompareInput({
 							autoComplete="off"
 							onChange={handleKeyWordChange}
 							onBlur={handleInputBlur}
+							spellCheck={false}
 						/>
 					)}
 				</div>
@@ -65,7 +65,7 @@ export default function CompareInput({
 					/>
 				)}
 			</div>
-			<p className="-mt-2 h-[1.8rem] text-[1.2rem] text-white lg:h-[2.1rem] lg:text-[1.4rem]">
+			<p className="-mt-2 h-[1.8rem] text-[1.2rem] font-light text-gray-100 lg:h-[2.1rem] lg:text-[1.4rem]">
 				{errorMessage}
 			</p>
 		</div>
