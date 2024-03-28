@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 
 import { getImageURL } from "@/apis/getImage";
 import { getProductDetail } from "@/apis/products";
@@ -39,6 +39,7 @@ export default function ReviewModal({
 	const [errMsg, setErrMsg] = useState("");
 	const [rateErrMsg, setRateErrMsg] = useState("");
 	const [trigger, setTrigger] = useState(0);
+	const [editImageId, setEditImageId] = useState<string | undefined>("");
 
 	const queryClient = useQueryClient();
 
@@ -89,12 +90,17 @@ export default function ReviewModal({
 		},
 	});
 
+	const prevTrigger = useRef(trigger);
 	useEffect(() => {
 		for (let i = 0; i <= 2; i++) {
 			const existingImage = image.find(
 				(img) => img.id === editorData[i]?.id && img.image,
 			);
-			if (!existingImage) {
+
+			if (
+				!existingImage ||
+				(prevTrigger.current !== trigger && editImageId === editorData[i]?.id)
+			) {
 				getImage(i);
 			}
 		}
@@ -118,13 +124,10 @@ export default function ReviewModal({
 
 	const handleOnClick = () => {
 		rating ? setRateErrMsg("") : setRateErrMsg("별점으로 상품을 평가해주세요.");
-
-		if (
-			rating &&
-			image.length >= 1 &&
-			content.length >= 10 &&
-			type === "create"
-		) {
+		if (content.length === 0) {
+			setErrMsg("리뷰 내용을 입력해주세요.");
+		}
+		if (rating && content.length >= 10 && type === "create") {
 			create();
 		}
 		if (
@@ -227,6 +230,7 @@ export default function ReviewModal({
 						setImage={setImage}
 						type={type}
 						setTrigger={setTrigger}
+						setEditImageId={setEditImageId}
 					/>
 				</div>
 			</div>
