@@ -1,24 +1,27 @@
 import Image from "next/image";
-import { useState } from "react";
 
 import LoginModal from "@/components/common/modal/LoginModal";
 import AddProductModal from "@/components/common/modal/product/AddProductModal";
+import { useModalActions } from "@/store/modal";
 
 type UserType = {
 	id: number;
 };
 
 type AddProductButtonProps = {
-	user?: UserType;
-	selectedCategoryName?: string | null;
-}
+  user?: UserType;
+};
 
-export default function AddProductButton({ user, selectedCategoryName }: AddProductButtonProps) {
-	const [isModalOpen, setIsModalOpen] = useState(false);
+export default function AddProductButton({ user }:AddProductButtonProps) {
+	const { openModal, closeModal } = useModalActions();
 
 	const handleOpenAddProductModal = () => {
-		setIsModalOpen(true);
-  };
+		if (!user) {
+			const modal = openModal(<LoginModal closeModal={() => closeModal(modal)} />);
+		} else {
+			const modal = openModal(<AddProductModal closeModal={() => closeModal(modal)} />)
+		}
+	};
 	return (
 		<>
 			<button
@@ -34,8 +37,6 @@ export default function AddProductButton({ user, selectedCategoryName }: AddProd
 					/>
 				</span>
 			</button>
-			{(isModalOpen && !user) && <LoginModal onClose={() => setIsModalOpen(false)} />}
-			{(isModalOpen && user) && <AddProductModal onClose={() => setIsModalOpen(false)} category="음악" />}
 		</>
 	);
 }

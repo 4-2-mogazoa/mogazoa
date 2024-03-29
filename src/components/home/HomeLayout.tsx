@@ -83,7 +83,7 @@ export default function HomeLayout() {
             )}
           </div>
         </div>
-        <AddProductButton user={user} selectedCategoryName={selectedCategoryName} />
+        <AddProductButton user={user} />
       </div>
     </div>
   );

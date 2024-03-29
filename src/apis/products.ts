@@ -1,4 +1,4 @@
-import { ProductDetail, ProductsResponse } from "@/types/product";
+import { ProductDetail, ProductNamesResponse, ProductsResponse } from "@/types/product";
 
 import instance from "./axiosInstance";
 
@@ -27,4 +27,11 @@ export async function getProductDetail(productId: number) {
 export async function patchProductDetail(productId: number) {
 	const res = await instance.patch<ProductDetail>(`products/${productId}`);
 	return res.data;
+}
+
+export async function getProductNames() {
+			const res = await instance.get<ProductNamesResponse>("products");
+			const data = res.data;
+			const names = data.list.map(product => product.name);
+			return names;
 }

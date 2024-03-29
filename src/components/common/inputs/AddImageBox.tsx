@@ -5,7 +5,11 @@ type EditorDataType = {
 	file?: string | null;
 };
 
-export default function AddImageBox() {
+type AddImageBoxProps = {
+	onImageSelect?: (imageUrl: string) => void;
+}
+
+export default function AddImageBox({ onImageSelect }: AddImageBoxProps) {
 	const [editorData, setEditorData] = useState<EditorDataType>({ file: null });
 	const fileRef = useRef<HTMLInputElement>(null);
 	const addPhotoIconSrc = "/icons/add_photo.svg";
@@ -18,6 +22,7 @@ export default function AddImageBox() {
 			reader.readAsDataURL(fileImg);
 			reader.onloadend = () => {
 				setEditorData({ file: reader.result as string });
+				onImageSelect && onImageSelect(reader.result as string);
 			};
 		}
 	};

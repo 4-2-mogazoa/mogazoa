@@ -37,6 +37,15 @@ export type Product = {
 	writerId: number;
 };
 
+export type ProductNames = {
+	name: string;
+};
+
+export type ProductNamesResponse = {
+	list: ProductNames[];
+	nextCursor: any;
+}
+
 export type ProductsResponse = Response<Product>;
 
 export type ReviewResponse = Response<Review>;
