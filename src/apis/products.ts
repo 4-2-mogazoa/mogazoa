@@ -1,4 +1,5 @@
-import { ProductDetail, ProductNamesResponse, ProductsResponse } from "@/types/product";
+import { ProductDetail, ProductNamesResponse,ProductsResponse } from "@/types/product";
+import { ReviewResponse } from "@/types/review";
 
 import instance from "./axiosInstance";
 
@@ -24,14 +25,39 @@ export async function getProductDetail(productId: number) {
 	return data;
 }
 
-export async function patchProductDetail(productId: number) {
-	const res = await instance.patch<ProductDetail>(`products/${productId}`);
+export async function getProductNames() {
+	const res = await instance.get<ProductNamesResponse>("products");
+	const data = res.data;
+	const names = data.list.map(product => product.name);
+	return names;
+}
+
+export async function getReviews({
+	productId,
+	order,
+	cursor,
+}: {
+	productId: number;
+	order?: "recent" | "ratingDesc" | "ratingAsc" | "likeCount";
+	cursor?: number | null;
+}) {
+	const params = { order, cursor };
+
+	const res = await instance.get<ReviewResponse>(
+		`products/${productId}/reviews`,
+		{
+			params,
+		},
+	);
+
 	return res.data;
 }
 
-export async function getProductNames() {
-			const res = await instance.get<ProductNamesResponse>("products");
-			const data = res.data;
-			const names = data.list.map(product => product.name);
-			return names;
+export async function postFavorite(productId: number) {
+	await instance.post<ProductDetail>(`products/${productId}/favorite`);
+}
+
+export async function deleteFavorite(productId: number) {
+	await instance.delete<ProductDetail>(`products/${productId}/favorite`);
+
 }

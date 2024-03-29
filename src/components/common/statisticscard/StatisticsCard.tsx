@@ -75,7 +75,9 @@ export default function StatisticsCard({
 						<Image src={icon} alt={label} fill className="object-cover" />
 					</div>
 					<span className="text-[1.6rem] text-gray-100 md:text-[2rem] lg:text-[2.4rem]">
-						{type === "rate" ? productData : productData?.toLocaleString()}
+						{type === "rate"
+							? productData?.toFixed(1)
+							: productData?.toLocaleString()}
 					</span>
 				</div>
 			</div>
@@ -84,7 +86,9 @@ export default function StatisticsCard({
 					<Image src={icon} alt={label} fill className="object-cover " />
 				</div>
 				<span className="text-[1.6rem] text-gray-100 md:text-[2rem] lg:text-[2.4rem]">
-					{type === "rate" ? productData : productData?.toLocaleString()}
+					{type === "rate"
+						? productData?.toFixed(1)
+						: productData?.toLocaleString()}
 				</span>
 			</div>
 			<div className="flex flex-row items-center text-[1.2rem] md:flex-col lg:flex-col lg:text-[1.4rem]">
@@ -102,4 +106,3 @@ export default function StatisticsCard({
 		</div>
 	);
 }
-
