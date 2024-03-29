@@ -1,4 +1,6 @@
 import CompareForm from "@/components/compare/CompareForm";
+import Loading from "@/components/compare/Loading";
+import Result from "@/components/compare/Result";
 import useCompareQueries from "@/hooks/compare/useCompareQueries";
 
 export default function Index() {
@@ -7,12 +9,18 @@ export default function Index() {
 	} = useCompareQueries();
 
 	return (
-		<div className="h-screen bg-[#1c1c22]">
-			<CompareForm />
-			<div>
-				{/* todo: 결과 테이블 UI 구현 */}
-				<p>{firstProduct?.name}</p>
-				<p>{secondProduct?.name}</p>
+		<div className="h-full min-h-screen bg-[#1c1c22]">
+			<div className="_flex-col-center mx-8 gap-24 pb-16 pt-12 md:mx-12 md:max-w-[94rem] md:pb-40 md:pt-16 lg:mx-auto lg:w-[94rem] lg:gap-32 lg:pt-24">
+				<CompareForm />
+				<div>
+					{firstProduct && secondProduct ? (
+						<Result firstProduct={firstProduct} secondProduct={secondProduct} />
+					) : (
+						<div className="mt-28 md:mt-72">
+							<Loading />
+						</div>
+					)}
+				</div>
 			</div>
 		</div>
 	);

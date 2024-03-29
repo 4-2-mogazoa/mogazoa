@@ -1,10 +1,23 @@
-import { ChangeEvent, TextareaHTMLAttributes, useState } from "react";
+import {
+	ChangeEvent,
+	forwardRef,
+	TextareaHTMLAttributes,
+	useState,
+} from "react";
 
-export default function TextBox({
-	maxLength,
-	defaultValue,
-	...props
-}: TextareaHTMLAttributes<HTMLTextAreaElement>) {
+type Props = TextareaHTMLAttributes<HTMLTextAreaElement> & {
+	maxLength: number;
+	defaultValue?: string;
+};
+
+const TextBox = forwardRef<HTMLTextAreaElement, Props>(function TextBox(
+	{
+		maxLength,
+		defaultValue,
+		...props
+	}: TextareaHTMLAttributes<HTMLTextAreaElement>,
+	ref,
+) {
 	const [count, setCount] = useState(
 		defaultValue ? String(defaultValue).length : 0,
 	);
@@ -19,6 +32,7 @@ export default function TextBox({
 			className={`min-h-[8.8rem] rounded-xl border ${isFocused ? "border-main_blue" : "border-[#353542]"} bg-[#252530] p-[2rem]`}
 		>
 			<textarea
+				ref={ref}
 				className="w-full resize-none overflow-hidden border-none bg-[#252530] text-[1.4rem] text-white placeholder:text-[1.4rem] placeholder:text-gray-200 focus:outline-none lg:text-[1.6rem] lg:placeholder:text-[1.6rem]"
 				rows={3}
 				onChange={handleOnTextarea}
@@ -35,4 +49,5 @@ export default function TextBox({
 			</p>
 		</div>
 	);
-}
+});
+export default TextBox;
