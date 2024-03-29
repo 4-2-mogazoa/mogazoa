@@ -7,14 +7,10 @@ import { getCategories } from '@/apis/categories';
 import { Category } from '@/types/common';
 
 type SideBarProps = {
-  user?: UserType;
+  user?: string;
   isSidebarOpen?: boolean;
   className?: string;
   onCategorySelect: (CategoryId: number | null, categoryName: string | null) => void;
-};
-
-type UserType = {
-  id: number;
 };
 
 export const SideBar: React.FC<SideBarProps> = ({ user, isSidebarOpen, onCategorySelect }) => {

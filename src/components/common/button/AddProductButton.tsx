@@ -4,12 +4,9 @@ import LoginModal from "@/components/common/modal/LoginModal";
 import AddProductModal from "@/components/common/modal/product/AddProductModal";
 import { useModalActions } from "@/store/modal";
 
-type UserType = {
-	id: number;
-};
 
 type AddProductButtonProps = {
-  user?: UserType;
+  user?: number;
 };
 
 export default function AddProductButton({ user }:AddProductButtonProps) {
@@ -19,7 +16,7 @@ export default function AddProductButton({ user }:AddProductButtonProps) {
 		if (!user) {
 			const modal = openModal(<LoginModal closeModal={() => closeModal(modal)} />);
 		} else {
-			const modal = openModal(<AddProductModal closeModal={() => closeModal(modal)} />)
+			const modal = openModal(<AddProductModal type="add" closeModal={() => closeModal(modal)} />)
 		}
 	};
 	return (

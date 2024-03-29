@@ -5,14 +5,10 @@ import { KeyboardEvent,useEffect, useState } from "react";
 
 import useWindowWidth from "@/hooks/common/useWindowWidth";
 
-type UserType = {
-	id: number;
-};
-
 type HeaderType = "homeHeader" | "";
 
 type HeaderProps = {
-  user?: UserType;
+  user?: string;
   isSidebarOpen?: boolean;
   toggleSidebar?: () => void;
   headerType?: HeaderType;

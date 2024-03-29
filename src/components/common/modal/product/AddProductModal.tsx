@@ -5,12 +5,15 @@ import BasicButton from "@/components/common/button/BasicButton";
 import AddImageBox from "@/components/common/inputs/AddImageBox";
 import AddCategoryDropdown from "@/components/home/AddCategoryDropdown";
 
+import ProductDropdown from "./productDropdown";
+
 type AddProductModalProps = {
-  closeModal: () => void;
+  type: 'add' | 'rewrite';
+  closeModal?: () => void;
 	defaultValue?: string;
 }
 
-export default function AddProductModal ({ closeModal, defaultValue }: AddProductModalProps) {
+export default function AddProductModal ({ type, closeModal, defaultValue }: AddProductModalProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [productImageUrl, setProductImageUrl] = useState<string>("");
   const [productName, setProductName] = useState<string>("");
@@ -20,7 +23,7 @@ export default function AddProductModal ({ closeModal, defaultValue }: AddProduc
   const [textAreaError, setTextAreaError] = useState<string>("");
   const [existingProductName, setExistingProductName] = useState<string[]>([]);
   const [isFocused, setIsFocused] = useState(false);
-
+  const [options, setOptions] = useState<string[]>(existingProductName);
   const [count, setCount] = useState(
 		defaultValue ? String(defaultValue).length : 0,
 	);
@@ -36,6 +39,10 @@ export default function AddProductModal ({ closeModal, defaultValue }: AddProduc
   const handleProductNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputName = event.target.value;
     if (inputName.length <= 20) {
+      setProductName(inputName);
+      const filteredOptions = existingProductName.filter(ele => ele.includes(inputName));
+      setOptions(filteredOptions);
+    } else {
       setProductName(inputName);
     }
   };
@@ -57,6 +64,14 @@ export default function AddProductModal ({ closeModal, defaultValue }: AddProduc
 
     getProductName();
   }, []);
+
+  useEffect(() => {
+    if(productName === '') {
+      setOptions([]);
+    } else {
+      setOptions(existingProductName.filter((ele) => ele.includes(productName)));
+    }
+  }, [productName]);
 
   const handleProductNameBlur = () => {
     if (!productName.trim()) {
@@ -92,11 +107,12 @@ export default function AddProductModal ({ closeModal, defaultValue }: AddProduc
 
   return (
     <div className="w-[100%] px-[4rem] md:w-[59rem] lg:w-[62rem]">
-      <h2 className="text-[2.4rem] font-semibold text-white">상품 추가</h2>
+      <h2 className="text-[2.4rem] font-semibold text-white">{type === 'add' ? '상품 추가' : '상품 편집'}</h2>
       <div className="flex flex-col gap-[2rem]">
         <div className="flex w-[100%] flex-row justify-between">
           <div className="mr-[2rem] flex w-[100%] flex-col md:m-0 md:w-[36rem] md:gap-[1rem] lg:gap-[2rem]">
             <input value={productName} onChange={handleProductNameChange} onBlur={handleProductNameBlur} placeholder="상품명 (상품 등록 여부를 확인해주세요)" className="mt-[1rem] h-[5.5rem] w-full rounded-xl border border-[#353542] bg-[#252530] px-[2rem] py-[2.3rem] text-[1.4rem] text-white outline-none focus:border-main_blue" />
+            <ProductDropdown options={options} />
             {productNameError && <p className="text-[1.3rem] text-red">{productNameError}</p>}
             <AddCategoryDropdown onSelect={handleCategorySelect} />
             {categoryError && <p className="text-[1.3rem] text-red">{categoryError}</p>}
@@ -116,6 +132,7 @@ export default function AddProductModal ({ closeModal, defaultValue }: AddProduc
             maxLength={500}
             defaultValue={defaultValue}
             onChange={handleOnTextarea}
+            placeholder="상품 설명을 입력해주세요."
 					/>
 					<p className="text-right text-[1.4rem] text-[#6E6E82]">
           <span>{count}</span>
