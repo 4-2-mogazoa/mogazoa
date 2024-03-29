@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import React, { ReactNode } from "react";
 import {
 	FieldValues,
@@ -19,11 +18,9 @@ export default function AuthFormContainer({
 	api,
 	setError,
 }: Props) {
-	const router = useRouter();
-
 	const onSubmit: SubmitHandler<FieldValues> = async (data) => {
 		try {
-			await api(data, setError, router);
+			await api(data, setError);
 		} catch (e) {
 			console.log(e);
 		}

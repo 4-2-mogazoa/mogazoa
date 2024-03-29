@@ -1,7 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 
-import { postSignup } from "@/apis/auth/postSignup";
 import BasicButton from "@/components/common/button/BasicButton";
 import Input from "@/components/common/inputs/Input";
 import { emailPattern, passwordPattern } from "@/constants/regExp";
