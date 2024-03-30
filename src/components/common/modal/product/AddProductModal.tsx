@@ -1,11 +1,17 @@
 import { ChangeEvent,useEffect, useState } from "react";
 
-import { getProductNames } from "@/apis/products";
+import { getCategories } from "@/apis/categories";
+import { getProductNames, postProducts } from "@/apis/products";
 import BasicButton from "@/components/common/button/BasicButton";
 import AddImageBox from "@/components/common/inputs/AddImageBox";
 import AddCategoryDropdown from "@/components/home/AddCategoryDropdown";
 
 import ProductDropdown from "./productDropdown";
+
+type Item = {
+  id: number;
+  name: string;
+};
 
 type AddProductModalProps = {
   type: 'add' | 'rewrite';
@@ -14,7 +20,10 @@ type AddProductModalProps = {
 }
 
 export default function AddProductModal ({ type, closeModal, defaultValue }: AddProductModalProps) {
+  const [category, setCategory] = useState<Item[]>([]);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number>(0);
   const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [productImageUrl, setProductImageUrl] = useState<string>("");
   const [productName, setProductName] = useState<string>("");
   const [productNameError, setProductNameError] = useState<string>("");
@@ -24,18 +33,24 @@ export default function AddProductModal ({ type, closeModal, defaultValue }: Add
   const [existingProductName, setExistingProductName] = useState<string[]>([]);
   const [isFocused, setIsFocused] = useState(false);
   const [options, setOptions] = useState<string[]>(existingProductName);
-  const [count, setCount] = useState(
-		defaultValue ? String(defaultValue).length : 0,
-	);
+  const [count, setCount] = useState(defaultValue ? String(defaultValue).length : 0,);
 
+  /* textArea 글자수 세기 */
 	const handleOnTextarea = (e: ChangeEvent<HTMLTextAreaElement>) => {
 		setCount(e.target.value.length);
+    if (count >= 10) {
+      setTextAreaError("");
+    }
 	};
 
-  const handleCategorySelect = (category: string) => {
-    setSelectedCategory(category);
+  /* 선택한 카테고리 정보 */
+  const handleCategorySelect = (categoryId: number, categoryName: string) => {
+    setSelectedCategory(categoryName);
+    setSelectedCategoryId(categoryId);
+    setCategoryError("");
   };
 
+  /* 상품명 */
   const handleProductNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputName = event.target.value;
     if (inputName.length <= 20) {
@@ -47,10 +62,13 @@ export default function AddProductModal ({ type, closeModal, defaultValue }: Add
     }
   };
 
+  /* 이미지 등록 */
   const handleImageSelect = (imageUrl: string) => {
     setProductImageUrl(imageUrl);
+    setImageError("");
   }
 
+  /* 상품명 중복 확인 및 자동완성을 위한 getProductName */
   useEffect(() => {
     const getProductName = async () => {
       try {
@@ -65,14 +83,16 @@ export default function AddProductModal ({ type, closeModal, defaultValue }: Add
     getProductName();
   }, []);
 
+  /* 상품명 자동완성에 보여줄 드롭다운 옵션 */
   useEffect(() => {
     if(productName === '') {
       setOptions([]);
     } else {
       setOptions(existingProductName.filter((ele) => ele.includes(productName)));
     }
-  }, [productName]);
+  }, []);
 
+  /* 상품명 인풋 블러 */
   const handleProductNameBlur = () => {
     if (!productName.trim()) {
       setProductNameError("상품 이름은 필수 입력입니다.");
@@ -83,6 +103,7 @@ export default function AddProductModal ({ type, closeModal, defaultValue }: Add
     }
   };
 
+  /* 텍스트 인풋 블러 */
   const handleTextareaBlur = () => {
     setIsFocused(false);
     if (count < 10) {
@@ -92,30 +113,61 @@ export default function AddProductModal ({ type, closeModal, defaultValue }: Add
     }
   };
 
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const categoryData = await getCategories();
+        setCategory(categoryData);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    }
+    fetchCategories();
+  }, []);
+  
+  const items: Item[] = category.map(category => ({ id: category.id, name: category.name }));
+
   const handleSubmitError = () => {
     if(!selectedCategory.trim()) {
       setCategoryError("카테고리를 선택해주세요.");
-      setImageError("");
     } else if (!productImageUrl) {
       setImageError("대표 이미지를 추가해주세요.");
-      setCategoryError("");
-    } else {
-      setCategoryError("");
-      setImageError("");
     }
   }
+
+  const handleDropDownClick = (value: string) => {
+    setProductName(value);
+    setOptions([]);
+  };
+
+  useEffect(() => {
+    if(productName && count > 0) {
+      setIsButtonDisabled(false);
+    }
+  }, [productName, count]);
 
   return (
     <div className="w-[100%] px-[4rem] md:w-[59rem] lg:w-[62rem]">
       <h2 className="text-[2.4rem] font-semibold text-white">{type === 'add' ? '상품 추가' : '상품 편집'}</h2>
-      <div className="flex flex-col gap-[2rem]">
+      <div className="relative flex flex-col gap-[3rem]">
         <div className="flex w-[100%] flex-row justify-between">
-          <div className="mr-[2rem] flex w-[100%] flex-col md:m-0 md:w-[36rem] md:gap-[1rem] lg:gap-[2rem]">
-            <input value={productName} onChange={handleProductNameChange} onBlur={handleProductNameBlur} placeholder="상품명 (상품 등록 여부를 확인해주세요)" className="mt-[1rem] h-[5.5rem] w-full rounded-xl border border-[#353542] bg-[#252530] px-[2rem] py-[2.3rem] text-[1.4rem] text-white outline-none focus:border-main_blue" />
-            <ProductDropdown options={options} />
-            {productNameError && <p className="text-[1.3rem] text-red">{productNameError}</p>}
-            <AddCategoryDropdown onSelect={handleCategorySelect} />
-            {categoryError && <p className="text-[1.3rem] text-red">{categoryError}</p>}
+          <div className="mr-[2rem] flex w-[100%] flex-col md:m-0 md:w-[36rem] md:gap-[1rem] lg:gap-[3rem]">
+            <div className="relative">
+              <input
+                value={productName}
+                onChange={handleProductNameChange}
+                onBlur={handleProductNameBlur}
+                placeholder="상품명 (상품 등록 여부를 확인해주세요)"
+                className="mt-[1rem] h-[6.5rem] w-full rounded-xl border border-[#353542] bg-[#252530] px-[2rem] py-[2.3rem] text-[1.4rem] text-white outline-none focus:border-main_blue"
+              />
+              <ProductDropdown
+                options={options}
+                handleDropDownClick={handleDropDownClick}
+              />
+            </div>
+            {productNameError && <p className="absolute top-[8rem] text-[1.3rem] text-red">{productNameError}</p>}
+            <AddCategoryDropdown onSelect={handleCategorySelect} items={items} />
+            {categoryError && <p className="absolute top-[17.5rem] text-[1.3rem] text-red">{categoryError}</p>}
           </div>
           <div className="mt-[1rem]">
             <AddImageBox onImageSelect={handleImageSelect} />
@@ -139,9 +191,9 @@ export default function AddProductModal ({ type, closeModal, defaultValue }: Add
           <span>/500</span>
 					</p>
 				</div>
-        {textAreaError && <p className="text-[1.3rem] text-red">{textAreaError}</p>}
-        {imageError && <p className="text-[1.3rem] text-red">{imageError}</p>}
-        <BasicButton label="추가하기" className="my-[4rem]" onClick={handleSubmitError} />
+        {textAreaError && <p className="absolute top-[35rem] text-[1.3rem] text-red">{textAreaError}</p>}
+        {imageError && <p className="absolute top-[37rem] text-[1.3rem] text-red">{imageError}</p>}
+        <BasicButton label="추가하기" className="my-[4rem]" onClick={handleSubmitError} disabled={isButtonDisabled} />
       </div>
     </div>
   );

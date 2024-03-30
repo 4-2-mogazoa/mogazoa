@@ -1,4 +1,4 @@
-import { ProductDetail, ProductNamesResponse,ProductsResponse } from "@/types/product";
+import { PostProducts,ProductDetail, ProductNamesResponse,ProductsResponse } from "@/types/product";
 import { ReviewResponse } from "@/types/review";
 
 import instance from "./axiosInstance";
@@ -59,5 +59,8 @@ export async function postFavorite(productId: number) {
 
 export async function deleteFavorite(productId: number) {
 	await instance.delete<ProductDetail>(`products/${productId}/favorite`);
+}
 
+export async function postProducts () {
+	await instance.post<PostProducts>('/products');
 }

@@ -5,7 +5,7 @@ type productDropdownProps = {
 
 export default function ProductDropdown ({ options, handleDropDownClick }: productDropdownProps) {
   return (
-    <ul>
+    <ul className="absolute left-0 top-[8rem] z-10 w-full rounded-xl bg-[#252530]">
       {options.map((value: any, index: number) => {
         return (
           <li key={index} onClick={() => handleDropDownClick && handleDropDownClick(value)}>

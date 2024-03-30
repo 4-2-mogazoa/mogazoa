@@ -46,6 +46,13 @@ export type ProductNamesResponse = {
 	nextCursor: any;
 }
 
+export type PostProducts = {
+	categoryId: number;
+	image: string;
+	description: string;
+	name: string;
+}
+
 export type ProductsResponse = Response<Product>;
 
 export type UserProductType =
