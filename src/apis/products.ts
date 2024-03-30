@@ -25,10 +25,11 @@ export async function getProductDetail(productId: number) {
 	return data;
 }
 
-export async function getProductNames() {
-	const res = await instance.get<ProductNamesResponse>("products");
-	const data = res.data;
-	const names = data.list.map(product => product.name);
+
+export async function getProductNames(): Promise<string[]> {
+	const res = await instance.get("products");
+	const products: ProductDetail[] = res.data.list;
+	const names: string[] = products.map((product: ProductDetail) => product.name);
 	return names;
 }
 
@@ -61,6 +62,12 @@ export async function deleteFavorite(productId: number) {
 	await instance.delete<ProductDetail>(`products/${productId}/favorite`);
 }
 
-export async function postProducts () {
-	await instance.post<PostProducts>('/products');
+export async function postProducts(categoryId: number, image: string, description: string, name: string) {
+  const response = await instance.post<PostProducts>('/products', {
+    categoryId,
+    image,
+    description,
+    name
+  });
+	return response.data;
 }
