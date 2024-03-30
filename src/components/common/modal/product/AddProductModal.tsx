@@ -4,9 +4,9 @@ import { getCategories } from '@/apis/categories';
 import { postProducts } from '@/apis/products';
 import { getProductNames } from '@/apis/products';
 import BasicButton from '@/components/common/button/BasicButton';
+import AddCategoryDropdown from '@/components/common/dropdown/product/AddCategoryDropdown';
+import ProductDropdown from '@/components/common/dropdown/product/productDropdown';
 import AddImageBox from '@/components/common/inputs/AddImageBox';
-import ProductDropdown from '@/components/common/modal/product/productDropdown';
-import AddCategoryDropdown from '@/components/home/AddCategoryDropdown';
 
 type AddProductModalProps = {
   type: 'add' | 'rewrite';
