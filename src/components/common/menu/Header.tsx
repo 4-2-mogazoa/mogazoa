@@ -4,6 +4,9 @@ import { KeyboardEvent, useEffect, useState } from "react";
 
 import useWindowWidth from "@/hooks/common/useWindowWidth";
 
+import NumberOfCompareProduct from "../numberOfCompareProduct/NumberOfCompareProduct";
+
+
 type UserType = {
 	id: number;
 };
@@ -119,9 +122,10 @@ export default function Header({
 					<div className="my-auto ml-[6rem] hidden font-normal text-white md:mr-[3rem] md:block md:text-[1.4rem] lg:mr-[12rem] lg:block lg:text-[1.6rem]">
 						<Link
 							href={user ? "/compare" : "/signin"}
-							className="min-w-[3.7rem] md:mr-[3rem] lg:mr-[6rem]"
+							className="relative min-w-[3.7rem] md:mr-[3rem] lg:mr-[6rem]"
 						>
 							{user ? "비교하기" : "로그인"}
+							<>{user && <NumberOfCompareProduct />}</>
 						</Link>
 						<Link
 							href={user ? "/profile/my" : "signup"}
@@ -134,8 +138,12 @@ export default function Header({
 			</div>
 			{headerType !== "homeHeader" && isDropdownOpen && (
 				<div className="flex w-[100%] flex-col items-center gap-[2rem] pt-[3rem] text-[1.4rem] text-white md:hidden">
-					<Link href={user ? "/compare" : "/signin"} className="cursor-pointer">
+					<Link
+						href={user ? "/compare" : "/signin"}
+						className="relative cursor-pointer"
+					>
 						{user ? "비교하기" : "로그인"}
+						<>{user && <NumberOfCompareProduct />}</>
 					</Link>
 					<Link
 						href={user ? "/profile/my" : "signup"}

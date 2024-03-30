@@ -41,7 +41,7 @@ export default function CompareForm() {
 			/>
 			<BasicButton
 				label="비교하기"
-				className="_flex-center h-[5.5rem] w-full md:mt-2 md:w-[16.4rem] lg:h-[7rem] lg:w-[20rem]"
+				className="_flex-center h-[5.5rem] w-full focus:outline focus:outline-main_indigo md:mt-2 md:w-[16.4rem] lg:h-[7rem] lg:w-[20rem]"
 			/>
 		</form>
 	);
