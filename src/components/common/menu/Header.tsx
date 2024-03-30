@@ -6,6 +6,7 @@ import useWindowWidth from "@/hooks/common/useWindowWidth";
 
 import NumberOfCompareProduct from "../numberOfCompareProduct/NumberOfCompareProduct";
 
+
 type UserType = {
 	id: number;
 };
