@@ -1,22 +1,29 @@
 import Image from "next/image";
-import React, { JSXElementConstructor, ReactElement, useEffect } from "react";
+import React, {
+	ReactNode,
+	useEffect,
+	useLayoutEffect,
+	useRef,
+	useState,
+} from "react";
 import { createPortal } from "react-dom";
 
-import useTrapFocus from "@/hooks/common/useTrapFocus";
 import { ModalConfig } from "@/store/modal";
+import trapFocus from "@/utils/trapFocus";
 
 type Props = {
 	id: string;
-	children: ReactElement<any, string | JSXElementConstructor<any>>;
+	children: ReactNode;
 	onRemove: (id: string) => void;
 	config: ModalConfig;
 };
 
 function ModalWrapper({ children, id, onRemove, config }: Props) {
-	const { focusableElements, handleModalTrapFocus } = useTrapFocus();
-
 	const closeIconSrc = "/icons/close.svg";
 	const modalRoot = document.getElementById("modal-root");
+
+	const modalLayoutRef = useRef<HTMLDivElement>(null);
+	const [modalLayoutTabIndex, setModalLayoutTabIndex] = useState(0);
 
 	const handleClickOutside = () => {
 		if (config.isCloseClickOutside) {
@@ -45,15 +52,24 @@ function ModalWrapper({ children, id, onRemove, config }: Props) {
 		};
 	}, [config.isCloseESC, id, onRemove]);
 
+	useLayoutEffect(() => {
+		if (modalLayoutRef.current) modalLayoutRef.current.focus();
+		setModalLayoutTabIndex(-1);
+	}, []);
+
 	useEffect(() => {
-		focusableElements.current[0]?.focus();
+		const focusableNodes = modalRoot?.querySelectorAll(
+			'button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+		);
+
+		const handleModalTrapFocus = trapFocus(focusableNodes);
 
 		document.addEventListener("keydown", handleModalTrapFocus);
 
 		return () => {
 			document.removeEventListener("keydown", handleModalTrapFocus);
 		};
-	}, []);
+	}, [modalLayoutTabIndex]);
 
 	return modalRoot
 		? createPortal(
@@ -67,21 +83,22 @@ function ModalWrapper({ children, id, onRemove, config }: Props) {
 						onClick={handleClickOutside}
 					></div>
 					{/* 모달 */}
-					<div className="z-10 rounded-[1.6rem] bg-[#1C1C22]">
+					<div
+						className="z-10 rounded-[1.6rem] bg-[#1C1C22]"
+						ref={modalLayoutRef}
+						tabIndex={modalLayoutTabIndex}
+					>
 						<div className="flex flex-col items-end">
 							<div className="px-[1.5rem] pt-[1.5rem] md:px-[2rem] md:pt-[2rem]">
 								<button
 									onClick={() => onRemove(id)}
-									ref={(el: HTMLButtonElement) =>
-										(focusableElements.current[0] = el)
-									}
 									className="relative size-[2.4rem] md:size-[3.6rem] lg:size-[4rem]"
 								>
 									<Image src={closeIconSrc} alt="모달 닫기" fill />
 								</button>
 							</div>
 							<div className="px-[2rem] pb-[2rem] md:px-[4rem] md:pb-[4rem]">
-								{React.cloneElement(children, { focusableElements })}
+								{children}
 							</div>
 						</div>
 					</div>
