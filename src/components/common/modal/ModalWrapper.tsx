@@ -1,11 +1,5 @@
 import Image from "next/image";
-import React, {
-	ReactNode,
-	useEffect,
-	useLayoutEffect,
-	useRef,
-	useState,
-} from "react";
+import { ReactNode, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 import { ModalConfig } from "@/store/modal";

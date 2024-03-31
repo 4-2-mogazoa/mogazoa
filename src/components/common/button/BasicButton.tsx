@@ -27,9 +27,9 @@ const buttonVariants = cva(
 	},
 );
 
-const BasicButton = forwardRef(function BasicButton(
+const BasicButton = forwardRef<HTMLButtonElement, Props>(function BasicButton(
 	{ label, variant = "primary", className, disabled, ...props }: Props,
-	ref?: React.LegacyRef<HTMLButtonElement> | undefined,
+	ref,
 ) {
 	return (
 		<button

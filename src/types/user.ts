@@ -38,12 +38,18 @@ export type UserResponseByVariant = {
 };
 
 export type UsersRanking = {
-  id: number;
-  nickname: string;
-  image: string | null;
-  teamId: string;
-  followersCount: number;
-  reviewCount: number;
-  createdAt: string;
-  rank: number;
+	id: number;
+	nickname: string;
+	image: string | null;
+	teamId: string;
+	followersCount: number;
+	reviewCount: number;
+	createdAt: string;
+	rank: number;
+};
+
+export type UserUpdateRequestBody = {
+	nickname: string;
+	description: string;
+	image?: string;
 };
