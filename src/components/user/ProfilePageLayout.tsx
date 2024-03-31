@@ -21,7 +21,7 @@ export default function ProfilePageLayout({ user }: Props) {
 			<main className="_flex-col-center gap-[6rem] bg-[#1C1C22] px-[2rem] py-[3rem] lg:flex-row lg:items-start lg:p-[6rem]">
 				<h1 className="sr-only">프로필 페이지</h1>
 				<ProfileCard user={user} isMine={isMine} />
-				<div className="flex flex-col gap-[6rem]">
+				<div className="flex w-[33.5rem] max-w-[94rem] grow flex-col gap-[6rem] md:w-[50.9rem]">
 					<ActivityDetails user={user} />
 					<FilteredProductList user={user} />
 				</div>
