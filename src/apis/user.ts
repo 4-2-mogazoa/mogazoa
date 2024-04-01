@@ -9,8 +9,8 @@ import {
 
 import instance from "./axiosInstance";
 
-export const getMe = async (): Promise<UserDetail> => {
-	const response = await instance.get<UserDetail>(`users/me`);
+export const getMe = async (config = {}): Promise<UserDetail> => {
+	const response = await instance.get<UserDetail>(`users/me`, { ...config });
 	return response.data;
 };
 

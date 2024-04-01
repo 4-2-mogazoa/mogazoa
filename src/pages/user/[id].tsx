@@ -1,43 +1,56 @@
-import { useQuery } from "@tanstack/react-query";
-import axios, { AxiosError } from "axios";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
+import {
+	GetServerSideProps,
+	GetServerSidePropsContext,
+	GetServerSidePropsResult,
+	InferGetServerSidePropsType,
+} from "next";
 
 import { getMe, getUserDetail } from "@/apis/user";
 import ProfilePageLayout from "@/components/user/ProfilePageLayout";
 import { UserDetail } from "@/types/user";
+import getAccessTokenFromReq from "@/utils/getAccessTokenFromReq";
 
-export default function UserPage() {
-	const router = useRouter();
-	const { data: me, isSuccess } = useQuery({
-		queryKey: ["me"],
-		queryFn: getMe,
-	});
+export async function getServerSideProps({
+	req,
+	params,
+}: GetServerSidePropsContext): Promise<
+	GetServerSidePropsResult<{ user: UserDetail }>
+> {
+	const paramId = Number(params?.id);
 
-	const { data: user, error } = useQuery<UserDetail, AxiosError>({
-		queryKey: ["user", Number(router.query.id)],
-		queryFn: () => getUserDetail(Number(router.query.id)),
-		enabled: !!router.query.id,
-		retry: 1,
-	});
-
-	useEffect(() => {
-		if (router.query.id == me?.id && isSuccess) {
-			router.push("/mypage");
-		}
-	}, [isSuccess, me?.id, router]);
-
-	useEffect(() => {
-		if (error && axios.isAxiosError<{ message: string }>(error)) {
-			console.error("error", error);
-			alert(error.response?.data.message);
-			router.back();
-		}
-	}, [error, router]);
-
-	if (!user) {
-		return <div>Loading...</div>;
+	if (Number.isNaN(paramId)) {
+		return {
+			notFound: true,
+		};
 	}
 
+	const user = await getUserDetail(paramId);
+	const accessToken = getAccessTokenFromReq(req);
+
+	if (accessToken) {
+		const me = await getMe({
+			headers: {
+				Authorization: `Bearer ${accessToken}`,
+			},
+		});
+
+		if (me.id === paramId) {
+			return {
+				redirect: {
+					destination: "/mypage",
+					permanent: false,
+				},
+			};
+		}
+	}
+
+	return {
+		props: { user },
+	};
+}
+
+export default function UserPage({
+	user,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
 	return <ProfilePageLayout user={user} />;
 }
