@@ -17,6 +17,7 @@ export default function ProductDetail({ id }: { id: number }) {
 		queryFn: () => getProductDetail(id),
 		enabled: !!id,
 		staleTime: 60 * 1000,
+		retry: false,
 	});
 	const myData = useQuery({
 		queryKey: ["me"],

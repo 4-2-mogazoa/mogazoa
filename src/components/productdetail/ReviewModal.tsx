@@ -51,6 +51,7 @@ export default function ReviewModal({
 		queryFn: () => getProductDetail(productId),
 		enabled: !!productId,
 		staleTime: 60 * 1000,
+		retry: false,
 	});
 
 	const { mutate: getImage } = useMutation({

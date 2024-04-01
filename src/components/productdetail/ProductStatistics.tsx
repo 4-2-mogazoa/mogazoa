@@ -15,6 +15,8 @@ export default function ProductStatistics({ id }: { id: number }) {
 		queryKey: ["productDetail", id],
 		queryFn: () => getProductDetail(id),
 		enabled: !!id,
+		staleTime: 60 * 1000,
+		retry: false,
 	});
 
 	return (
