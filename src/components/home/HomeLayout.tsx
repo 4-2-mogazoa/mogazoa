@@ -12,13 +12,13 @@ import useWindowWidth from "@/hooks/common/useWindowWidth";
 
 export default function HomeLayout() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
-  const [searchKeyword, setSearchKeyword] = useState<string>("");
   const currentWidth = useWindowWidth();
   const [isWrapPoint, setIsWrapPoint] = useState(false);
   const [isOverflow, setIsOverflow] = useState(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
   const [selectedCategoryName, setSelectedCategoryName] = useState<string | null>(null);
   const router = useRouter();
+  const searchKeyword = router.query.search as string;
 
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
@@ -32,10 +32,7 @@ export default function HomeLayout() {
   useEffect(() => {
     setIsWrapPoint(BREAK_POINT.md < currentWidth && currentWidth < 1787);
     setIsOverflow(currentWidth < 360);
-
-    const keyword = router.query.search as string;
-    setSearchKeyword(keyword);
-  }, [currentWidth, router.query.search]);
+  }, [currentWidth]);
 
   return (
     <div className="h-screen bg-[#1c1c22]">
