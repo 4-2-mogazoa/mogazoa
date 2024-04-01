@@ -11,6 +11,7 @@ export default function ProductDetail({ id }: { id: number }) {
 		data: productData,
 		isFetching,
 		isLoading,
+		isError,
 	} = useQuery({
 		queryKey: ["productDetail", id],
 		queryFn: () => getProductDetail(id),
@@ -30,6 +31,7 @@ export default function ProductDetail({ id }: { id: number }) {
 				/>
 			)}
 			{(isLoading || isFetching) && <NoneReview type="loading" />}
+			{isError && <NoneReview type="error" />}
 		</div>
 	);
 }

@@ -10,6 +10,7 @@ export default function ProductStatistics({ id }: { id: number }) {
 		data: productData,
 		isLoading,
 		isFetching,
+		isError,
 	} = useQuery({
 		queryKey: ["productDetail", id],
 		queryFn: () => getProductDetail(id),
@@ -41,6 +42,7 @@ export default function ProductStatistics({ id }: { id: number }) {
 				</div>
 			)}
 			{(isLoading || isFetching) && <NoneReview type="loading" />}
+			{isError && <NoneReview type="error" />}
 		</div>
 	);
 }

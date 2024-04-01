@@ -23,6 +23,7 @@ export default function ProductReview({ id }: { id: number }) {
 		isFetching,
 		fetchNextPage,
 		hasNextPage,
+		isError,
 	} = useInfiniteQuery({
 		queryKey: ["review", id, order],
 		queryFn: ({ pageParam = 0 }) =>
@@ -96,6 +97,7 @@ export default function ProductReview({ id }: { id: number }) {
 			))}
 			{reviewData?.pages[0].list.length === 0 && <NoneReview type="none" />}
 			{(isLoading || isFetching) && <NoneReview type="loading" />}
+			{isError && <NoneReview type="error" />}
 			<div ref={setTarget}></div>
 		</div>
 	);
