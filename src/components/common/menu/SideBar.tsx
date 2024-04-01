@@ -7,13 +7,13 @@ import { getCategories } from '@/apis/categories';
 import { Category } from '@/types/common';
 
 type SideBarProps = {
-  user?: string;
+  isLoggedIn: boolean;
   isSidebarOpen?: boolean;
   className?: string;
   onCategorySelect: (CategoryId: number | null, categoryName: string | null) => void;
 };
 
-export const SideBar: React.FC<SideBarProps> = ({ user, isSidebarOpen, onCategorySelect }) => {
+export const SideBar: React.FC<SideBarProps> = ({ isLoggedIn, isSidebarOpen, onCategorySelect }) => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
 
@@ -54,11 +54,11 @@ export const SideBar: React.FC<SideBarProps> = ({ user, isSidebarOpen, onCategor
         </ul>
       </div>
       <div className={'ml-[1rem] flex w-[16rem] flex-col gap-[0.4rem] lg:w-[20rem]'}>
-        <Link href={user ? '/compare' : '/signin'} className={'h-[4.5rem] w-[100%] px-[2rem] py-[1.5rem] text-[1.4rem] font-medium lg:h-[5rem] lg:text-[1.6rem]'}>
-          {user ? '비교하기' : '로그인'}
+        <Link href={isLoggedIn ? '/compare' : '/signin'} className={'h-[4.5rem] w-[100%] px-[2rem] py-[1.5rem] text-[1.4rem] font-medium lg:h-[5rem] lg:text-[1.6rem]'}>
+          {isLoggedIn ? '비교하기' : '로그인'}
         </Link>
-        <Link href={user ? '/profile/my' : '/signup'} className={'mb-[4.5rem] h-[4.5rem] w-[100%] px-[2rem] py-[1.5rem] text-[1.4rem] font-medium lg:h-[5rem] lg:text-[1.6rem]'}>
-          {user ? '내 프로필' : '회원가입'}
+        <Link href={isLoggedIn ? '/mypage' : '/signup'} className={'mb-[4.5rem] h-[4.5rem] w-[100%] px-[2rem] py-[1.5rem] text-[1.4rem] font-medium lg:h-[5rem] lg:text-[1.6rem]'}>
+          {isLoggedIn ? '내 프로필' : '회원가입'}
         </Link>
       </div>
     </div>

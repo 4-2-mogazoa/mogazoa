@@ -6,14 +6,14 @@ import { useModalActions } from "@/store/modal";
 
 
 type AddProductButtonProps = {
-  user?: number;
+  isLoggedIn: boolean;
 };
 
-export default function AddProductButton({ user=123 }:AddProductButtonProps) {
+export default function AddProductButton({ isLoggedIn }:AddProductButtonProps) {
 	const { openModal, closeModal } = useModalActions();
 
 	const handleOpenAddProductModal = () => {
-		if (!user) {
+		if (!isLoggedIn) {
 			const modal = openModal(<MovingPageModal description="로그인이 필요한 서비스입니다. 로그인하시겠습니까?" closeModal={() => closeModal(modal)} url="/signin" />);
 		} else {
 			const modal = openModal(<ProductModal type="add" closeModal={() => closeModal(modal)} />);

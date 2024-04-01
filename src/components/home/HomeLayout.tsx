@@ -9,6 +9,7 @@ import ProductList from "@/components/home/ProductList";
 import ReviewerRanking from "@/components/home/ReviewerRanking";
 import { BREAK_POINT } from "@/constants/breakPoint";
 import useWindowWidth from "@/hooks/common/useWindowWidth";
+import getCookies from "@/utils/getCookies";
 
 
 export default function HomeLayout() {
@@ -20,6 +21,10 @@ export default function HomeLayout() {
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
   const [selectedCategoryName, setSelectedCategoryName] = useState<string | null>(null);
   const router = useRouter();
+
+  const cookie = getCookies();
+	const accessToken = cookie["accessToken"];
+  const isLoggedIn = (accessToken != null);
 
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
@@ -40,10 +45,10 @@ export default function HomeLayout() {
 
   return (
     <div className="h-screen bg-[#1c1c22]">
-      <Header toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} headerType="homeHeader" />
+      <Header toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} headerType="homeHeader" isLoggedIn={isLoggedIn} />
       <div className="w-[100%] overflow-auto bg-[#1c1c22] pb-[10rem]">
         <div className={clsx('flex flex-row', isWrapPoint ? 'lg:mx-[5rem]' : 'lg:mx-[18rem]')}>
-          <SideBar isSidebarOpen={isSidebarOpen} onCategorySelect={handleCategorySelect} />
+          <SideBar isSidebarOpen={isSidebarOpen} onCategorySelect={handleCategorySelect} isLoggedIn={isLoggedIn} />
           <div className="hidden lg:mx-auto lg:flex lg:flex-col">
             {(!selectedCategoryId && !searchKeyword) && (
               <>
@@ -77,7 +82,7 @@ export default function HomeLayout() {
             )}
           </div>
         </div>
-        <AddProductButton />
+        <AddProductButton isLoggedIn={isLoggedIn} />
       </div>
     </div>
   );
