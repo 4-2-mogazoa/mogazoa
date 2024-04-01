@@ -6,7 +6,7 @@ import { useModalActions } from "@/store/modal";
 import { CompareStatePosition, StoredProductInfo } from "@/types/compare";
 
 import BasicButton from "../common/button/BasicButton";
-import MovingPageModal from "./MovingPageModal";
+import MovingPageModal from "../common/modal/MovingPageModal";
 
 type Props = {
 	currentId: number;

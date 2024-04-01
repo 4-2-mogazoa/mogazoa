@@ -27,6 +27,7 @@ type Props = {
 	setPreviousImage: Dispatch<SetStateAction<ImageType[]>>;
 	setImage: Dispatch<SetStateAction<ImageType[]>>;
 	setTrigger: Dispatch<SetStateAction<number>>;
+	setEditImageId: Dispatch<SetStateAction<string | undefined>>;
 };
 
 export default function ReviewModalAddImageBox({
@@ -37,6 +38,7 @@ export default function ReviewModalAddImageBox({
 	setPreviousImage,
 	setImage,
 	setTrigger,
+	setEditImageId,
 }: Props) {
 	const fileRef = useRef<HTMLInputElement>(null);
 
@@ -162,6 +164,7 @@ export default function ReviewModalAddImageBox({
 							: imgData,
 					),
 				);
+				setEditImageId(id);
 				setTrigger((prev) => prev + 1);
 			};
 		}

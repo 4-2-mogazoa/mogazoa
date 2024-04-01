@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 
-import BasicButton from "../common/button/BasicButton";
+import BasicButton from "../button/BasicButton";
 
 type Props = {
 	description: string;
@@ -20,7 +20,6 @@ export default function MovingPageModal({
 		router.push(url);
 	};
 
-	// Q: 1줄짜리 , 2줄짜리 설명을 모두 받고 싶어서 이렇게 했는데, 너무 억지스러운가?..yes..어떻게 할까?
 	const descriptionText = description.split(". ");
 
 	return (
