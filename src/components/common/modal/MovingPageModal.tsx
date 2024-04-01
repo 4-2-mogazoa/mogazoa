@@ -34,7 +34,12 @@ export default function MovingPageModal({
 					<>{description}</>
 				)}
 			</div>
-			<BasicButton variant="primary" label="확인" onClick={handleButtonClick} />
+			<BasicButton
+				variant="primary"
+				label="확인"
+				onClick={handleButtonClick}
+				className="w-full"
+			/>
 		</form>
 	);
 }

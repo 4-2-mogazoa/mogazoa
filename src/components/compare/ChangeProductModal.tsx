@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { useState } from "react";
+import { forwardRef, useState } from "react";
 
 import useCompareStore from "@/store/compare";
 import { useModalActions } from "@/store/modal";
@@ -102,17 +102,13 @@ export default function ChangeProductModal({
 				variant="primary"
 				disabled={secondProduct.id === 0}
 				onClick={handleChangeProduct}
+				className="w-full"
 			/>
 		</section>
 	);
 }
 
-function ProductBox({
-	product,
-	position,
-	selected,
-	handleSelectProduct,
-}: {
+type ProductBoxProps = {
 	product: StoredProductInfo;
 	position: CompareStatePosition;
 	selected: boolean;
@@ -120,9 +116,16 @@ function ProductBox({
 		position: CompareStatePosition,
 		product: StoredProductInfo,
 	) => void;
-}) {
+};
+
+function ProductBox({
+	product,
+	position,
+	selected,
+	handleSelectProduct,
+}: ProductBoxProps) {
 	return (
-		<div
+		<button
 			className={clsx(
 				"_flex-center w-full cursor-pointer rounded-[0.8rem] border border-solid p-[2.4rem] text-[1.6rem] font-semibold lg:text-[1.8rem]",
 				selected
@@ -130,8 +133,9 @@ function ProductBox({
 					: "border-black-border text-gray-200",
 			)}
 			onClick={() => handleSelectProduct(position, product)}
+			type="button"
 		>
 			{product.name}
-		</div>
+		</button>
 	);
 }
