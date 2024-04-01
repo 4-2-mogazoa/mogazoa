@@ -8,9 +8,11 @@ import { useModalActions } from "@/store/modal";
 import { ProductDetail } from "@/types/product";
 import cn from "@/utils/cn";
 import getCookies from "@/utils/getCookies";
+import { moveModalText } from "@/utils/modalText";
 
 import BasicButton from "../common/button/BasicButton";
 import CategoryBadge from "../common/categoryBadge/CategoryBadge";
+import MovingPageModal from "../common/modal/MovingPageModal";
 import ReviewAlertModal from "./ReviewAlertModal";
 import ReviewModal from "./ReviewModal";
 
@@ -33,8 +35,25 @@ type FavoriteProps = {
 export default function DetailCard({ productData, isMyProduct }: Props) {
 	const { name, description, image, isFavorite, category, id } = productData;
 	const { openModal, closeModal } = useModalActions();
+	const cookie = getCookies();
+	const accessToken = cookie["accessToken"];
 
 	const handleReviewCreateButton = () => {
+		if (!accessToken) {
+			const modalId = openModal(
+				<MovingPageModal
+					closeModal={() => closeModal(modalId)}
+					description={moveModalText.signin}
+					url="/signin"
+				/>,
+				{
+					isCloseClickOutside: true,
+					isCloseESC: true,
+				},
+			);
+			return;
+		}
+
 		const modalId = openModal(
 			<ReviewModal
 				type="create"
@@ -47,9 +66,6 @@ export default function DetailCard({ productData, isMyProduct }: Props) {
 			},
 		);
 	};
-
-	const cookie = getCookies();
-	const accessToken = cookie["accessToken"];
 
 	const { compareButtonText, handleCompareButtonClick } = useCompareModal(
 		productData,
@@ -138,7 +154,7 @@ export function Share({ className }: ShareProps) {
 
 	return (
 		<div className={cn("flex gap-[1rem]", className)}>
-			<button className="bg-black-bg flex size-[2.4rem] items-center justify-center rounded-[0.6rem] lg:size-[2.8rem]">
+			<button className="flex size-[2.4rem] items-center justify-center rounded-[0.6rem] bg-black-bg lg:size-[2.8rem]">
 				<div className="relative size-[1.4rem] lg:size-[1.8rem]">
 					<Image
 						src="/icons/kakaotalk.svg"
@@ -150,7 +166,7 @@ export function Share({ className }: ShareProps) {
 			</button>
 			{/**TODO: 카카오공유는 배포이후 추가 가능*/}
 			<button
-				className="bg-black-bg flex size-[2.4rem] items-center justify-center rounded-[0.6rem] lg:size-[2.8rem]"
+				className="flex size-[2.4rem] items-center justify-center rounded-[0.6rem] bg-black-bg lg:size-[2.8rem]"
 				onClick={handleCopyClipBoard}
 			>
 				<div className="relative size-[1.4rem] lg:size-[1.8rem]">
@@ -205,8 +221,21 @@ export function Favorite({
 		},
 	});
 	const handleButtonOnclick = () => {
-		if (error?.message === "Request failed with status code 401") {
-			alert("로그인해주세요!");
+		const cookie = getCookies();
+		const accessToken = cookie["accessToken"];
+
+		if (!accessToken) {
+			const modalId = openModal(
+				<MovingPageModal
+					closeModal={() => closeModal(modalId)}
+					description={moveModalText.signin}
+					url="/signin"
+				/>,
+				{
+					isCloseClickOutside: true,
+					isCloseESC: true,
+				},
+			);
 			return;
 		}
 

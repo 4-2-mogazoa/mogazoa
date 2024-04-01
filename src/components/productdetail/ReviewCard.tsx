@@ -6,7 +6,10 @@ import { deleteReviewLike, postReviewLike } from "@/apis/review";
 import { starRate } from "@/constants/starRate";
 import { useModalActions } from "@/store/modal";
 import { Review, ReviewImages, ReviewResponsePage } from "@/types/review";
+import getCookies from "@/utils/getCookies";
+import { moveModalText } from "@/utils/modalText";
 
+import MovingPageModal from "../common/modal/MovingPageModal";
 import ProfileImage from "../common/profileImage/ProfileImage";
 import Thumbs from "../common/thumbs/Thumbs";
 import ReviewAlertModal from "./ReviewAlertModal";
@@ -37,7 +40,10 @@ export default function ReviewCard({ reviewData, isMyReview, order }: Props) {
 
 	const { openModal, closeModal } = useModalActions();
 
-	const { mutate: toggleLike, error } = useMutation({
+	const cookie = getCookies();
+	const accessToken = cookie["accessToken"];
+
+	const { mutate: toggleLike } = useMutation({
 		mutationFn: () => (isLiked ? deleteReviewLike(id) : postReviewLike(id)),
 		onMutate: () => {
 			const previous: ReviewResponsePage | undefined = queryClient.getQueryData(
@@ -83,8 +89,18 @@ export default function ReviewCard({ reviewData, isMyReview, order }: Props) {
 	});
 
 	const handleButtonClick = () => {
-		if (error?.message === "Request failed with status code 401") {
-			alert("로그인해주세요!");
+		if (!accessToken) {
+			const modalId = openModal(
+				<MovingPageModal
+					closeModal={() => closeModal(modalId)}
+					description={moveModalText.signin}
+					url="/signin"
+				/>,
+				{
+					isCloseClickOutside: true,
+					isCloseESC: true,
+				},
+			);
 			return;
 		}
 
@@ -101,6 +117,7 @@ export default function ReviewCard({ reviewData, isMyReview, order }: Props) {
 			);
 			return;
 		}
+
 		toggleLike();
 	};
 
