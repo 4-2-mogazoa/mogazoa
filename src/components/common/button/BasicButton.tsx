@@ -1,5 +1,5 @@
 import { cva, VariantProps } from "class-variance-authority";
-import { ButtonHTMLAttributes } from "react";
+import { ButtonHTMLAttributes, forwardRef } from "react";
 
 import cn from "@/utils/cn";
 
@@ -27,17 +27,15 @@ const buttonVariants = cva(
 	},
 );
 
-export default function BasicButton({
-	label,
-	variant = "primary",
-	className,
-	disabled,
-	...props
-}: Props) {
+const BasicButton = forwardRef<HTMLButtonElement, Props>(function BasicButton(
+	{ label, variant = "primary", className, disabled, ...props }: Props,
+	ref,
+) {
 	return (
 		<button
 			className={cn(buttonVariants({ variant }), className)}
 			disabled={disabled}
+			ref={ref}
 			{...props}
 		>
 			<span
@@ -49,4 +47,6 @@ export default function BasicButton({
 			</span>
 		</button>
 	);
-}
+});
+
+export default BasicButton;

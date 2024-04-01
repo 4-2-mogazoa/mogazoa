@@ -17,13 +17,21 @@ export default function CompareInput({
 	tagColor,
 }: Props) {
 	const {
-		data: { productList, errorMessage, isDropdownOpen, dropdownRef },
+		data: {
+			keyword,
+			productList,
+			errorMessage,
+			isDropdownOpen,
+			dropdownRef,
+			focusIndex,
+		},
 		handlerFn: {
 			handleKeyWordChange,
 			handleInputBlur,
 			handleAddProduct,
 			handleDeleteProduct,
 			handleLoadMoreProducts,
+			handleKeyDown,
 		},
 	} = useCompareInputState(position);
 
@@ -42,22 +50,25 @@ export default function CompareInput({
 							color={tagColor}
 							productName={product.name}
 							handleDeleteButtonClick={handleDeleteProduct}
-							//TODO: text overflow 처리 좀 더 좋은 방법
 							className="md:truncate"
 						/>
 					) : (
 						<input
 							className="w-full border-none bg-inherit outline-none"
 							id={position}
+							value={keyword}
 							type="text"
 							autoComplete="off"
 							onChange={handleKeyWordChange}
 							onBlur={handleInputBlur}
+							onKeyDown={handleKeyDown}
+							spellCheck={false}
 						/>
 					)}
 				</div>
 				{isDropdownOpen && (
 					<CompareDropdown
+						focusIndex={focusIndex}
 						dropdownRef={dropdownRef}
 						productList={productList}
 						handleAddProduct={handleAddProduct}
@@ -65,7 +76,7 @@ export default function CompareInput({
 					/>
 				)}
 			</div>
-			<p className="-mt-2 h-[1.8rem] text-[1.2rem] text-white lg:h-[2.1rem] lg:text-[1.4rem]">
+			<p className="-mt-2 h-[1.8rem] text-[1.2rem] font-light text-gray-100 lg:h-[2.1rem] lg:text-[1.4rem]">
 				{errorMessage}
 			</p>
 		</div>

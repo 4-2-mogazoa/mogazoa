@@ -4,6 +4,7 @@ import {
 	FollowersResponse,
 	UserDetail,
 	UsersRanking,
+	UserUpdateRequestBody,
 } from "@/types/user";
 
 import instance from "./axiosInstance";
@@ -16,20 +17,12 @@ export const getMe = async (): Promise<UserDetail> => {
 export const patchUpdateMe = async ({
 	nickname,
 	description,
-	// image,
-}: {
-	nickname: string;
-	description: string;
-	// image?: string;
-}) => {
-	const response = await instance.patch<{
-		nickname: string;
-		description: string;
-		image?: string;
-	}>("users/me", {
+	image,
+}: UserUpdateRequestBody) => {
+	const response = await instance.patch<UserUpdateRequestBody>("users/me", {
 		nickname,
 		description,
-		// image,
+		image,
 	});
 	return response.data;
 };

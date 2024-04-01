@@ -1,9 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { KeyboardEvent,useEffect, useState } from "react";
+import { KeyboardEvent, useEffect, useState } from "react";
 
 import useWindowWidth from "@/hooks/common/useWindowWidth";
+
+import NumberOfCompareProduct from "../numberOfCompareProduct/NumberOfCompareProduct";
+
 
 type UserType = {
 	id: number;
@@ -41,9 +44,9 @@ export default function Header({
 		setSearchVisible(!isSearchVisible);
 	};
 
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
+	const toggleDropdown = () => {
+		setIsDropdownOpen(!isDropdownOpen);
+	};
 
   const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
     if(e.key === "Enter") {
@@ -54,9 +57,9 @@ export default function Header({
     }
   };
 
-  useEffect(() => {
-    setIsLogoOverflow(currentWidth < 430);
-  }, [currentWidth])
+	useEffect(() => {
+		setIsLogoOverflow(currentWidth < 430);
+	}, [currentWidth]);
 
   return (
     <>
@@ -91,22 +94,29 @@ export default function Header({
           <Link href={user ? '/compare' : '/signin'} className="min-w-[3.7rem] md:mr-[3rem] lg:mr-[6rem]">
             {user ? '비교하기' : '로그인'}
           </Link>
-          <Link href={user ? '/profile/my' : 'signup'} className="min-w-[4.9rem]">
+          <Link href={user ? '/mypage' : 'signup'} className="min-w-[4.9rem]">
             {user ? '내 프로필' : '회원가입'}
           </Link>
         </div>
       </div>
     </div>
     {headerType !== "homeHeader" && isDropdownOpen && (
-        <div className="flex w-[100%] flex-col items-center gap-[2rem] pt-[3rem] text-[1.4rem] text-white md:hidden">
-          <Link href={user ? '/compare' : '/signin'} className="cursor-pointer">
-            {user ? '비교하기' : '로그인'}
-          </Link>
-          <Link href={user ? '/profile/my' : 'signup'} className="cursor-pointer">
-            {user ? '내 프로필' : '회원가입'}
-          </Link>
-        </div>
-      )}
+				<div className="flex w-[100%] flex-col items-center gap-[2rem] pt-[3rem] text-[1.4rem] text-white md:hidden">
+					<Link
+						href={user ? "/compare" : "/signin"}
+						className="relative cursor-pointer"
+					>
+						{user ? "비교하기" : "로그인"}
+						<>{user && <NumberOfCompareProduct />}</>
+					</Link>
+					<Link
+						href={user ? "/mypage" : "signup"}
+						className="cursor-pointer"
+					>
+						{user ? "내 프로필" : "회원가입"}
+					</Link>
+				</div>
+			)}
     </>
   );
 }

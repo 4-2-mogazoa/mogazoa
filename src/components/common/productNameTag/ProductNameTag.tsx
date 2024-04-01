@@ -37,7 +37,7 @@ export default function ProductNameTag({
 			className={cn(productNameTagVariants({ color, className }))}
 			onClick={handleDeleteButtonClick}
 		>
-			{productName}
+			<span className="md:truncate">{productName}</span>
 			<div className="_flex-center size-[1.7rem] rounded-[0.6rem] bg-[#000000]/50 p-[0.2rem] md:size-[1.9rem]">
 				<div className="relative size-[1.3rem] md:size-[1.5rem]">
 					<Image src={deleteIconSrc} alt="상품 삭제하기" fill />

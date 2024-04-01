@@ -43,4 +43,3 @@ export type UserProductType =
 	| "created-products"
 	| "reviewed-products"
 	| "favorite-products";
-
