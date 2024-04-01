@@ -25,7 +25,7 @@ export default function ProductDetail({ id }: { id: number }) {
 
 	return (
 		<div className="w-full lg:w-[94rem]">
-			{productData && (
+			{productData && !isError && (
 				<DetailCard
 					productData={productData}
 					isMyProduct={productData.writerId === myData?.id}

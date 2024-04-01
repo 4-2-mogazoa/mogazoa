@@ -22,7 +22,7 @@ export default function ProductStatistics({ id }: { id: number }) {
 			<span className="pb-[3rem] text-[1.8rem] text-white md:text-[1.6rem] lg:text-[2rem]">
 				상품 통계
 			</span>
-			{productData && (
+			{productData && !isError && (
 				<div className="flex flex-col gap-[1.5rem] md:flex-row lg:gap-[2rem] ">
 					<StatisticsCard
 						type="rate"

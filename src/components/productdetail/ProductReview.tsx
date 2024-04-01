@@ -83,18 +83,19 @@ export default function ProductReview({ id }: { id: number }) {
 					<Dropdown.List />
 				</Dropdown>
 			</div>
-			{reviewData?.pages.map((page, index) => (
-				<div key={index} className="flex flex-col gap-[1.5rem] lg:gap-[2rem]">
-					{page.list.map((review) => (
-						<ReviewCard
-							reviewData={review}
-							isMyReview={review.userId === myData?.id}
-							key={review.id}
-							order={order}
-						/>
-					))}
-				</div>
-			))}
+			{!isError &&
+				reviewData?.pages.map((page, index) => (
+					<div key={index} className="flex flex-col gap-[1.5rem] lg:gap-[2rem]">
+						{page.list.map((review) => (
+							<ReviewCard
+								reviewData={review}
+								isMyReview={review.userId === myData?.id}
+								key={review.id}
+								order={order}
+							/>
+						))}
+					</div>
+				))}
 			{reviewData?.pages[0].list.length === 0 && <NoneReview type="none" />}
 			{(isLoading || isFetching) && <NoneReview type="loading" />}
 			{isError && <NoneReview type="error" />}
