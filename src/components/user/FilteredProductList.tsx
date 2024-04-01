@@ -33,7 +33,7 @@ export default function FilteredProductList({ user }: { user: UserDetail }) {
 				setFilter={setFilter}
 			/>
 			{isLoading && <Loading />}
-			{!isLoading && !data?.pages[0].list.length ? (
+			{!isLoading && !data?.pages?.[0].list?.length ? (
 				<NoProducts />
 			) : (
 				<FilteredProductListProducts
