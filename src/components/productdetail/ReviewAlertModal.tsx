@@ -31,25 +31,25 @@ export default function ReviewAlertModal({
 	const mainText = () => {
 		switch (type) {
 			case "delete":
-				return "정말 삭제 하시겠습니까?";
+				return "정말 삭제 하실껀가요 ?";
 
 			case "favorite":
-				return "자신의 상품은 찜할 수 없어요!";
+				return "내 상품은 찜 할 수 없어요 !";
 
 			case "reviewLike":
-				return "자신의 리뷰는 추천할 수 없습니다!";
+				return "내 리뷰는 추천 할 수 없어요 !";
 
 			case "clipboard":
-				return "복사 완료!";
+				return "복사 완료 !";
 
 			case "compare":
-				return "상품으로 추가되었습니다!";
+				return "상품으로 추가되었어요 !";
 
 			case "fileType":
-				return "이미지 파일만 업로드 해주세요!";
+				return "이미지 파일만 업로드 해주세요 !";
 
 			default:
-				return "정말 삭제 하시겠습니까?";
+				return "";
 		}
 	};
 
