@@ -1,7 +1,7 @@
 import { useState } from "react";
 
+import MovingPageModal from "@/components/common/modal/MovingPageModal";
 import ChangeProductModal from "@/components/compare/ChangeProductModal";
-import MovingPageModal from "@/components/compare/MovingPageModal";
 import useCompareStore from "@/store/compare";
 import { useModalActions } from "@/store/modal";
 import { CompareStatePosition } from "@/types/compare";
