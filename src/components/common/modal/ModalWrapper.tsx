@@ -1,12 +1,12 @@
 import Image from "next/image";
-import React, { useEffect } from "react";
+import { ReactNode, useEffect } from "react";
 import { createPortal } from "react-dom";
 
 import { ModalConfig } from "@/store/modal";
 
 type Props = {
 	id: string;
-	children: React.ReactNode;
+	children: ReactNode;
 	onRemove: (id: string) => void;
 	config: ModalConfig;
 };
