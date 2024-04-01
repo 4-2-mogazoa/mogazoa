@@ -11,22 +11,14 @@ import NumberOfCompareProduct from "../numberOfCompareProduct/NumberOfComparePro
 type HeaderType = "homeHeader" | "";
 
 type HeaderProps = {
-<<<<<<< HEAD
   isLoggedIn:boolean;
-=======
-  user?: UserType;
->>>>>>> 2820ab1aa4166643ee8020200af9308de012cde6
   isSidebarOpen?: boolean;
   toggleSidebar?: () => void;
   headerType?: HeaderType;
 };
 
 export default function Header({
-<<<<<<< HEAD
   isLoggedIn,
-=======
-  user,
->>>>>>> 2820ab1aa4166643ee8020200af9308de012cde6
   isSidebarOpen,
   toggleSidebar,
   headerType
@@ -60,19 +52,11 @@ export default function Header({
       });
     }
   };
-<<<<<<< HEAD
 
   useEffect(() => {
     setIsLogoOverflow(currentWidth < 430);
   }, [currentWidth])
 
-=======
-
-	useEffect(() => {
-		setIsLogoOverflow(currentWidth < 430);
-	}, [currentWidth]);
-
->>>>>>> 2820ab1aa4166643ee8020200af9308de012cde6
   return (
     <>
     <div className="flex h-[7rem] w-[100%] flex-row justify-between border-b border-black-bg bg-[#1c1c22] align-middle md:h-[8rem] lg:h-[10rem]">
@@ -103,26 +87,17 @@ export default function Header({
           <input placeholder='상품 이름을 검색해 보세요' value={searchValue} onChange={(e) => setSearchValue(e.target.value)} onKeyDown={handleKeyPress} className="w-[80%] bg-black-bg outline-none md:ml-[1rem] lg:ml-[2rem]" />
         </div>
         <div className="my-auto ml-[6rem] hidden font-normal text-white md:mr-[3rem] md:block md:text-[1.4rem] lg:mr-[12rem] lg:block lg:text-[1.6rem]">
-<<<<<<< HEAD
           <Link href={isLoggedIn ? '/compare' : '/signin'} className="min-w-[3.7rem] md:mr-[3rem] lg:mr-[6rem]">
             {isLoggedIn ? '비교하기' : '로그인'}
 						<>{isLoggedIn && <NumberOfCompareProduct />}</>
           </Link>
           <Link href={isLoggedIn ? '/mypage' : 'signup'} className="min-w-[4.9rem]">
             {isLoggedIn ? '내 프로필' : '회원가입'}
-=======
-          <Link href={user ? '/compare' : '/signin'} className="min-w-[3.7rem] md:mr-[3rem] lg:mr-[6rem]">
-            {user ? '비교하기' : '로그인'}
-          </Link>
-          <Link href={user ? '/mypage' : 'signup'} className="min-w-[4.9rem]">
-            {user ? '내 프로필' : '회원가입'}
->>>>>>> 2820ab1aa4166643ee8020200af9308de012cde6
           </Link>
         </div>
       </div>
     </div>
     {headerType !== "homeHeader" && isDropdownOpen && (
-<<<<<<< HEAD
         <div className="flex w-[100%] flex-col items-center gap-[2rem] pt-[3rem] text-[1.4rem] text-white md:hidden">
           <Link href={isLoggedIn ? '/compare' : '/signin'} className="cursor-pointer">
             {isLoggedIn ? '비교하기' : '로그인'}
@@ -133,24 +108,6 @@ export default function Header({
           </Link>
         </div>
       )}
-=======
-				<div className="flex w-[100%] flex-col items-center gap-[2rem] pt-[3rem] text-[1.4rem] text-white md:hidden">
-					<Link
-						href={user ? "/compare" : "/signin"}
-						className="relative cursor-pointer"
-					>
-						{user ? "비교하기" : "로그인"}
-						<>{user && <NumberOfCompareProduct />}</>
-					</Link>
-					<Link
-						href={user ? "/mypage" : "signup"}
-						className="cursor-pointer"
-					>
-						{user ? "내 프로필" : "회원가입"}
-					</Link>
-				</div>
-			)}
->>>>>>> 2820ab1aa4166643ee8020200af9308de012cde6
     </>
   );
 }
