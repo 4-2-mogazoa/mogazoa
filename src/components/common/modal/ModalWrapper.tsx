@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { ReactNode, useEffect, useLayoutEffect, useRef, useState } from "react";
+
 import { createPortal } from "react-dom";
 
 import { ModalConfig } from "@/store/modal";
