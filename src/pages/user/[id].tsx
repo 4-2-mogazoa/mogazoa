@@ -1,5 +1,4 @@
 import {
-	GetServerSideProps,
 	GetServerSidePropsContext,
 	GetServerSidePropsResult,
 	InferGetServerSidePropsType,
