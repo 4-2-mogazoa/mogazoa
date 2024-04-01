@@ -2,7 +2,7 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 import { getReviews } from "@/apis/products";
-import { getUserMe } from "@/apis/review";
+import { getMe } from "@/apis/user";
 import { filterBy } from "@/constants/filterBy";
 import { useIntersectionObserver } from "@/hooks/common/useIntersectionObserver";
 import useThrottle from "@/hooks/common/useThrottle";
@@ -45,8 +45,8 @@ export default function ProductReview({ id }: { id: number }) {
 	});
 
 	const myData = useQuery({
-		queryKey: ["usersMe"],
-		queryFn: () => getUserMe(),
+		queryKey: ["me"],
+		queryFn: () => getMe(),
 	}).data;
 
 	const handleOnSelect = (item: { id: number; name: string }) => {
