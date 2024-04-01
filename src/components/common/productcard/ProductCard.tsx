@@ -21,7 +21,7 @@ const ProductCard = forwardRef<HTMLDivElement, Props>(function ProductCard(
 	return (
 		<div
 			ref={ref}
-			className="flex max-h-[18.3rem] max-w-[16rem] grow flex-col rounded-[1.2rem] border border-black-border bg-black-bg md:max-h-[25.6rem] md:max-w-[24.7rem] lg:max-h-[30.8rem] lg:max-w-[30rem]"
+			className="flex max-h-[18.3rem] max-w-[16rem] grow flex-col gap-[1rem] rounded-[1.2rem] border border-black-border bg-black-bg p-[1rem] md:max-h-[25.6rem] md:max-w-[24.7rem] md:gap-[2rem] md:px-[1rem] md:pb-[2rem] md:pt-[1rem] lg:max-h-[30.8rem] lg:max-w-[30rem] lg:gap-[2.5rem] lg:pb-[2.5rem]"
 		>
 			<div className="relative h-[14rem] max-w-[14rem] md:h-[22.7rem] md:max-w-[22.7rem] lg:h-[18.4rem] lg:max-w-[28.4rem]">
 				<Image
@@ -31,7 +31,7 @@ const ProductCard = forwardRef<HTMLDivElement, Props>(function ProductCard(
 					fill
 				/>
 			</div>
-			<div className=" p-[1rem] md:px-[1.647rem] md:py-[2rem] lg:px-[2rem] lg:py-[2.5rem]">
+			<div className="flex flex-col md:gap-[1rem] md:px-[0.65rem] lg:px-[1rem]">
 				<div className="truncate text-[1.4rem] text-white md:text-[1.6rem] lg:text-[1.8rem]">
 					{productName}
 				</div>
