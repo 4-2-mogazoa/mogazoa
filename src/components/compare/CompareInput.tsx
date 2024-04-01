@@ -17,13 +17,21 @@ export default function CompareInput({
 	tagColor,
 }: Props) {
 	const {
-		data: { productList, errorMessage, isDropdownOpen, dropdownRef },
+		data: {
+			keyword,
+			productList,
+			errorMessage,
+			isDropdownOpen,
+			dropdownRef,
+			focusIndex,
+		},
 		handlerFn: {
 			handleKeyWordChange,
 			handleInputBlur,
 			handleAddProduct,
 			handleDeleteProduct,
 			handleLoadMoreProducts,
+			handleKeyDown,
 		},
 	} = useCompareInputState(position);
 
@@ -48,16 +56,19 @@ export default function CompareInput({
 						<input
 							className="w-full border-none bg-inherit outline-none"
 							id={position}
+							value={keyword}
 							type="text"
 							autoComplete="off"
 							onChange={handleKeyWordChange}
 							onBlur={handleInputBlur}
+							onKeyDown={handleKeyDown}
 							spellCheck={false}
 						/>
 					)}
 				</div>
 				{isDropdownOpen && (
 					<CompareDropdown
+						focusIndex={focusIndex}
 						dropdownRef={dropdownRef}
 						productList={productList}
 						handleAddProduct={handleAddProduct}
