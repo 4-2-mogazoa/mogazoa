@@ -14,17 +14,20 @@ import getCookies from "@/utils/getCookies";
 
 export default function HomeLayout() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
-  const [searchKeyword, setSearchKeyword] = useState<string>("");
   const currentWidth = useWindowWidth();
   const [isWrapPoint, setIsWrapPoint] = useState(false);
   const [isOverflow, setIsOverflow] = useState(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
   const [selectedCategoryName, setSelectedCategoryName] = useState<string | null>(null);
   const router = useRouter();
+<<<<<<< HEAD
 
   const cookie = getCookies();
 	const accessToken = cookie["accessToken"];
   const isLoggedIn = (accessToken != null);
+=======
+  const searchKeyword = router.query.search as string;
+>>>>>>> 2820ab1aa4166643ee8020200af9308de012cde6
 
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
@@ -45,7 +48,11 @@ export default function HomeLayout() {
 
   return (
     <div className="h-screen bg-[#1c1c22]">
+<<<<<<< HEAD
       <Header toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} headerType="homeHeader" isLoggedIn={isLoggedIn} />
+=======
+      <Header toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} headerType="homeHeader" />
+>>>>>>> 2820ab1aa4166643ee8020200af9308de012cde6
       <div className="w-[100%] overflow-auto bg-[#1c1c22] pb-[10rem]">
         <div className={clsx('flex flex-row', isWrapPoint ? 'lg:mx-[5rem]' : 'lg:mx-[18rem]')}>
           <SideBar isSidebarOpen={isSidebarOpen} onCategorySelect={handleCategorySelect} isLoggedIn={isLoggedIn} />
