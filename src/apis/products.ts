@@ -70,3 +70,13 @@ export async function postProducts(categoryId: number, image: string, descriptio
   });
 	return response.data;
 }
+
+export async function patchProduct(productId:number, categoryId: number, image: string, description: string, name: string) {
+	const response = await instance.patch(`products/${productId}`, {
+		categoryId,
+		image,
+		description,
+		name
+	});
+	return response.data;
+}

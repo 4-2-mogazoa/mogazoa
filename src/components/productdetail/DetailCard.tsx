@@ -3,6 +3,7 @@ import clsx from "clsx";
 import Image from "next/image";
 
 import { deleteFavorite, postFavorite } from "@/apis/products";
+import ProductModal from "@/components/common/modal/product/ProductModal";
 import useCompareModal from "@/hooks/compare/useCompareModal";
 import { useModalActions } from "@/store/modal";
 import { ProductDetail } from "@/types/product";
@@ -47,6 +48,12 @@ export default function DetailCard({ productData, isMyProduct }: Props) {
 			},
 		);
 	};
+
+	const handleEditButtonClick = () => {
+		const modal = openModal(
+			<ProductModal type="edit" productId={id} closeModal={() => closeModal(modal)} />
+		)
+	}
 
 	const cookie = getCookies();
 	const accessToken = cookie["accessToken"];
@@ -111,10 +118,10 @@ export default function DetailCard({ productData, isMyProduct }: Props) {
 							label="편집하기"
 							variant="tertiary"
 							className="md:max-w-[10.7rem] lg:max-w-[16rem]"
+							onClick={handleEditButtonClick}
 						/>
 					)}
 				</div>
-				{/**TODO: 상품 편집 모달 추가*/}
 			</div>
 		</div>
 	);
@@ -138,7 +145,7 @@ export function Share({ className }: ShareProps) {
 
 	return (
 		<div className={cn("flex gap-[1rem]", className)}>
-			<button className="bg-black-bg flex size-[2.4rem] items-center justify-center rounded-[0.6rem] lg:size-[2.8rem]">
+			<button className="flex size-[2.4rem] items-center justify-center rounded-[0.6rem] bg-black-bg lg:size-[2.8rem]">
 				<div className="relative size-[1.4rem] lg:size-[1.8rem]">
 					<Image
 						src="/icons/kakaotalk.svg"
@@ -150,7 +157,7 @@ export function Share({ className }: ShareProps) {
 			</button>
 			{/**TODO: 카카오공유는 배포이후 추가 가능*/}
 			<button
-				className="bg-black-bg flex size-[2.4rem] items-center justify-center rounded-[0.6rem] lg:size-[2.8rem]"
+				className="flex size-[2.4rem] items-center justify-center rounded-[0.6rem] bg-black-bg lg:size-[2.8rem]"
 				onClick={handleCopyClipBoard}
 			>
 				<div className="relative size-[1.4rem] lg:size-[1.8rem]">

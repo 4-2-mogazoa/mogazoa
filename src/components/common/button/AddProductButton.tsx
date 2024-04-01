@@ -1,7 +1,7 @@
 import Image from "next/image";
 
-import LoginModal from "@/components/common/modal/LoginModal";
-import AddProductModal from "@/components/common/modal/product/AddProductModal";
+import MovingPageModal from "@/components/common/modal/MovingPageModal";
+import ProductModal from "@/components/common/modal/product/ProductModal";
 import { useModalActions } from "@/store/modal";
 
 
@@ -9,14 +9,14 @@ type AddProductButtonProps = {
   user?: number;
 };
 
-export default function AddProductButton({ user }:AddProductButtonProps) {
+export default function AddProductButton({ user=123 }:AddProductButtonProps) {
 	const { openModal, closeModal } = useModalActions();
 
 	const handleOpenAddProductModal = () => {
 		if (!user) {
-			const modal = openModal(<LoginModal closeModal={() => closeModal(modal)} />);
+			const modal = openModal(<MovingPageModal description="로그인이 필요한 서비스입니다. 로그인하시겠습니까?" closeModal={() => closeModal(modal)} url="/signin" />);
 		} else {
-			const modal = openModal(<AddProductModal type="add" closeModal={() => closeModal(modal)} />)
+			const modal = openModal(<ProductModal type="add" closeModal={() => closeModal(modal)} />);
 		}
 	};
 	return (
