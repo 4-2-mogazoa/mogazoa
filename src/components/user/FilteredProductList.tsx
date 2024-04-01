@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { getUserProducts } from "@/apis/user";
 import { UserDetail } from "@/types/user";
@@ -24,6 +24,10 @@ export default function FilteredProductList({ user }: { user: UserDetail }) {
 			getNextPageParam: (lastPage) => lastPage.nextCursor,
 			staleTime: 60 * 1000 * 2,
 		});
+
+	useEffect(() => {
+		setFilter(productsFilter[0]);
+	}, [user]);
 
 	return (
 		<section className="flex flex-col gap-[3rem]">
