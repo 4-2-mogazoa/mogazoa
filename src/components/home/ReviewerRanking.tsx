@@ -28,7 +28,7 @@ export default function ReviewerRanking() {
       <div className="h-[1.7rem] w-[6.3rem] text-[1.4rem] text-white md:w-[6.9rem] lg:h-[1.9rem] lg:w-[7.4rem] lg:text-[1.6rem] lg:font-normal">리뷰어 랭킹</div>
       <div className="flex flex-row gap-[1.5rem] md:gap-[2rem] lg:flex-col lg:gap-[3rem]">
         {rankingData.map((data, index) => (
-          <Link key={index} href={`/profile/${data.id}`}>
+          <Link key={index} href={`/user/${data.id}`}>
             <ReviewerProfile key={index} reviewerData={data} />
           </Link>
         ))}

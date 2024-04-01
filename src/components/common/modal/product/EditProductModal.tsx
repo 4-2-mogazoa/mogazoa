@@ -1,23 +1,23 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 
 import { getCategories } from '@/apis/categories';
-import { postProducts } from '@/apis/products';
 import { getProductsName } from '@/apis/products';
 import BasicButton from '@/components/common/button/BasicButton';
 import AddCategoryDropdown from '@/components/common/dropdown/product/AddCategoryDropdown';
 import ProductDropdown from '@/components/common/dropdown/product/productDropdown';
 import AddProductImage from '@/components/common/inputs/product/AddProductImage';
+import { ProductDetail } from '@/types/product';
 
-type AddProductModalProps = {
-  type: 'add' | 'rewrite';
-  closeModal: () => void;
+type EditProductModalProps = {
+  productData: ProductDetail;
+  productId: number;
 }
 
-export default function AddProductModal ({ type, closeModal }: AddProductModalProps) {
-  const [categoryId, setCategoryId] = useState<number>(0);
-  const [imageUrl, setImageUrl] = useState<string>('');
-  const [description, setDescription] = useState<string>('');
-  const [name, setName] = useState<string>('');
+export default function EditProductModal ({ productData, productId=199 }:EditProductModalProps) {
+  const [categoryId, setCategoryId] = useState<number>(productData.category.id);
+  const [imageUrl, setImageUrl] = useState<string>(productData.image);
+  const [description, setDescription] = useState<string>(productData.description);
+  const [name, setName] = useState<string>(productData.name);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [categories, setCategories] = useState<{ id: number; name: string }[]>([]);
   const [existingProductName, setExistingProductName] = useState<string[]>([]);
@@ -93,29 +93,6 @@ export default function AddProductModal ({ type, closeModal }: AddProductModalPr
     setOptions([]);
   };
 
-  const handleSubmit = () => {
-    if (categoryId === 0) {
-      setCategoryError("카테고리를 선택해주세요.");
-    } else {
-      setCategoryError("");
-      if (imageUrl === "") {
-        setImageError("대표 이미지를 추가해주세요.");
-      } else {
-        setImageError("");
-        if (!nameError && !categoryError && !textareaError && !imageError) {
-          postProducts(categoryId, imageUrl, description, name)
-          .then((response) => {
-            alert("상품이 등록되었습니다!");
-          })
-          .catch((error) => {
-            alert("상품을 등록하는 데 실패하였습니다: " + error.message);
-          })
-        }
-        closeModal();
-      }
-    }
-  };
-
   const handleOnTextarea = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setCount(e.target.value.length);
     setDescription(e.target.value)
@@ -141,9 +118,13 @@ export default function AddProductModal ({ type, closeModal }: AddProductModalPr
     }
   }, [name, count]);
 
+  const handleSubmit = () => {
+    // 편집된 정보를 서버에 전송하는 로직
+  };
+
   return (
     <div className="w-[100%] px-[4rem] md:w-[59rem] lg:w-[62rem]">
-      <h2 className="text-[2.4rem] font-semibold text-white">{type === 'add' ? '상품 추가' : '상품 편집'}</h2>
+      <h2 className="text-[2.4rem] font-semibold text-white">상품 편집</h2>
       <div className="relative flex flex-col gap-[3rem]">
         <div className="flex w-[100%] flex-row justify-between">
           <div className="mr-[2rem] flex w-[100%] flex-col md:m-0 md:w-[36rem] md:gap-[1rem] lg:gap-[3rem]">
@@ -155,7 +136,7 @@ export default function AddProductModal ({ type, closeModal }: AddProductModalPr
                 onBlur={handleNameInputBlur}
                 onChange={handleOnName}
                 required
-                placeholder="상품명 (상품 등록 여부를 확인해주세요)"
+                placeholder="상품명"
                 className="mt-[1rem] h-[6.5rem] w-full rounded-xl border border-[#353542] bg-[#252530] px-[2rem] py-[2.3rem] text-[1.4rem] text-white outline-none focus:border-main_blue"
               />
               <ProductDropdown options={options} handleDropDownClick={handleDropDownClick} />
@@ -177,9 +158,8 @@ export default function AddProductModal ({ type, closeModal }: AddProductModalPr
             value={description}
             className="w-full resize-none overflow-hidden border-none bg-[#252530] text-[1.4rem] text-white placeholder:text-[1.4rem] placeholder:text-gray-200 focus:border-main_blue focus:outline-none lg:text-[1.6rem] lg:placeholder:text-[1.6rem]"
             rows={3}
-            onFocus={() => setIsFocused(true)}
-            onBlur={handleTextareaBlur}
             maxLength={500}
+            onBlur={handleTextareaBlur}
             onChange={handleOnTextarea}
             placeholder="상품 설명을 입력해주세요."
           />
@@ -190,7 +170,7 @@ export default function AddProductModal ({ type, closeModal }: AddProductModalPr
         </div>
         {textareaError && <p className="absolute top-[35rem] text-[1.3rem] text-red">{textareaError}</p>}
         {imageError && <p className="absolute top-[37rem] text-[1.3rem] text-red">{imageError}</p>}
-        <BasicButton label={type === 'add' ? "추가하기" : "저장하기"} className="my-[4rem]" onClick={handleSubmit} disabled={isButtonDisabled} />
+        <BasicButton label="저장하기" className="my-[4rem]" onClick={handleSubmit} />
       </div>
     </div>
   );

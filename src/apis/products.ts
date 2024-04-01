@@ -1,4 +1,4 @@
-import { PostProducts,ProductDetail, ProductNamesResponse,ProductsResponse } from "@/types/product";
+import { ProductDetail, ProductsResponse } from "@/types/product";
 import { ReviewResponse } from "@/types/review";
 
 import instance from "./axiosInstance";
@@ -26,11 +26,10 @@ export async function getProductDetail(productId: number) {
 }
 
 
-export async function getProductNames(): Promise<string[]> {
+export async function getProductsName() {
 	const res = await instance.get("products");
 	const products: ProductDetail[] = res.data.list;
-	const names: string[] = products.map((product: ProductDetail) => product.name);
-	return names;
+	return products;
 }
 
 export async function getReviews({
@@ -63,7 +62,7 @@ export async function deleteFavorite(productId: number) {
 }
 
 export async function postProducts(categoryId: number, image: string, description: string, name: string) {
-  const response = await instance.post<PostProducts>('/products', {
+  const response = await instance.post('/products', {
     categoryId,
     image,
     description,
