@@ -1,26 +1,74 @@
-import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 
+import { getReviews } from "@/apis/products";
+import { getMe } from "@/apis/user";
 import { filterBy } from "@/constants/filterBy";
+import { useIntersectionObserver } from "@/hooks/common/useIntersectionObserver";
+import useThrottle from "@/hooks/common/useThrottle";
+import { ReviewResponse } from "@/types/review";
 
 import Dropdown from "../common/dropdown/Dropdown";
-import { reviewData } from "./MockData";
+import NoneReview from "./NoneReview";
 import ReviewCard from "./ReviewCard";
 
-export default function ProductReview() {
-	const [cookieid, setCookieId] = useState<number>(0);
+export default function ProductReview({ id }: { id: number }) {
+	const [order, setOrder] = useState<
+		"recent" | "ratingDesc" | "ratingAsc" | "likeCount"
+	>("recent");
 
-	useEffect(() => {
-		const cookies = Object.fromEntries(
-			document.cookie.split(";").map((cookie) => cookie.trim().split("=")),
-		);
-		setCookieId(Number(cookies["id"]));
-	}, []);
-	//TODO: 쿠키는 아마도 기능구현때 store에서 관리
+	const {
+		data: reviewData,
+		isLoading,
+		isFetching,
+		fetchNextPage,
+		hasNextPage,
+	} = useInfiniteQuery({
+		queryKey: ["review", id, order],
+		queryFn: ({ pageParam = 0 }) =>
+			getReviews({ cursor: pageParam, productId: id, order }),
+		getNextPageParam: (lastPage: ReviewResponse) => {
+			if (lastPage.list.length === 0) {
+				return undefined;
+			}
+			return lastPage.nextCursor;
+		},
+		initialPageParam: null,
+		enabled: !!id,
+	});
 
+	const fetchNextPageThrottled = useThrottle(fetchNextPage, 200);
+
+	const { setTarget } = useIntersectionObserver({
+		hasNextPage,
+		fetchNextPage: fetchNextPageThrottled,
+	});
+
+	const myData = useQuery({
+		queryKey: ["me"],
+		queryFn: () => getMe(),
+	}).data;
+
+	const handleOnSelect = (item: { id: number; name: string }) => {
+		switch (item.id) {
+			case 0:
+				setOrder("recent");
+				break;
+			case 1:
+				setOrder("ratingDesc");
+				break;
+			case 2:
+				setOrder("ratingAsc");
+				break;
+			case 3:
+				setOrder("likeCount");
+				break;
+			default:
+				setOrder("recent");
+		}
+	};
 	return (
 		<div className="w-full lg:w-[94rem]">
-			{/**TODO: 리뷰 목록 무한 스크롤 구현 */}
 			<div className="flex min-w-[33.5rem] items-center justify-between pb-[3rem] ">
 				<span className="text-[1.8rem] text-white md:text-[1.6rem] lg:text-[2rem]">
 					상품 리뷰
@@ -28,46 +76,27 @@ export default function ProductReview() {
 				<Dropdown
 					items={filterBy}
 					defaultItem={filterBy[0]}
-					onSelect={(item) => console.log(`선택된 항목: ${item.name}`)}
+					onSelect={(item) => handleOnSelect(item)}
 				>
-					{/**TODO: 선택된 항목 별 정렬 */}
 					<Dropdown.Button variant={"small"} />
 					<Dropdown.List />
 				</Dropdown>
 			</div>
-			<div className="flex flex-col gap-[1.5rem] lg:gap-[2rem]">
-				{reviewData.list.map((data) => (
-					<ReviewCard
-						reviewData={data}
-						isMyReview={data.userId === cookieid}
-						key={data.id}
-					/>
-				))}
-			</div>
-		</div>
-	);
-}
-
-type NoneReviewProps = {
-	type: "none" | "loading";
-};
-// 기능 구현 때 데이터가 없거나 로딩중일때 렌더링하도록 컴포넌트 사용할 예정
-export function NoneReview({ type }: NoneReviewProps) {
-	const text = type === "none" ? "첫 리뷰를 작성해 보세요!" : "Loading...";
-	const noneReviewIconSrc = "/icons/none_review.svg";
-	return (
-		<div className="flex h-[20rem] flex-col items-center justify-center gap-[2rem] md:h-[29.8rem] lg:h-[32rem]">
-			<div className="relative h-[3.2rem] w-[3.92rem] lg:h-[4rem] lg:w-[4.9rem]">
-				<Image
-					src={noneReviewIconSrc}
-					fill
-					className="object-cover"
-					alt="none"
-				/>
-			</div>
-			<span className=" flex flex-row text-[1.8rem] text-gray-200 lg:text-[2rem]">
-				{text}
-			</span>
+			{reviewData?.pages.map((page, index) => (
+				<div key={index} className="flex flex-col gap-[1.5rem] lg:gap-[2rem]">
+					{page.list.map((review) => (
+						<ReviewCard
+							reviewData={review}
+							isMyReview={review.userId === myData?.id}
+							key={review.id}
+							order={order}
+						/>
+					))}
+				</div>
+			))}
+			{reviewData?.pages[0].list.length === 0 && <NoneReview type="none" />}
+			{(isLoading || isFetching) && <NoneReview type="loading" />}
+			<div ref={setTarget}></div>
 		</div>
 	);
 }

@@ -1,4 +1,5 @@
 import { ProductDetail, ProductsResponse } from "@/types/product";
+import { ReviewResponse } from "@/types/review";
 
 import instance from "./axiosInstance";
 
@@ -22,4 +23,33 @@ export async function getProductDetail(productId: number) {
 	const data = res.data;
 
 	return data;
+}
+
+export async function getReviews({
+	productId,
+	order,
+	cursor,
+}: {
+	productId: number;
+	order?: "recent" | "ratingDesc" | "ratingAsc" | "likeCount";
+	cursor?: number | null;
+}) {
+	const params = { order, cursor };
+
+	const res = await instance.get<ReviewResponse>(
+		`products/${productId}/reviews`,
+		{
+			params,
+		},
+	);
+
+	return res.data;
+}
+
+export async function postFavorite(productId: number) {
+	await instance.post<ProductDetail>(`products/${productId}/favorite`);
+}
+
+export async function deleteFavorite(productId: number) {
+	await instance.delete<ProductDetail>(`products/${productId}/favorite`);
 }

@@ -8,7 +8,7 @@ type Props = {
 
 export default function ActivityDetails({ user }: Props) {
 	return (
-		<section className="flex flex-col gap-[3rem]">
+		<section className="flex flex-col gap-[3rem] lg:w-full">
 			<h2 className="text-[1.8rem] font-semibold text-white lg:text-[2rem]">
 				활동 내역
 			</h2>

@@ -1,12 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 
+import { postUploadImage } from "@/apis/image";
 import { patchUpdateMe } from "@/apis/user";
 import BasicButton from "@/components/common/button/BasicButton";
 import AddImageBox from "@/components/common/inputs/AddImageBox";
 import TextBox from "@/components/common/inputs/TextBox";
-import { UserDetail } from "@/types/user";
+import { UserDetail, UserUpdateRequestBody } from "@/types/user";
 
 type Props = {
 	user: UserDetail;
@@ -15,6 +16,9 @@ type Props = {
 
 export default function ProfileModifyModal({ user, closeModal }: Props) {
 	const queryClient = useQueryClient();
+	const [previewImage, setPreviewImage] = useState<string | null>(user.image);
+	const [nextProfileImage, setNextProfileImage] = useState<File | null>(null);
+
 	const textBoxRef = useRef<HTMLTextAreaElement>(null);
 	const {
 		register,
@@ -31,26 +35,55 @@ export default function ProfileModifyModal({ user, closeModal }: Props) {
 		mutationFn: ({
 			nickname,
 			description,
-			// image,
+			image,
 		}: {
 			nickname: string;
 			description: string;
-			// image?: string;
-		}) => patchUpdateMe({ nickname, description }),
+			image?: string;
+		}) => patchUpdateMe({ nickname, description, image }),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["me"] });
 		},
 	});
 
+	const imageUploadMutation = useMutation({
+		mutationFn: (imageFile: File | null) => postUploadImage(imageFile),
+	});
+
 	const onSubmit = (data: { nickname: string }) => {
 		const description = textBoxRef.current?.value || "";
-		const formData = {
+		const formData: UserUpdateRequestBody = {
 			nickname: data.nickname,
 			description,
 		};
 
-		userInfoMutation.mutate(formData);
-		closeModal();
+		if (nextProfileImage) {
+			imageUploadMutation.mutate(nextProfileImage as File | null, {
+				async onSuccess(data) {
+					formData.image = data.url;
+					userInfoMutation.mutate(formData, {
+						onSuccess() {
+							closeModal();
+						},
+						onError(error) {
+							console.error(error.message);
+						},
+					});
+				},
+				onError(error) {
+					console.error(error.message);
+				},
+			});
+		} else {
+			userInfoMutation.mutate(formData, {
+				onSuccess() {
+					closeModal();
+				},
+				onError(error) {
+					console.error(error.message);
+				},
+			});
+		}
 	};
 
 	return (
@@ -60,7 +93,11 @@ export default function ProfileModifyModal({ user, closeModal }: Props) {
 				className="flex min-w-[25.5rem] flex-col gap-[1rem] md:min-w-[51rem] md:gap-[2rem]"
 				onSubmit={handleSubmit(onSubmit)}
 			>
-				<AddImageBox />
+				<AddImageBox
+					previewImage={previewImage}
+					setPreviewImage={setPreviewImage}
+					setNextImage={setNextProfileImage}
+				/>
 				<div className="flex flex-col gap-[0.5rem] md:gap-[1rem]">
 					<input
 						className="rounded-[0.8rem] bg-black-bg px-[2rem] py-[1.7rem] text-[1.4rem] text-white outline outline-black-border placeholder:text-[1.4rem] placeholder:text-gray-200 focus:outline-[#5097FA] md:py-[1.95rem] lg:py-[2.3rem] lg:text-[1.6rem] placeholder:lg:text-[1.6rem]"
@@ -90,7 +127,11 @@ export default function ProfileModifyModal({ user, closeModal }: Props) {
 					variant={"primary"}
 					type="submit"
 					className="mt-[2rem]"
-					disabled={!!formError["nickname"]}
+					disabled={
+						!!formError["nickname"] ||
+						userInfoMutation.isPending ||
+						!previewImage
+					}
 				/>
 			</form>
 		</div>

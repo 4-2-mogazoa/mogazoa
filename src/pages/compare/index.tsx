@@ -1,3 +1,4 @@
+import Header from "@/components/common/menu/Header";
 import CompareForm from "@/components/compare/CompareForm";
 import Loading from "@/components/compare/Loading";
 import Result from "@/components/compare/Result";
@@ -10,6 +11,7 @@ export default function Index() {
 
 	return (
 		<div className="h-full min-h-screen bg-[#1c1c22]">
+			<Header />
 			<div className="_flex-col-center mx-8 gap-24 pb-16 pt-12 md:mx-12 md:max-w-[94rem] md:pb-40 md:pt-16 lg:mx-auto lg:w-[94rem] lg:gap-32 lg:pt-24">
 				<CompareForm />
 				<div>

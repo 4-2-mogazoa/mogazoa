@@ -1,11 +1,18 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import clsx from "clsx";
 import Image from "next/image";
 
+import { deleteFavorite, postFavorite } from "@/apis/products";
+import useCompareModal from "@/hooks/compare/useCompareModal";
+import { useModalActions } from "@/store/modal";
 import { ProductDetail } from "@/types/product";
 import cn from "@/utils/cn";
+import getCookies from "@/utils/getCookies";
 
 import BasicButton from "../common/button/BasicButton";
 import CategoryBadge from "../common/categoryBadge/CategoryBadge";
+import ReviewAlertModal from "./ReviewAlertModal";
+import ReviewModal from "./ReviewModal";
 
 type Props = {
 	productData: ProductDetail;
@@ -19,17 +26,42 @@ type ShareProps = {
 type FavoriteProps = {
 	isFavorite: boolean;
 	className: string;
+	id: number;
+	isMyProduct: boolean;
 };
 
 export default function DetailCard({ productData, isMyProduct }: Props) {
-	const { name, description, image, isFavorite, category } = productData;
+	const { name, description, image, isFavorite, category, id } = productData;
+	const { openModal, closeModal } = useModalActions();
+
+	const handleReviewCreateButton = () => {
+		const modalId = openModal(
+			<ReviewModal
+				type="create"
+				closeModal={() => closeModal(modalId)}
+				productId={id}
+			/>,
+			{
+				isCloseClickOutside: true,
+				isCloseESC: true,
+			},
+		);
+	};
+
+	const cookie = getCookies();
+	const accessToken = cookie["accessToken"];
+
+	const { compareButtonText, handleCompareButtonClick } = useCompareModal(
+		productData,
+		accessToken,
+	);
 
 	return (
 		<div className="flex min-w-[33.5rem] flex-col items-center md:flex-row lg:justify-between">
-			<div className="relative min-h-[19.7rem] min-w-[28rem] lg:ml-[3rem]">
-				<Image src={image} fill alt={name} className="object-cover" />
+			<div className="relative min-h-[19.7rem] min-w-[28rem] lg:mx-[6rem]">
+				<Image src={image} fill alt={name} className="object-contain" />
 			</div>
-			<div className="flex flex-col">
+			<div className="flex w-full flex-col">
 				<div className="flex justify-between">
 					<CategoryBadge size="small" category={category.name} />
 					<Share className="flex md:hidden" />
@@ -39,31 +71,41 @@ export default function DetailCard({ productData, isMyProduct }: Props) {
 						<span className="text-[2rem] font-semibold text-white lg:text-[2.4rem]">
 							{name}
 						</span>
-						<Favorite isFavorite={isFavorite} className="hidden md:flex" />
+						<Favorite
+							isFavorite={isFavorite}
+							className="hidden md:flex"
+							id={id}
+							isMyProduct={isMyProduct}
+						/>
 					</div>
 					<Share className="hidden md:flex" />
-					<Favorite isFavorite={isFavorite} className="flex md:hidden" />
+					<Favorite
+						isFavorite={isFavorite}
+						className="flex md:hidden"
+						id={id}
+						isMyProduct={isMyProduct}
+					/>
 				</div>
-				<div className="text-[1.4rem] text-white lg:max-w-[54.5rem] lg:text-[1.6rem]">
+				<div className="text-[1.4rem] text-white lg:text-[1.6rem]">
 					{description}
 				</div>
 				<div className="flex flex-col gap-[1.5rem] pt-[2rem] md:flex-row md:gap-[2rem] md:pt-[6rem]">
 					<BasicButton
 						label="리뷰 작성하기"
 						variant="primary"
-						className={clsx("md:lg:max-w-[34.5rem]", {
+						className={clsx("lg:max-w-[34.5rem]", {
 							"lg:max-w-[18.5rem]": isMyProduct,
 						})}
+						onClick={handleReviewCreateButton}
 					/>
-					{/**TODO: 리뷰 작성 모달, 비로그인 시 로그인 요청 모달*/}
 					<BasicButton
-						label="비교하기"
+						label={compareButtonText}
 						variant="secondary"
 						className={clsx("md:max-w-[12.3rem] lg:max-w-[18rem]", {
 							"md:max-w-[10.7rem] lg:max-w-[16rem]": isMyProduct,
 						})}
+						onClick={handleCompareButtonClick}
 					/>
-					{/**TODO: 비교상품 없을 경우 alert표시, 하나 있을 경우 확인할지 안할지 모달 표시 확인하면 /compare 이동, 두개 있을 경우 비교 상품 교체 모달 비로그인시 로그인 요청 모달*/}
 					{isMyProduct && (
 						<BasicButton
 							label="편집하기"
@@ -79,17 +121,27 @@ export default function DetailCard({ productData, isMyProduct }: Props) {
 }
 
 export function Share({ className }: ShareProps) {
-	const buttonCn =
-		"flex size-[2.4rem] items-center justify-center rounded-[0.6rem] bg-black-bg lg:size-[2.8rem]";
-	const imageDivCn = "relative size-[1.4rem] lg:size-[1.8rem]";
-	const kakaoShareIconSrc = "/icons/kakaotalk.svg";
-	const shareIconSrc = "/icons/share.svg";
+	const { openModal, closeModal } = useModalActions();
+	const handleCopyClipBoard = () => {
+		navigator.clipboard.writeText(window.location.href);
+		const modalId = openModal(
+			<ReviewAlertModal
+				closeModal={() => closeModal(modalId)}
+				type="clipboard"
+			/>,
+			{
+				isCloseClickOutside: true,
+				isCloseESC: true,
+			},
+		);
+	};
+
 	return (
 		<div className={cn("flex gap-[1rem]", className)}>
-			<button className={buttonCn}>
-				<div className={imageDivCn}>
+			<button className="bg-black-bg flex size-[2.4rem] items-center justify-center rounded-[0.6rem] lg:size-[2.8rem]">
+				<div className="relative size-[1.4rem] lg:size-[1.8rem]">
 					<Image
-						src={kakaoShareIconSrc}
+						src="/icons/kakaotalk.svg"
 						alt="카카오_공유"
 						fill
 						className="object-cover"
@@ -97,26 +149,84 @@ export function Share({ className }: ShareProps) {
 				</div>
 			</button>
 			{/**TODO: 카카오공유는 배포이후 추가 가능*/}
-			<button className={buttonCn}>
-				<div className={imageDivCn}>
+			<button
+				className="bg-black-bg flex size-[2.4rem] items-center justify-center rounded-[0.6rem] lg:size-[2.8rem]"
+				onClick={handleCopyClipBoard}
+			>
+				<div className="relative size-[1.4rem] lg:size-[1.8rem]">
 					<Image
-						src={shareIconSrc}
+						src="/icons/share.svg"
 						alt="클립보드_공유"
 						fill
 						className="object-cover"
 					/>
 				</div>
 			</button>
-			{/**TODO: 클립보드 복사 기능 추가*/}
 		</div>
 	);
 }
 
-export function Favorite({ isFavorite, className }: FavoriteProps) {
+export function Favorite({
+	isFavorite,
+	className,
+	id,
+	isMyProduct,
+}: FavoriteProps) {
 	const heartOnIconSrc = "/icons/heart_on.svg";
 	const heartOffIconSrc = "/icons/heart_off.svg";
+	const queryClient = useQueryClient();
+	const { openModal, closeModal } = useModalActions();
+
+	const { mutate: toggleFavorite, error } = useMutation({
+		mutationFn: () => (isFavorite ? deleteFavorite(id) : postFavorite(id)),
+		onMutate: () => {
+			const previous: ProductDetail | undefined = queryClient.getQueryData([
+				"productDetail",
+				id,
+			]);
+			if (!previous) {
+				throw new Error("error!");
+			}
+
+			const updateData = () => {
+				return {
+					...previous,
+					isFavorite: !previous.isFavorite,
+				};
+			};
+			queryClient.setQueryData(["productDetail", id], updateData());
+			return previous;
+		},
+		onError: (error, variables, context) => {
+			queryClient.setQueryData(["productDetail", id], context);
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["productDetail", id] });
+		},
+	});
+	const handleButtonOnclick = () => {
+		if (error?.message === "Request failed with status code 401") {
+			alert("로그인해주세요!");
+			return;
+		}
+
+		if (isMyProduct) {
+			const modalId = openModal(
+				<ReviewAlertModal
+					closeModal={() => closeModal(modalId)}
+					type="favorite"
+				/>,
+				{
+					isCloseClickOutside: true,
+					isCloseESC: true,
+				},
+			);
+			return;
+		}
+		toggleFavorite();
+	};
 	return (
-		<button className={className}>
+		<button className={className} onClick={handleButtonOnclick}>
 			<div className="relative size-[2.4rem] lg:size-[2.8rem]">
 				<Image
 					src={isFavorite ? heartOnIconSrc : heartOffIconSrc}
@@ -128,4 +238,3 @@ export function Favorite({ isFavorite, className }: FavoriteProps) {
 		</button>
 	);
 }
-

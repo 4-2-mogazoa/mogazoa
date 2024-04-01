@@ -51,7 +51,7 @@ export default function ProfileCard({ user, isMine = true }: Props) {
 			<h2 className="sr-only">기본 정보</h2>
 			<ProfileImage size="large" src={user.image} />
 			<div className="flex w-full flex-col gap-[1rem]">
-				<strong className="self-center text-[2rem] font-semibold text-white">
+				<strong className="truncate text-center text-[2rem] font-semibold text-white">
 					{user?.nickname}
 				</strong>
 				<p className="text-[1.4rem] text-gray-200">{user?.description}</p>
