@@ -1,7 +1,9 @@
+import axios from "axios";
 import clsx from "clsx";
 import { useRouter } from "next/router";
 import { useEffect,useState } from "react";
 
+import { getMe } from "@/apis/user";
 import AddProductButton from "@/components/common/button/AddProductButton";
 import Header from "@/components/common/menu/Header";
 import { SideBar } from "@/components/common/menu/SideBar";
@@ -9,10 +11,10 @@ import ProductList from "@/components/home/ProductList";
 import ReviewerRanking from "@/components/home/ReviewerRanking";
 import { BREAK_POINT } from "@/constants/breakPoint";
 import useWindowWidth from "@/hooks/common/useWindowWidth";
-import getCookies from "@/utils/getCookies";
 
 
 export default function HomeLayout() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const currentWidth = useWindowWidth();
   const [isWrapPoint, setIsWrapPoint] = useState(false);
@@ -20,10 +22,26 @@ export default function HomeLayout() {
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
   const [selectedCategoryName, setSelectedCategoryName] = useState<string | null>(null);
   const router = useRouter();
-  const cookie = getCookies();
-	const accessToken = cookie["accessToken"];
-  const isLoggedIn = (accessToken != null);
   const searchKeyword = router.query.search as string;
+
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      try {
+        await getMe();
+        setIsLoggedIn(true);
+      } catch (error) {
+        if (axios.isAxiosError(error) && error.response && error.response.status===401) {
+          setIsLoggedIn(false);
+        } else {
+          alert('유저 정보를 불러오는 데 실패하였습니다: ' + error);
+        }
+      }
+    };
+
+    checkLoginStatus();
+
+  }, []); 
+
 
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
