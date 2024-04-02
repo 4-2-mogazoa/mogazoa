@@ -17,7 +17,7 @@ export default function FilteredProductList({ user }: { user: UserDetail }) {
 
 	const { data, fetchNextPage, hasNextPage, isFetching, isLoading } =
 		useInfiniteQuery({
-			queryKey: ["products", user?.id, currentFilter.type],
+			queryKey: ["products", user.id, currentFilter.type],
 			queryFn: ({ pageParam }) =>
 				getUserProducts(user.id, currentFilter.type, pageParam),
 			initialPageParam: 0,
