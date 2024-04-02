@@ -1,10 +1,17 @@
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
+import { isAxiosError } from "axios";
+import { GetServerSidePropsContext } from "next";
+import { useEffect } from "react";
 
 import { getMe } from "@/apis/user";
+import Loading from "@/components/user/Loading";
 import ProfilePageLayout from "@/components/user/ProfilePageLayout";
+import { UserDetail } from "@/types/user";
 import getAccessTokenFromReq from "@/utils/getAccessTokenFromReq";
 
 export async function getServerSideProps({ req }: GetServerSidePropsContext) {
+	const queryClient = new QueryClient();
+
 	const accessToken = getAccessTokenFromReq(req);
 	if (!accessToken) {
 		return {
@@ -15,19 +22,41 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
 		};
 	}
 
-	const me = await getMe({
-		headers: {
-			Authorization: `Bearer ${accessToken}`,
-		},
+	await queryClient.prefetchQuery<UserDetail>({
+		queryKey: ["me"],
+		queryFn: () =>
+			getMe({
+				headers: {
+					Authorization: `Bearer ${accessToken}`,
+				},
+			}),
+		staleTime: 60 * 1000,
 	});
 
 	return {
-		props: { me },
+		props: { dehydratedState: dehydrate(queryClient) },
 	};
 }
 
-export default function MyPage({
-	me,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function MyPage() {
+	const { data: me, error } = useQuery<UserDetail>({
+		queryKey: ["me"],
+		queryFn: getMe,
+		staleTime: 60 * 1000,
+		retry: 0,
+	});
+
+	useEffect(() => {
+		if (error && isAxiosError<{ message: string }>(error)) {
+			console.error("error", error);
+			alert(error.response?.data.message);
+			window.location.href = "/";
+		}
+	}, [error]);
+
+	if (!me) {
+		return <Loading />;
+	}
+
 	return <ProfilePageLayout user={me} />;
 }
