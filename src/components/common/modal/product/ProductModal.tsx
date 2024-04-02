@@ -150,7 +150,7 @@ export default function ProductModal({ type, productId, closeModal }: ProductMod
   const handleOnTextarea = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setCount(e.target.value.length);
     setDescription(e.target.value);
-    if (e.target.value.length < 10) {
+    if (1<= e.target.value.length && e.target.value.length < 10) {
       setTextareaError("최소 10자 이상 적어주세요.");
     } else {
       setTextareaError("");
@@ -159,8 +159,10 @@ export default function ProductModal({ type, productId, closeModal }: ProductMod
 
   const handleTextareaBlur = () => {
     setIsFocused(false);
-    if (count < 10) {
+    if (1 <= count && count < 10) {
       setTextareaError("최소 10자 이상 적어주세요.");
+    } else if (count === 0) {
+      setTextareaError("상품 설명은 필수 입력입니다.");
     }
   };
 
@@ -181,7 +183,7 @@ export default function ProductModal({ type, productId, closeModal }: ProductMod
                 placeholder="상품명 (상품 등록 여부를 확인해주세요)"
                 className="mt-[1rem] h-[6.5rem] w-full rounded-xl border border-[#353542] bg-[#252530] px-[2rem] py-[2.3rem] text-[1.4rem] text-white outline-none focus:border-main_blue"
               />
-              <ProductDropdown options={options} handleDropDownClick={handleDropDownClick} />
+              <ProductDropdown options={options} handleDropDownClick={handleDropDownClick} productDetailName={productDetail?.name} />
               {nameError && <p className="absolute top-[8rem] text-[1.3rem] text-red">{nameError}</p>}
             </div>
             <div>
