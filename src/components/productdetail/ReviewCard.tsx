@@ -159,7 +159,7 @@ export default function ReviewCard({ reviewData, isMyReview, order }: Props) {
 			<div className="flex min-w-[11rem] max-[767px]:mb-[2rem] md:mr-[2rem] lg:mr-[3rem]">
 				<button
 					className="flex h-[5rem] items-center gap-[1rem]"
-					onClick={() => router.push(`/profile/${user.id}`)}
+					onClick={() => router.push(`/user/${user.id}`)}
 				>
 					<ProfileImage src={user.image} size="small" />
 					<div className="text-[1.4rem] text-white lg:text-[1.6rem]">
