@@ -4,9 +4,11 @@ import React, { useEffect } from "react";
 import { postOAuthSignin } from "@/apis/auth/postOAuthSignin";
 import getCookies from "@/utils/getCookies";
 
-export default function OAuth({}: {}) {
+export default function OAuth() {
 	const router = useRouter();
 	const { code } = router.query;
+
+	console.log(code);
 
 	useEffect(() => {
 		if (getCookies().accessToken) {
@@ -17,7 +19,7 @@ export default function OAuth({}: {}) {
 
 		if (code) {
 			console.log("토큰없음 로그인시도 !");
-			postOAuthSignin(code, "kakao");
+			postOAuthSignin(code, "google");
 			return;
 		}
 	}, [code, router]);
