@@ -1,5 +1,8 @@
 import Image from "next/image";
+import Link from "next/link";
 import React, { ReactNode } from "react";
+
+import { GOOGLE_AUTH_URL, KAKAO_AUTH_URL } from "@/constants/oauth";
 
 export default function OAuthLayout() {
 	const kakaoSrc = "/icons/kakao.svg";
@@ -11,12 +14,16 @@ export default function OAuthLayout() {
 				SNS로 바로 시작하기
 			</p>
 			<div className="flex justify-center gap-[2rem]">
-				<ImgContainer>
-					<Image src={kakaoSrc} fill alt="google-icon" />
-				</ImgContainer>
-				<ImgContainer>
-					<Image src={googleSrc} fill alt="kakao-icon" />
-				</ImgContainer>
+				<Link href={KAKAO_AUTH_URL}>
+					<ImgContainer>
+						<Image src={kakaoSrc} fill alt="google-icon" />
+					</ImgContainer>
+				</Link>
+				<Link href={GOOGLE_AUTH_URL}>
+					<ImgContainer>
+						<Image src={googleSrc} fill alt="kakao-icon" />
+					</ImgContainer>
+				</Link>
 			</div>
 		</div>
 	);
