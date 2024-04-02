@@ -22,6 +22,7 @@ export default function ProductDetail({ id }: { id: number }) {
 	const myData = useQuery({
 		queryKey: ["me"],
 		queryFn: () => getMe(),
+		retry: false,
 	}).data;
 
 	return (

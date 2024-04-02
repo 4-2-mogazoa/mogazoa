@@ -48,6 +48,7 @@ export default function ProductReview({ id }: { id: number }) {
 	const myData = useQuery({
 		queryKey: ["me"],
 		queryFn: () => getMe(),
+		retry: false,
 	}).data;
 
 	const handleOnSelect = (item: { id: number; name: string }) => {

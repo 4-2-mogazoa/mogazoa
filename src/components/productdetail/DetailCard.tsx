@@ -1,8 +1,9 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import clsx from "clsx";
 import Image from "next/image";
 
 import { deleteFavorite, postFavorite } from "@/apis/products";
+import { getMe } from "@/apis/user";
 import useCompareModal from "@/hooks/compare/useCompareModal";
 import { useModalActions } from "@/store/modal";
 import { ProductDetail } from "@/types/product";
@@ -35,11 +36,18 @@ type FavoriteProps = {
 export default function DetailCard({ productData, isMyProduct }: Props) {
 	const { name, description, image, isFavorite, category, id } = productData;
 	const { openModal, closeModal } = useModalActions();
+
+	const { isError } = useQuery({
+		queryKey: ["me"],
+		queryFn: () => getMe(),
+		retry: false,
+	});
+
 	const cookie = getCookies();
 	const accessToken = cookie["accessToken"];
 
 	const handleReviewCreateButton = () => {
-		if (!accessToken) {
+		if (isError) {
 			const modalId = openModal(
 				<MovingPageModal
 					closeModal={() => closeModal(modalId)}
@@ -193,6 +201,12 @@ export function Favorite({
 	const queryClient = useQueryClient();
 	const { openModal, closeModal } = useModalActions();
 
+	const { isError } = useQuery({
+		queryKey: ["me"],
+		queryFn: () => getMe(),
+		retry: false,
+	});
+
 	const { mutate: toggleFavorite, error } = useMutation({
 		mutationFn: () => (isFavorite ? deleteFavorite(id) : postFavorite(id)),
 		onMutate: () => {
@@ -221,10 +235,7 @@ export function Favorite({
 		},
 	});
 	const handleButtonOnclick = () => {
-		const cookie = getCookies();
-		const accessToken = cookie["accessToken"];
-
-		if (!accessToken) {
+		if (isError) {
 			const modalId = openModal(
 				<MovingPageModal
 					closeModal={() => closeModal(modalId)}

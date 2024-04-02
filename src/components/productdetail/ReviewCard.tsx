@@ -1,12 +1,12 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
 import { deleteReviewLike, postReviewLike } from "@/apis/review";
+import { getMe } from "@/apis/user";
 import { starRate } from "@/constants/starRate";
 import { useModalActions } from "@/store/modal";
 import { Review, ReviewImages, ReviewResponsePage } from "@/types/review";
-import getCookies from "@/utils/getCookies";
 import { moveModalText } from "@/utils/modalText";
 
 import MovingPageModal from "../common/modal/MovingPageModal";
@@ -40,8 +40,11 @@ export default function ReviewCard({ reviewData, isMyReview, order }: Props) {
 
 	const { openModal, closeModal } = useModalActions();
 
-	const cookie = getCookies();
-	const accessToken = cookie["accessToken"];
+	const { isError } = useQuery({
+		queryKey: ["me"],
+		queryFn: () => getMe(),
+		retry: false,
+	});
 
 	const { mutate: toggleLike } = useMutation({
 		mutationFn: () => (isLiked ? deleteReviewLike(id) : postReviewLike(id)),
@@ -89,7 +92,7 @@ export default function ReviewCard({ reviewData, isMyReview, order }: Props) {
 	});
 
 	const handleButtonClick = () => {
-		if (!accessToken) {
+		if (isError) {
 			const modalId = openModal(
 				<MovingPageModal
 					closeModal={() => closeModal(modalId)}
