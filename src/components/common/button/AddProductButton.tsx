@@ -6,7 +6,7 @@ import { useModalActions } from "@/store/modal";
 
 
 type AddProductButtonProps = {
-  isLoggedIn: boolean;
+  isLoggedIn?: boolean;
 };
 
 export default function AddProductButton({ isLoggedIn }:AddProductButtonProps) {
@@ -16,7 +16,9 @@ export default function AddProductButton({ isLoggedIn }:AddProductButtonProps) {
 		if (!isLoggedIn) {
 			const modal = openModal(<MovingPageModal description="로그인이 필요한 서비스입니다. 로그인하시겠습니까?" closeModal={() => closeModal(modal)} url="/signin" />);
 		} else {
-			const modal = openModal(<ProductModal type="add" closeModal={() => closeModal(modal)} />);
+			const modal = openModal(
+				<ProductModal type="add" closeModal={() => closeModal(modal)} />
+			);
 		}
 	};
 	return (

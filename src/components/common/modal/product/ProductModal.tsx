@@ -1,11 +1,13 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { ChangeEvent, useEffect, useRef,useState } from 'react';
 
 import { getCategories } from '@/apis/categories';
+import { postUploadImage } from "@/apis/image";
 import { getProductDetail, getProductsName, patchProduct, postProducts } from '@/apis/products';
-import BasicButton from '@/components/common/button/BasicButton';
+import BasicButton from "@/components/common/button/BasicButton";
 import AddCategoryDropdown from '@/components/common/dropdown/product/AddCategoryDropdown';
 import ProductDropdown from '@/components/common/dropdown/product/productDropdown';
-import ProductImageInput from '@/components/common/inputs/product/ProductImageInput';
+import AddImageBox from "@/components/common/inputs/AddImageBox";
 
 type ProductModalProps = {
   type: 'add' | 'edit';
@@ -15,7 +17,8 @@ type ProductModalProps = {
 
 export default function ProductModal({ type, productId, closeModal }: ProductModalProps) {
   const [categoryId, setCategoryId] = useState<number>(0);
-  const [imageUrl, setImageUrl] = useState<string>('');
+  const [previewImage, setPreviewImage] = useState<string | null>("");
+	const [nextProductImage, setNextProductImage] = useState<File | null>(null);
   const [description, setDescription] = useState<string>('');
   const [name, setName] = useState<string>('');
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
@@ -58,7 +61,7 @@ export default function ProductModal({ type, productId, closeModal }: ProductMod
           setDescription(fetchedProductDetail.description);
           setName(fetchedProductDetail.name);
           if (fetchedProductDetail.image !== "") {
-            setImageUrl(fetchedProductDetail.image);
+            setPreviewImage(fetchedProductDetail.image);
           }
         } catch (error) {
           console.error('Error fetching product detail:', error);
@@ -70,7 +73,7 @@ export default function ProductModal({ type, productId, closeModal }: ProductMod
   }, [type, productId]);
 
   useEffect(() => {
-    if (name && count >= 10) {
+    if (name && name.length <= 20 && count >= 10) {
       setIsButtonDisabled(false);
     } else {
       setIsButtonDisabled(true);
@@ -114,44 +117,119 @@ export default function ProductModal({ type, productId, closeModal }: ProductMod
     setOptions([]);
   };
 
-  const handleSubmit = () => {
+  const queryClient = useQueryClient();
+
+  const addProductMutation = useMutation({
+    mutationFn: ({
+      categoryId,
+      name,
+      image,
+      description,
+    }: {
+      categoryId: number;
+      name: string;
+      image: string;
+      description: string;
+    }) => postProducts(categoryId, image, description, name),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["addProduct"] });
+    },
+  });
+
+  const editProductMutation = useMutation({
+    mutationFn: ({
+      productId,
+      categoryId,
+      name,
+      image,
+      description,
+    }: {
+      productId: number;
+      categoryId: number;
+      name: string;
+      image: string;
+      description: string;
+    }) => patchProduct(productId, categoryId, image, description, name),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["editProduct"] });
+    },
+  });
+  
+  const imageUploadMutation = useMutation({
+    mutationFn: (imageFile: File | null) => postUploadImage(imageFile),
+  });
+  
+  const onSubmit = async () => {
+    type FormData = {
+      categoryId: number;
+      description: string;
+      name: string;
+      image: string;
+    }
+    
+    const formData: FormData = {
+      categoryId: categoryId,
+      description: description,
+      name: name,
+      image: '',
+    };
+
+    if (nextProductImage) {
+      try {
+        const imageUploadResult = await imageUploadMutation.mutateAsync(nextProductImage as File | null);
+        formData.image = imageUploadResult.url;
+      } catch (error) {
+        alert("이미지를 업로드하는 데 실패하였습니다.: " + error);
+        return;
+      }
+    } else if (type === 'edit' && !nextProductImage && previewImage) {
+      formData.image = previewImage;
+    }
+
+    try {
+      if (type === 'add') {
+        await addProductMutation.mutateAsync(formData);
+        closeModal();
+        alert("상품 등록이 완료되었습니다.");
+      } else if (type === 'edit') {
+        if (productId !== undefined) {
+          await editProductMutation.mutateAsync({
+            productId: productId,
+            ...formData,
+          });
+          closeModal();
+          alert("상품 수정이 완료되었습니다.");
+        }
+      }
+    } catch (error) {
+      alert("상품을 서버로 전송하는 데 실패하였습니다: " + error);
+    }
+  }
+
+  const handleSubmit = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    event.preventDefault(); 
     if (categoryId === 0) {
-      setCategoryError("카테고리를 선택해주세요.");
+      setCategoryError ("카테고리를 선택해주세요.");
     } else {
       setCategoryError("");
-      if (imageUrl === "") {
+      if (!previewImage) {
         setImageError("대표 이미지를 추가해주세요.");
       } else {
-        setImageError("");
+        setImageError ("");
         if (!nameError && !categoryError && !textareaError && !imageError) {
-          if (type === 'add') {
-            postProducts(categoryId, imageUrl, description, name)
-              .then(() => {
-                alert("상품이 등록되었습니다.");
-              })
-              .catch((error) => {
-                alert("상품을 등록하는 데 실패하였습니다: " + error.message);
-              });
-          } else if (type === 'edit' && productId) {
-            patchProduct(productId, categoryId, imageUrl, description, name)
-            .then(() => {
-              alert("상품이 수정되었습니다.");
-            })
-            .catch((error) => {
-              alert("상품을 수정하는 데 실패하였습니다: " + error.message);
-            });
-          }
-          closeModal();
+          onSubmit();
         }
       }
     }
-  };
+  }
 
   const handleOnTextarea = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setCount(e.target.value.length);
     setDescription(e.target.value);
     if (1<= e.target.value.length && e.target.value.length < 10) {
       setTextareaError("최소 10자 이상 적어주세요.");
+    } else if (e.target.value.length === 0) {
+      setTextareaError("상품 설명은 필수 입력입니다.");
     } else {
       setTextareaError("");
     }
@@ -163,6 +241,8 @@ export default function ProductModal({ type, productId, closeModal }: ProductMod
       setTextareaError("최소 10자 이상 적어주세요.");
     } else if (count === 0) {
       setTextareaError("상품 설명은 필수 입력입니다.");
+    } else {
+      setTextareaError("");
     }
   };
 
@@ -183,7 +263,7 @@ export default function ProductModal({ type, productId, closeModal }: ProductMod
                 placeholder="상품명 (상품 등록 여부를 확인해주세요)"
                 className="mt-[1rem] h-[6.5rem] w-full rounded-xl border border-[#353542] bg-[#252530] px-[2rem] py-[2.3rem] text-[1.4rem] text-white outline-none focus:border-main_blue"
               />
-              <ProductDropdown options={options} handleDropDownClick={handleDropDownClick} productDetailName={productDetail?.name} />
+              <ProductDropdown options={options} handleDropDownClick={handleDropDownClick} />
               {nameError && <p className="absolute top-[8rem] text-[1.3rem] text-red">{nameError}</p>}
             </div>
             <div>
@@ -192,11 +272,11 @@ export default function ProductModal({ type, productId, closeModal }: ProductMod
             </div>
           </div>
           <div className="mt-[1rem]">
-            {type === 'add' ? (
-              <ProductImageInput type='add' setImageUrlProp={setImageUrl} imageUrl='' />
-            ) : (
-              <ProductImageInput type='edit' setImageUrlProp={setImageUrl} imageUrl={imageUrl} />
-            )}
+            <AddImageBox
+              previewImage={previewImage}
+              setPreviewImage={setPreviewImage}
+              setNextImage={setNextProductImage}
+            />
           </div>
         </div>
         <div
