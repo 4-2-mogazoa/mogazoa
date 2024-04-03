@@ -6,7 +6,7 @@ import { postUploadImage } from "@/apis/image";
 import { getProductDetail, getProductsName, patchProduct, postProducts } from '@/apis/products';
 import BasicButton from "@/components/common/button/BasicButton";
 import AddCategoryDropdown from '@/components/common/dropdown/product/AddCategoryDropdown';
-import ProductDropdown from '@/components/common/dropdown/product/productDropdown';
+import ProductAutoComplete from "@/components/common/dropdown/product/productAutoComplete";
 import AddImageBox from "@/components/common/inputs/AddImageBox";
 
 type ProductModalProps = {
@@ -251,7 +251,7 @@ export default function ProductModal({ type, productId, closeModal }: ProductMod
       <h2 className="text-[2.4rem] font-semibold text-white">{type === 'add' ? '상품 추가' : '상품 편집'}</h2>
       <div className="relative flex flex-col gap-[3rem]">
         <div className="flex w-[100%] flex-row justify-between">
-          <div className="mr-[2rem] flex w-[100%] flex-col md:m-0 md:w-[36rem] md:gap-[1rem] lg:gap-[3rem]">
+          <div className="mr-[2rem] flex w-[100%] flex-col gap-[3rem] md:m-0 md:w-[36rem]">
             <div className="relative">
               <input
                 type="text"
@@ -261,9 +261,10 @@ export default function ProductModal({ type, productId, closeModal }: ProductMod
                 onChange={handleOnName}
                 required
                 placeholder="상품명 (상품 등록 여부를 확인해주세요)"
-                className="mt-[1rem] h-[6.5rem] w-full rounded-xl border border-[#353542] bg-[#252530] px-[2rem] py-[2.3rem] text-[1.4rem] text-white outline-none focus:border-main_blue"
+                autoComplete="off"
+                className="mt-[1rem] h-[5rem] w-full rounded-xl border border-[#353542] bg-[#252530] px-[2rem] py-[2.3rem] text-[1.4rem] text-white outline-none focus:border-main_blue md:h-[5.4rem] lg:h-[6.5rem]"
               />
-              <ProductDropdown options={options} handleDropDownClick={handleDropDownClick} />
+              <ProductAutoComplete options={options} handleDropDownClick={handleDropDownClick} />
               {nameError && <p className="absolute top-[8rem] text-[1.3rem] text-red">{nameError}</p>}
             </div>
             <div>

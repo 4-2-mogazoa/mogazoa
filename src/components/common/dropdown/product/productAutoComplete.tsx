@@ -1,16 +1,16 @@
 import { useEffect,useMemo,useState } from 'react';
 
-type ProductDropdownProps = {
+type ProductAutoCompleteProps = {
   options: string[];
   productDetailName?: string;
   handleDropDownClick: (productName: string) => void;
 };
 
-export default function ProductDropdown({
+export default function ProductAutoComplete({
   options,
   productDetailName,
   handleDropDownClick,
-}: ProductDropdownProps) {
+}: ProductAutoCompleteProps) {
   const [selectedIndex, setSelectedIndex] = useState<number>(-1);
 
   useEffect(() => {
