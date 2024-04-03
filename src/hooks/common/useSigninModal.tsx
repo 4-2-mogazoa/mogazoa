@@ -1,13 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { useEffect } from "react";
 
 import { getMe } from "@/apis/user";
 import MovingPageModal from "@/components/common/modal/MovingPageModal";
 import { useModalActions } from "@/store/modal";
 import { moveModalText } from "@/utils/modalText";
 
-export default function IsneededSigninModal(accessToken: string) {
+export default function OpenSigninModal(accessToken: string) {
 	const { openModal, closeModal } = useModalActions();
 
 	const { data: myData, isFetching } = useQuery({

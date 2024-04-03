@@ -5,7 +5,7 @@ import Header from "@/components/common/menu/Header";
 import CompareForm from "@/components/compare/CompareForm";
 import Loading from "@/components/compare/Loading";
 import Result from "@/components/compare/Result";
-import useSigninModal from "@/hooks/common/useSigninModal";
+import OpenSigninModal from "@/hooks/common/useSigninModal";
 import useCompareQueries from "@/hooks/compare/useCompareQueries";
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
@@ -25,7 +25,7 @@ export default function Index({
 		products: { firstProduct, secondProduct },
 	} = useCompareQueries();
 
-	const openSigninModal = useSigninModal(accessToken);
+	const openSigninModal = OpenSigninModal(accessToken);
 
 	useEffect(() => {
 		openSigninModal && openSigninModal();
