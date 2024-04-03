@@ -4,7 +4,7 @@ import { useState } from "react";
 import { getReviews } from "@/apis/products";
 import { getMe } from "@/apis/user";
 import { filterBy } from "@/constants/filterBy";
-import { useIntersectionObserver } from "@/hooks/common/useIntersectionObserver";
+import { useIntersect } from "@/hooks/common/useIntersect";
 import useThrottle from "@/hooks/common/useThrottle";
 import { ReviewResponse } from "@/types/review";
 
@@ -40,10 +40,15 @@ export default function ProductReview({ id }: { id: number }) {
 
 	const fetchNextPageThrottled = useThrottle(fetchNextPage, 200);
 
-	const { setTarget } = useIntersectionObserver({
-		hasNextPage,
-		fetchNextPage: fetchNextPageThrottled,
-	});
+	const intersectRef = useIntersect<HTMLDivElement>(
+		async (entry, observer) => {
+			observer.unobserve(entry.target);
+			if (hasNextPage && !isFetching) {
+				fetchNextPageThrottled();
+			}
+		},
+		{ rootMargin: "50px" },
+	);
 
 	const myData = useQuery({
 		queryKey: ["me"],
@@ -100,7 +105,7 @@ export default function ProductReview({ id }: { id: number }) {
 			{reviewData?.pages[0].list.length === 0 && <NoneReview type="none" />}
 			{(isLoading || isFetching) && <NoneReview type="loading" />}
 			{isError && <NoneReview type="error" />}
-			<div ref={setTarget}></div>
+			<div ref={intersectRef}></div>
 		</div>
 	);
 }
