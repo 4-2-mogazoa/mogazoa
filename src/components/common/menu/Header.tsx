@@ -1,8 +1,10 @@
+import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { KeyboardEvent, useEffect, useState } from "react";
 
+import { getMe } from "@/apis/user";
 import useWindowWidth from "@/hooks/common/useWindowWidth";
 
 import NumberOfCompareProduct from "../numberOfCompareProduct/NumberOfCompareProduct";
@@ -11,21 +13,19 @@ import NumberOfCompareProduct from "../numberOfCompareProduct/NumberOfComparePro
 type HeaderType = "homeHeader" | "";
 
 type HeaderProps = {
-  isLoggedIn:boolean;
   isSidebarOpen?: boolean;
   toggleSidebar?: () => void;
   headerType?: HeaderType;
 };
 
 export default function Header({
-  isLoggedIn,
   isSidebarOpen,
   toggleSidebar,
   headerType
 }: HeaderProps) {
   const currentWidth = useWindowWidth();
   const router = useRouter();
-
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isSearchVisible, setSearchVisible] = useState(false);
   const [isLogoOverflow, setIsLogoOverflow] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -35,6 +35,24 @@ export default function Header({
   const logoSrc = "/icons/logo.svg";
   const searchSrc = "/icons/search.svg";
   const closeSrc = "/icons/close.svg";
+
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      try {
+        await getMe();
+        setIsLoggedIn(true);
+      } catch (error) {
+        if (axios.isAxiosError(error) && error.response && error.response.status===401) {
+          setIsLoggedIn(false);
+        } else {
+          alert('유저 정보를 불러오는 데 실패하였습니다: ' + error);
+        }
+      }
+    };
+
+    checkLoginStatus();
+
+  }, []); 
 
 	const toggleSearch = () => {
 		setSearchVisible(!isSearchVisible);

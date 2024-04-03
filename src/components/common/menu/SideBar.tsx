@@ -4,18 +4,37 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 
 import { getCategories } from '@/apis/categories';
+import { getMe } from "@/apis/user";
 import { Category } from '@/types/common';
 
 type SideBarProps = {
-  isLoggedIn: boolean;
   isSidebarOpen?: boolean;
   className?: string;
   onCategorySelect: (CategoryId: number | null, categoryName: string | null) => void;
 };
 
-export const SideBar: React.FC<SideBarProps> = ({ isLoggedIn, isSidebarOpen, onCategorySelect }) => {
+export const SideBar: React.FC<SideBarProps> = ({ isSidebarOpen, onCategorySelect }) => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
+
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      try {
+        await getMe();
+        setIsLoggedIn(true);
+      } catch (error) {
+        if (axios.isAxiosError(error) && error.response && error.response.status===401) {
+          setIsLoggedIn(false);
+        } else {
+          alert('유저 정보를 불러오는 데 실패하였습니다: ' + error);
+        }
+      }
+    };
+
+    checkLoginStatus();
+
+  }, []); 
 
   useEffect(() => {
     const fetchCategories = async () => {

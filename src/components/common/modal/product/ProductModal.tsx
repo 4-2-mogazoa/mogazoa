@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ChangeEvent, useEffect, useRef,useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 
 import { getCategories } from '@/apis/categories';
 import { postUploadImage } from "@/apis/image";
