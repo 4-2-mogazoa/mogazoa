@@ -12,14 +12,12 @@ export default function OAuth() {
 
 	useEffect(() => {
 		if (getCookies().accessToken) {
-			console.log("토큰있음 루트로 리다이렉트");
 			router.push("/");
 			return;
 		}
 
 		if (code) {
-			console.log("토큰없음 로그인시도 !");
-			postOAuthSignin(code, "google");
+			postOAuthSignin(code, "kakao");
 			return;
 		}
 	}, [code, router]);
