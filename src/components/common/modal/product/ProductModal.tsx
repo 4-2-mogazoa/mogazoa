@@ -92,6 +92,9 @@ export default function ProductModal({ type, productId, closeModal }: ProductMod
 
   const handleOnName = (e: ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
+    if (inputValue.length > 20) {
+      return;
+    }
     setName(inputValue);
 
     if (inputValue === "") {
