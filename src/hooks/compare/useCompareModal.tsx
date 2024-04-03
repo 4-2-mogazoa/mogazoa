@@ -6,6 +6,7 @@ import useCompareStore from "@/store/compare";
 import { useModalActions } from "@/store/modal";
 import { CompareStatePosition } from "@/types/compare";
 import { ProductDetail } from "@/types/product";
+import { moveModalText } from "@/utils/modalText";
 
 type Return = {
 	compareButtonText: string;
@@ -40,7 +41,7 @@ export default function useCompareModal(
 			handleCompareButtonClick: () => {
 				const modalId = openModal(
 					<MovingPageModal
-						description="로그인이 필요한 서비스입니다. 로그인하시겠습니까?"
+						description={moveModalText.signin}
 						closeModal={() => closeModal(modalId)}
 						url="/signin"
 					/>,
@@ -82,7 +83,7 @@ export default function useCompareModal(
 
 					const modalId = openModal(
 						<MovingPageModal
-							description="상품이 담겼습니다. 바로 확인 해보시겠습니까?"
+							description={moveModalText.comparePage}
 							closeModal={() => closeModal(modalId)}
 							url="/compare"
 						/>,
