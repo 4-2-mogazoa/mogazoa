@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import clsx from "clsx";
 import Image from "next/image";
+import { useEffect } from "react";
 
 import { deleteFavorite, postFavorite } from "@/apis/products";
 import useCompareModal from "@/hooks/compare/useCompareModal";
@@ -122,8 +123,20 @@ export default function DetailCard({ productData, isMyProduct }: Props) {
 
 export function Share({ className }: ShareProps) {
 	const { openModal, closeModal } = useModalActions();
+
+	const shareUrl = typeof window !== "undefined" ? window.location.href : "";
+
+	useEffect(() => {
+		if (typeof window !== "undefined") {
+			if (!window.Kakao.isInitialized()) {
+				window.Kakao.init("2fad6374928f2fdae3ad76e79d72417d");
+			}
+			//env파일 key로 수정 예정
+		}
+	}, []);
+
 	const handleCopyClipBoard = () => {
-		navigator.clipboard.writeText(window.location.href);
+		navigator.clipboard.writeText(shareUrl);
 		const modalId = openModal(
 			<ReviewAlertModal
 				closeModal={() => closeModal(modalId)}
@@ -136,9 +149,18 @@ export function Share({ className }: ShareProps) {
 		);
 	};
 
+	const handleCopyKakao = () => {
+		window.Kakao.Share.sendScrap({
+			requestUrl: shareUrl,
+		});
+	};
+
 	return (
 		<div className={cn("flex gap-[1rem]", className)}>
-			<button className="bg-black-bg flex size-[2.4rem] items-center justify-center rounded-[0.6rem] lg:size-[2.8rem]">
+			<button
+				className="flex size-[2.4rem] items-center justify-center rounded-[0.6rem] bg-black-bg lg:size-[2.8rem]"
+				onClick={handleCopyKakao}
+			>
 				<div className="relative size-[1.4rem] lg:size-[1.8rem]">
 					<Image
 						src="/icons/kakaotalk.svg"
@@ -148,9 +170,8 @@ export function Share({ className }: ShareProps) {
 					/>
 				</div>
 			</button>
-			{/**TODO: 카카오공유는 배포이후 추가 가능*/}
 			<button
-				className="bg-black-bg flex size-[2.4rem] items-center justify-center rounded-[0.6rem] lg:size-[2.8rem]"
+				className="flex size-[2.4rem] items-center justify-center rounded-[0.6rem] bg-black-bg lg:size-[2.8rem]"
 				onClick={handleCopyClipBoard}
 			>
 				<div className="relative size-[1.4rem] lg:size-[1.8rem]">
