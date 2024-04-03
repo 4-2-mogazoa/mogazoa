@@ -82,7 +82,7 @@ export default function DetailCard({ productData, isMyProduct }: Props) {
 
 	return (
 		<div className="flex min-w-[33.5rem] flex-col items-center md:flex-row lg:justify-between">
-			<div className="relative min-h-[19.7rem] min-w-[28rem] lg:mx-[6rem]">
+			<div className="relative min-h-[21rem] min-w-[28rem] md:mr-[3rem] lg:mx-[6rem]">
 				<Image src={image} fill alt={name} className="object-contain" />
 			</div>
 			<div className="flex w-full flex-col">
