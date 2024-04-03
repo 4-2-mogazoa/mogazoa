@@ -25,7 +25,12 @@ export async function getServerSideProps({
 
 	await queryClient.prefetchQuery<UserDetail>({
 		queryKey: ["user", userId],
-		queryFn: () => getUserDetail(userId),
+		queryFn: () =>
+			getUserDetail(userId, {
+				headers: {
+					Authorization: `Bearer ${accessToken}`,
+				},
+			}),
 		staleTime: 60 * 1000,
 	});
 
