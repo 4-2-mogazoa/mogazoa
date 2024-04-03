@@ -1,15 +1,13 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-type ProductInfo = { id: number; name: string };
-
-type Position = "firstProduct" | "secondProduct";
+import { CompareStatePosition, StoredProductInfo } from "@/types/compare";
 
 type State = {
 	numberOfProducts: number;
 	products: {
-		firstProduct: ProductInfo | null;
-		secondProduct: ProductInfo | null;
+		firstProduct: StoredProductInfo | null;
+		secondProduct: StoredProductInfo | null;
 	};
 };
 
@@ -18,11 +16,14 @@ type Action = {
 	isAlreadyStoredProduct: (id: number) => boolean;
 	getCurrentProductPosition: (id: number) => string | undefined;
 	addProduct: (
-		newProduct: ProductInfo,
-		position?: Position,
+		newProduct: StoredProductInfo,
+		position?: CompareStatePosition,
 	) => string | undefined;
-	deleteProduct: (position: Position) => void;
-	changeProduct: (newProduct: ProductInfo, position: Position) => void;
+	deleteProduct: (position: CompareStatePosition) => void;
+	changeProduct: (
+		newProduct: StoredProductInfo,
+		position: CompareStatePosition,
+	) => void;
 	clearProducts: () => void;
 };
 

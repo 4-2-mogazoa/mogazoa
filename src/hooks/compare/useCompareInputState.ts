@@ -2,13 +2,12 @@ import { ChangeEvent, KeyboardEvent, useState } from "react";
 
 import { getProducts } from "@/apis/products";
 import useCompareStore from "@/store/compare";
+import { CompareStatePosition } from "@/types/compare";
 import { ProductsResponse } from "@/types/product";
 
 import useOutsideClick from "../common/useOutsideClick";
 
-export default function useCompareInputState(
-	position: "firstProduct" | "secondProduct",
-) {
+export default function useCompareInputState(position: CompareStatePosition) {
 	const { products, addProduct, deleteProduct } = useCompareStore();
 
 	const [keyword, setKeyword] = useState("");
