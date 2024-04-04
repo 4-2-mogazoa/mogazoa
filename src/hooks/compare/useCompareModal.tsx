@@ -1,12 +1,14 @@
+import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
+import { getMe } from "@/apis/user";
 import MovingPageModal from "@/components/common/modal/MovingPageModal";
 import ChangeProductModal from "@/components/compare/ChangeProductModal";
+import { moveModalText } from "@/constants/modalText";
 import useCompareStore from "@/store/compare";
 import { useModalActions } from "@/store/modal";
 import { CompareStatePosition } from "@/types/compare";
 import { ProductDetail } from "@/types/product";
-import { moveModalText } from "@/utils/modalText";
 
 type Return = {
 	compareButtonText: string;
@@ -14,11 +16,13 @@ type Return = {
 };
 
 // onClick 시 실행할 "함수"를 리턴함 - 즉, 이 함수를 반환값을 비교하기 버튼 onClick에 전달하면 됨
-export default function useCompareModal(
-	product: ProductDetail,
-	accessToken: string,
-): Return {
+export default function useCompareModal(product: ProductDetail): Return {
 	const { openModal, closeModal } = useModalActions();
+
+	const { isFetching, isError } = useQuery({
+		queryKey: ["me"],
+		queryFn: () => getMe(),
+	});
 
 	const {
 		numberOfProducts,
@@ -35,7 +39,7 @@ export default function useCompareModal(
 	);
 
 	// 1. 로그인 여부 - 로그인을 안한 경우 "로그인 요청 모달"
-	if (!accessToken) {
+	if (!isFetching && isError) {
 		return {
 			compareButtonText,
 			handleCompareButtonClick: () => {

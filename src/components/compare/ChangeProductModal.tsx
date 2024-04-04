@@ -1,10 +1,10 @@
 import clsx from "clsx";
 import { useState } from "react";
 
+import { moveModalText } from "@/constants/modalText";
 import useCompareStore from "@/store/compare";
 import { useModalActions } from "@/store/modal";
 import { CompareStatePosition, StoredProductInfo } from "@/types/compare";
-import { moveModalText } from "@/utils/modalText";
 
 import BasicButton from "../common/button/BasicButton";
 import MovingPageModal from "../common/modal/MovingPageModal";

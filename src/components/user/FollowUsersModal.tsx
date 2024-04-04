@@ -49,7 +49,7 @@ export default function FollowUsersModal({
 	return (
 		<div className="flex max-h-[50rem] flex-col gap-[2rem] px-[2rem] md:max-h-[55rem] lg:max-h-[60rem]">
 			<h3 className="text-[2rem] font-semibold text-white lg:text-[2.4rem]">
-				{owner.nickname}님{variant === "followee" ? "을" : "이"} 팔로우하는 유저
+				{owner.nickname}님{variant === "followee" ? "이" : "을"} 팔로우하는 유저
 			</h3>
 			{isLoading && <Loading />}
 			{!isLoading && !data?.pages[0].list.length ? (

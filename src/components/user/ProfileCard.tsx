@@ -1,10 +1,12 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import { useCallback } from "react";
 
 import { deleteFollow, postFollow } from "@/apis/follow";
 import BasicButton from "@/components/common/button/BasicButton";
+import MovingPageModal from "@/components/common/modal/MovingPageModal";
 import ProfileImage from "@/components/common/profileImage/ProfileImage";
+import { moveModalText } from "@/constants/modalText";
 import useAuth from "@/hooks/auth/useAuth";
 import { useModalActions } from "@/store/modal";
 import { UserDetail } from "@/types/user";
@@ -30,13 +32,31 @@ export default function ProfileCard({ user, isMine = true }: Props) {
 			queryClient.invalidateQueries({ queryKey: ["user", user.id] });
 		},
 		onError: (error) => {
-			if (isAxiosError(error)) {
+			if (!isAxiosError(error)) {
+				return;
+			}
+
+			if (error.response?.status !== 401) {
 				openModal(
 					<div className="p-[1.5rem] text-center text-[1.8rem] text-gray-400 lg:text-[2rem]">
 						{error?.response?.data.message || "팔로우 실패했습니다."}
 					</div>,
 				);
+
+				return;
 			}
+
+			if (getCookies().accessToken) {
+				document.cookie =
+					"accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+			}
+			const modalId = openModal(
+				<MovingPageModal
+					description={moveModalText.signin}
+					closeModal={() => closeModal(modalId)}
+					url="/signin"
+				/>,
+			);
 		},
 	});
 
@@ -56,17 +76,8 @@ export default function ProfileCard({ user, isMine = true }: Props) {
 	};
 
 	const handleClickFollow = useCallback(() => {
-		const token = getCookies()["accessToken"];
-		if (!token) {
-			openModal(
-				<div className="p-[1.5rem] text-center text-[1.8rem] text-gray-400 lg:text-[2rem]">
-					로그인이 필요합니다.
-				</div>,
-			);
-		}
-
 		followMutation.mutate(user.id);
-	}, [followMutation, openModal, user.id]);
+	}, [followMutation, user.id]);
 
 	return (
 		<section className="_flex-col-center w-[33.5rem] gap-[3rem] rounded-[1.2rem] border border-black-border bg-black-bg px-[2rem] py-[3rem] md:w-[50.9rem] lg:w-[34rem]">
@@ -76,21 +87,23 @@ export default function ProfileCard({ user, isMine = true }: Props) {
 				<strong className="truncate text-center text-[2rem] font-semibold text-white">
 					{user?.nickname}
 				</strong>
-				<p className="text-[1.4rem] text-gray-200">{user?.description}</p>
+				<p className="text-center text-[1.4rem] text-gray-200">
+					{user?.description}
+				</p>
 			</div>
 			<div className="flex w-full justify-evenly">
 				<button className="_flex-col-center" onClick={handleOpenFolloweesModal}>
 					<span className="text-[1.8rem] font-semibold text-white">
 						{user?.followeesCount}
 					</span>
-					<span className="text-[1.4rem] text-gray-100">팔로워</span>
+					<span className="text-[1.4rem] text-gray-100">팔로잉</span>
 				</button>
 				<div className="h-[4.8rem] w-[1px] bg-black-border"></div>
 				<button className="_flex-col-center" onClick={handleOpenFollowersModal}>
 					<span className="text-[1.8rem] font-semibold text-white">
 						{user?.followersCount}
 					</span>
-					<span className="text-[1.4rem] text-gray-100">팔로잉</span>
+					<span className="text-[1.4rem] text-gray-100">팔로워</span>
 				</button>
 			</div>
 			{isMine ? (

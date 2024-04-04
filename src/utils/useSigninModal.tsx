@@ -2,13 +2,14 @@ import { useQuery } from "@tanstack/react-query";
 
 import { getMe } from "@/apis/user";
 import MovingPageModal from "@/components/common/modal/MovingPageModal";
+import { moveModalText } from "@/constants/modalText";
 import { useModalActions } from "@/store/modal";
-import { moveModalText } from "@/utils/modalText";
+import getCookies from "@/utils/getCookies";
 
-export default function OpenSigninModal(accessToken: string) {
+export default function OpenSigninModal() {
 	const { openModal, closeModal } = useModalActions();
 
-	const { data: myData, isFetching } = useQuery({
+	const { isFetching, isError } = useQuery({
 		queryKey: ["me"],
 		queryFn: () => getMe(),
 		retry: 0,
@@ -24,7 +25,11 @@ export default function OpenSigninModal(accessToken: string) {
 		);
 	};
 
-	if (!isFetching && !myData && !accessToken) {
+	if (!isFetching && isError) {
+		if (getCookies().accessToken) {
+			document.cookie =
+				"accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+		}
 		return openSigninModal;
 	}
 }

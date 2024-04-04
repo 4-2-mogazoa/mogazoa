@@ -24,8 +24,12 @@ export default function ReviewAlertModal({
 	const queryClient = useQueryClient();
 	const { mutate } = useMutation({
 		mutationFn: () => deleteReview(reviewId),
-		onSuccess: () =>
+		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["review", productId] }),
+				queryClient.invalidateQueries({
+					queryKey: ["productDetail", productId],
+				});
+		},
 	});
 
 	const mainText = () => {

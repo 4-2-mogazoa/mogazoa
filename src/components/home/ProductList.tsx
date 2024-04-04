@@ -2,7 +2,12 @@ import clsx from "clsx";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-import { getProducts } from "@/apis/products";
+import {
+	getCategoryProducts,
+	getPoPularProducts,
+	getRatedProducts,
+	getSearchedProducts,
+} from "@/apis/products";
 import CategoryFilterButton from "@/components/common/categoryFilterButton/CategoryFilter";
 import ProductCard from "@/components/common/productcard/ProductCard";
 import SortDropdown from "@/components/home/SortDropdown";
@@ -26,29 +31,69 @@ export default function ProductList({
 	const currentWidth = useWindowWidth();
 	const [isWrapPoint, setIsWrapPoint] = useState(false);
 	const [products, setProducts] = useState<Product[]>([]);
+	const [popularProducts, setPopularProducts] = useState<Product[]>([]);
+	const [ratedProducts, setRatedProducts] = useState<Product[]>([]);
+	const [searchProducts, setSearchProducts] = useState<Product[]>([]);
+	const [categoryProducts, setCategoryProducts] = useState<Product[]>([]);
 
-	const getProductList = async () => {
-		try {
-			const data = await getProducts();
-			setProducts(data.list);
-		} catch (error) {
-			console.error("Error fetching products:", error);
+	const productsToShow =
+		type === "review"
+			? popularProducts
+			: type === "rating"
+				? ratedProducts
+				: type === "category"
+					? categoryProducts
+					: type === "search"
+						? searchProducts
+						: [];
+
+	const getMainProducts = async () => {
+		if (type === "review") {
+			try {
+				const data = await getPoPularProducts();
+				setPopularProducts(data);
+			} catch (error) {
+				alert("상품 목록을 불러오는 데 실패하였습니다. :" + error);
+			}
+		} else if (type === "rating") {
+			try {
+				const data = await getRatedProducts();
+				setRatedProducts(data);
+			} catch (error) {
+				alert("상품 목록을 불러오는 데 실패하였습니다. :" + error);
+			}
 		}
 	};
 
 	useEffect(() => {
-		getProductList();
+		getMainProducts();
+	});
+
+	const getSearchProducts = async () => {
+		if (searchKeyword) {
+			const data = await getSearchedProducts(searchKeyword);
+			setSearchProducts(data);
+		}
+	};
+
+	useEffect(() => {
+		getSearchProducts();
+	}, [searchKeyword]);
+
+	const getCategoryProduct = async () => {
+		if (selectedCategoryId) {
+			const data = await getCategoryProducts(selectedCategoryId);
+			setCategoryProducts(data);
+		}
+	};
+
+	useEffect(() => {
+		getCategoryProduct();
 	}, [selectedCategoryId]);
 
 	useEffect(() => {
 		setIsWrapPoint(BREAK_POINT.md < currentWidth && currentWidth < 1787);
 	}, [currentWidth]);
-
-	const filterProductsBySearch = (products: any[], query: any) => {
-		return products.filter((product) =>
-			product.name.toLowerCase().includes(query.toLowerCase()),
-		);
-	};
 
 	const [sortOption, setSortOption] = useState(() => {
 		switch (type) {
@@ -123,18 +168,6 @@ export default function ProductList({
 		}
 	};
 
-	let filteredProducts = selectedCategoryId
-		? products.filter((product) => product.categoryId === selectedCategoryId)
-		: products;
-
-	if (!selectedCategoryId) {
-		filteredProducts = sortProducts(products).slice(0, 6);
-	}
-
-	if (searchKeyword) {
-		filteredProducts = filterProductsBySearch(filteredProducts, searchKeyword);
-	}
-
 	return (
 		<div className="flex w-[100%] flex-col gap-[3rem] text-[2rem] font-semibold text-white md:max-w-[63rem] lg:mt-[6rem] lg:max-w-[95rem] lg:text-[2.4rem]">
 			<div
@@ -188,11 +221,11 @@ export default function ProductList({
 						: "lg:m-0 lg:min-w-[95rem] lg:grid-cols-3 lg:gap-[2rem]",
 				)}
 			>
-				{sortProducts(filteredProducts).map((product) => (
+				{productsToShow.map((product) => (
 					<Link
 						href={`/productdetail/${product.id}`}
 						key={product.id}
-						className="md:max-w-[24.7rem] lg:max-w-[30rem]"
+						className="hover:rounded-[1.2rem] hover:border-[0.01rem] hover:border-main_blue md:max-w-[24.7rem] lg:max-w-[30rem]"
 					>
 						<ProductCard
 							productName={product.name}
@@ -204,16 +237,19 @@ export default function ProductList({
 					</Link>
 				))}
 			</div>
-			{filteredProducts.length === 0 && (
-				<div className="mt-[20rem] text-center text-5xl text-gray-400">
-					상품 준비 중
-					<p className="mt-[5rem] text-3xl">
-						더 나은 구성을 위해 상품 준비 중입니다.
-						<br />
-						조금만 기다려주세요!
-					</p>
-				</div>
-			)}
+			{popularProducts.length === 0 ||
+				ratedProducts.length === 0 ||
+				searchProducts.length === 0 ||
+				(categoryProducts.length === 0 && (
+					<div className="mt-[20rem] text-center text-5xl text-gray-400">
+						상품 준비 중
+						<p className="mt-[5rem] text-3xl">
+							더 나은 구성을 위해 상품 준비 중입니다.
+							<br />
+							조금만 기다려주세요!
+						</p>
+					</div>
+				))}
 		</div>
 	);
 }

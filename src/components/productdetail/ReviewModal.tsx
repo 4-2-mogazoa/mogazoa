@@ -74,6 +74,9 @@ export default function ReviewModal({
 		},
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["review", productId] });
+			queryClient.invalidateQueries({
+				queryKey: ["productDetail", productId],
+			});
 			closeModal();
 		},
 	});
@@ -87,7 +90,10 @@ export default function ReviewModal({
 		},
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["review", productId] }),
-				closeModal();
+				queryClient.invalidateQueries({
+					queryKey: ["productDetail", productId],
+				});
+			closeModal();
 		},
 	});
 

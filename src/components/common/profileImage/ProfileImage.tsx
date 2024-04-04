@@ -25,7 +25,7 @@ export default function ProfileImage({ src, size }: Props) {
 	const iconSrc = src ? src : "/icons/profile.svg";
 
 	return (
-		<div className={cn(profileImageVariants({ size }))}>
+		<div className={cn(profileImageVariants({ size }), "flex shrink-0")}>
 			{isError ? (
 				<Image
 					src={"/icons/profile.svg"}

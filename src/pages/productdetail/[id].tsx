@@ -3,7 +3,7 @@ import ProductDetailPageLayout from "@/components/productdetail/ProductDetailPag
 
 export default function ProductDetailPage() {
 	return (
-		<div>
+		<div className="bg-[#1C1C22]">
 			<Header />
 			<ProductDetailPageLayout />
 		</div>

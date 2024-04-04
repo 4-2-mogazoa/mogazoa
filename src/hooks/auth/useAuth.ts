@@ -6,11 +6,14 @@ import { useRouter } from "next/router";
 import { postOAuthSignup } from "@/apis/auth/postOAuthSignup";
 import { postSignIn } from "@/apis/auth/postSignin";
 import { postSignup } from "@/apis/auth/postSignup";
+import useCompareStore from "@/store/compare";
 import { LoginUserData, RegistrationUserData } from "@/types/auth";
 
 const useAuth = () => {
 	const queryClient = useQueryClient();
 	const router = useRouter();
+
+	const { clearProducts } = useCompareStore((state) => state);
 
 	const { platform } = router.query;
 
@@ -43,6 +46,8 @@ const useAuth = () => {
 			"accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 
 		queryClient.removeQueries({ queryKey: ["me"] });
+
+		clearProducts();
 
 		window.location.href = "/";
 	};

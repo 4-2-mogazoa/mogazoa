@@ -90,6 +90,8 @@ export default function ProductReview({ id }: { id: number }) {
 				</Dropdown>
 			</div>
 			{!isError &&
+				!isLoading &&
+				!isFetching &&
 				reviewData?.pages.map((page, index) => (
 					<div key={index} className="flex flex-col gap-[1.5rem] lg:gap-[2rem]">
 						{page.list.map((review) => (

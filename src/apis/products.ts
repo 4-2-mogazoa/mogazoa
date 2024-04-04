@@ -3,6 +3,36 @@ import { ReviewResponse } from "@/types/review";
 
 import instance from "./axiosInstance";
 
+export async function getPoPularProducts() {
+	const res = await instance.get<ProductsResponse>(
+		"products?order=reviewCount",
+	);
+	const popularData = res.data.list;
+	return popularData.slice(0, 6);
+}
+
+export async function getRatedProducts() {
+	const res = await instance.get<ProductsResponse>("products?order=rating");
+	const popularData = res.data.list;
+	return popularData.slice(0, 6);
+}
+
+export async function getSearchedProducts(keyword: string) {
+	const res = await instance.get<ProductsResponse>(
+		`products?keyword=${keyword}`,
+	);
+	const searchedData = res.data.list;
+	return searchedData;
+}
+
+export async function getCategoryProducts(categoryId: number) {
+	const res = await instance.get<ProductsResponse>(
+		`products?category=${categoryId}`,
+	);
+	const categoryData = res.data.list;
+	return categoryData;
+}
+
 export async function getProducts(
 	keyword?: string,
 	categoryId?: number,
@@ -24,7 +54,6 @@ export async function getProductDetail(productId: number) {
 
 	return data;
 }
-
 
 export async function getProductsName() {
 	const res = await instance.get("products");
@@ -61,22 +90,33 @@ export async function deleteFavorite(productId: number) {
 	await instance.delete<ProductDetail>(`products/${productId}/favorite`);
 }
 
-export async function postProducts(categoryId: number, image: string, description: string, name: string) {
-  const response = await instance.post('/products', {
-    categoryId,
-    image,
-    description,
-    name
-  });
+export async function postProducts(
+	categoryId: number,
+	image: string,
+	description: string,
+	name: string,
+) {
+	const response = await instance.post("/products", {
+		categoryId,
+		image,
+		description,
+		name,
+	});
 	return response.data;
 }
 
-export async function patchProduct(productId:number, categoryId: number, image: string, description: string, name: string) {
+export async function patchProduct(
+	productId: number,
+	categoryId: number,
+	image: string,
+	description: string,
+	name: string,
+) {
 	const response = await instance.patch(`products/${productId}`, {
 		categoryId,
 		image,
 		description,
-		name
+		name,
 	});
 	return response.data;
 }

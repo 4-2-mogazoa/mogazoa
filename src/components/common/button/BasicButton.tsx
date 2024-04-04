@@ -1,10 +1,11 @@
 import { cva, VariantProps } from "class-variance-authority";
-import { motion } from "framer-motion";
+import { HTMLMotionProps, motion } from "framer-motion";
 import { ButtonHTMLAttributes, forwardRef } from "react";
 
 import cn from "@/utils/cn";
 
-type Props = ButtonHTMLAttributes<HTMLButtonElement> &
+type Props = HTMLMotionProps<"button"> &
+	ButtonHTMLAttributes<HTMLButtonElement> &
 	VariantProps<typeof buttonVariants> & {
 		label: string;
 		className?: string;

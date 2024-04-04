@@ -1,6 +1,5 @@
 import { FormEvent } from "react";
 
-import useSigninModal from "@/hooks/common/useSigninModal";
 import useCompareQueries from "@/hooks/compare/useCompareQueries";
 
 import BasicButton from "../common/button/BasicButton";

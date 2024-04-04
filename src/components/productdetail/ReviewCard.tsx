@@ -1,13 +1,14 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { isAxiosError } from "axios";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
 import { deleteReviewLike, postReviewLike } from "@/apis/review";
 import { getMe } from "@/apis/user";
+import { moveModalText } from "@/constants/modalText";
 import { starRate } from "@/constants/starRate";
 import { useModalActions } from "@/store/modal";
 import { Review, ReviewImages, ReviewResponsePage } from "@/types/review";
-import { moveModalText } from "@/utils/modalText";
 
 import MovingPageModal from "../common/modal/MovingPageModal";
 import ProfileImage from "../common/profileImage/ProfileImage";
@@ -40,7 +41,7 @@ export default function ReviewCard({ reviewData, isMyReview, order }: Props) {
 
 	const { openModal, closeModal } = useModalActions();
 
-	const { isError } = useQuery({
+	const { error } = useQuery({
 		queryKey: ["me"],
 		queryFn: () => getMe(),
 		retry: false,
@@ -92,19 +93,17 @@ export default function ReviewCard({ reviewData, isMyReview, order }: Props) {
 	});
 
 	const handleButtonClick = () => {
-		if (isError) {
-			const modalId = openModal(
-				<MovingPageModal
-					closeModal={() => closeModal(modalId)}
-					description={moveModalText.signin}
-					url="/signin"
-				/>,
-				{
-					isCloseClickOutside: true,
-					isCloseESC: true,
-				},
-			);
-			return;
+		if (isAxiosError(error)) {
+			if (error.request.status === 401) {
+				const modalId = openModal(
+					<MovingPageModal
+						closeModal={() => closeModal(modalId)}
+						description={moveModalText.signin}
+						url="/signin"
+					/>,
+				);
+				return;
+			}
 		}
 
 		if (isMyReview) {
@@ -113,10 +112,6 @@ export default function ReviewCard({ reviewData, isMyReview, order }: Props) {
 					closeModal={() => closeModal(modalId)}
 					type="reviewLike"
 				/>,
-				{
-					isCloseClickOutside: true,
-					isCloseESC: true,
-				},
 			);
 			return;
 		}
@@ -132,10 +127,6 @@ export default function ReviewCard({ reviewData, isMyReview, order }: Props) {
 				productId={productId}
 				reviewData={reviewData}
 			/>,
-			{
-				isCloseClickOutside: true,
-				isCloseESC: true,
-			},
 		);
 	};
 
@@ -147,27 +138,23 @@ export default function ReviewCard({ reviewData, isMyReview, order }: Props) {
 				productId={productId}
 				type="delete"
 			/>,
-			{
-				isCloseClickOutside: true,
-				isCloseESC: true,
-			},
 		);
 	};
 
 	return (
 		<div className="flex min-w-[33.5rem] flex-col rounded-[1.2rem] border border-black-border bg-black-bg p-[2rem] md:flex-row lg:p-[3rem]">
-			<div className="flex min-w-[11rem] max-[767px]:mb-[2rem] md:mr-[2rem] lg:mr-[3rem]">
+			<div className="flex max-[767px]:mb-[2rem] md:mr-[2rem] md:w-[20%] md:overflow-hidden md:whitespace-normal lg:mr-[3rem]">
 				<button
 					className="flex h-[5rem] items-center gap-[1rem]"
 					onClick={() => router.push(`/user/${user.id}`)}
 				>
 					<ProfileImage src={user.image} size="small" />
-					<div className="text-[1.4rem] text-white lg:text-[1.6rem]">
+					<div className="text-start text-[1.4rem] text-white md:overflow-hidden md:whitespace-normal lg:text-[1.6rem]">
 						{user.nickname}
 					</div>
 				</button>
 			</div>
-			<div className="flex w-full flex-col gap-[2rem]">
+			<div className="flex flex-col gap-[2rem] md:w-[80%]">
 				<div className="flex gap-[3rem]">
 					<div className="flex gap-[0.2rem]">
 						{rateArray.map((index) => (

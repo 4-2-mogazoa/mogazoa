@@ -1,31 +1,18 @@
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useEffect } from "react";
 
 import Header from "@/components/common/menu/Header";
 import CompareForm from "@/components/compare/CompareForm";
 import Loading from "@/components/compare/Loading";
 import Result from "@/components/compare/Result";
-import OpenSigninModal from "@/hooks/common/useSigninModal";
 import useCompareQueries from "@/hooks/compare/useCompareQueries";
+import OpenSigninModal from "@/utils/useSigninModal";
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-	const accessToken = req.cookies.accessToken || "";
-
-	return {
-		props: {
-			accessToken,
-		},
-	};
-};
-
-export default function Index({
-	accessToken,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function Index() {
 	const {
 		products: { firstProduct, secondProduct },
 	} = useCompareQueries();
 
-	const openSigninModal = OpenSigninModal(accessToken);
+	const openSigninModal = OpenSigninModal();
 
 	useEffect(() => {
 		openSigninModal && openSigninModal();
