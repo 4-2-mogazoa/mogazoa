@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import Image from "next/image";
 import { forwardRef } from "react";
 
@@ -19,9 +20,11 @@ const ProductCard = forwardRef<HTMLDivElement, Props>(function ProductCard(
 	const roundedRate = parseFloat(rate.toFixed(2));
 
 	return (
-		<div
+		<motion.div
 			ref={ref}
 			className="flex max-h-[18.3rem] max-w-[16rem] grow flex-col gap-[1rem] rounded-[1.2rem] border border-black-border bg-black-bg p-[1rem] md:max-h-[25.6rem] md:max-w-[24.7rem] md:gap-[2rem] md:px-[1rem] md:pb-[2rem] md:pt-[1rem] lg:max-h-[30.8rem] lg:max-w-[30rem] lg:gap-[2.5rem] lg:pb-[2.5rem]"
+			whileHover={{ scale: 1.03, borderColor: "#5097FA" }}
+			whileTap={{ scale: 0.95, borderColor: "#5097FA" }}
 		>
 			<div className="relative h-[14rem] max-w-[14rem] md:h-[22.7rem] md:max-w-[22.7rem] lg:h-[18.4rem] lg:max-w-[28.4rem]">
 				<Image
@@ -55,7 +58,7 @@ const ProductCard = forwardRef<HTMLDivElement, Props>(function ProductCard(
 					</div>
 				</div>
 			</div>
-		</div>
+		</motion.div>
 	);
 });
 
