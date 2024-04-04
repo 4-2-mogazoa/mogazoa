@@ -101,7 +101,7 @@ export const SideBar: React.FC<SideBarProps> = ({
 									? "bg-[#353542] text-white"
 									: "text-[#6e6e82]",
 							)}
-							whileHover={{ x: 10, color: "white" }}
+							whileHover={{ x: 10, color: "#F1F1F5" }}
 							transition={{ type: "spring" }}
 						>
 							{category.name}

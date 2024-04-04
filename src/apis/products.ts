@@ -1,4 +1,8 @@
-import { ProductDetail, ProductsResponse } from "@/types/product";
+import {
+	GetProductsParams,
+	ProductDetail,
+	ProductsResponse,
+} from "@/types/product";
 import { ReviewResponse } from "@/types/review";
 
 import instance from "./axiosInstance";
@@ -33,14 +37,7 @@ export async function getCategoryProducts(categoryId: number) {
 	return categoryData;
 }
 
-export async function getProducts(
-	keyword?: string,
-	categoryId?: number,
-	order?: "recent" | "rating" | "reviewCount",
-	cursor?: number,
-) {
-	const params = { keyword, categoryId, order, cursor };
-
+export async function getProducts(params: GetProductsParams) {
 	const res = await instance.get<ProductsResponse>("products", {
 		params,
 	});

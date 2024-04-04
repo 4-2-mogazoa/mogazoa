@@ -44,14 +44,14 @@ export type ProductNames = {
 export type ProductNamesResponse = {
 	list: ProductNames[];
 	nextCursor: any;
-}
+};
 
 export type PostProducts = {
 	categoryId: number;
 	image: string;
 	description: string;
 	name: string;
-}
+};
 
 export type ProductsResponse = Response<Product>;
 
@@ -59,3 +59,12 @@ export type UserProductType =
 	| "created-products"
 	| "reviewed-products"
 	| "favorite-products";
+
+export type GetProductsParams = {
+	keyword?: string;
+	category?: number;
+	order?: Order;
+	cursor?: number;
+};
+
+export type Order = "recent" | "rating" | "reviewCount";

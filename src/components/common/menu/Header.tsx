@@ -64,12 +64,20 @@ export default function Header({
 		setIsDropdownOpen(!isDropdownOpen);
 	};
 
+	const handleInitializeSearchValue = () => setSearchValue("");
+
 	const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
 		if (e.key === "Enter") {
-			router.push({
-				pathname: "/",
-				query: { search: searchValue },
-			});
+			if (searchValue !== "") {
+				router.push({
+					pathname: "/",
+					query: { search: searchValue },
+				});
+			} else if (searchValue === "") {
+				router.push({
+					pathname: "/",
+				});
+			}
 		}
 	};
 
@@ -92,6 +100,7 @@ export default function Header({
 					<Link
 						href="/"
 						className="relative my-auto h-[1.8rem] w-[11.2rem] md:ml-[3rem] md:h-[2.4rem] md:w-[13.8rem] lg:ml-[12rem] lg:h-[2.8rem] lg:w-[16.6rem]"
+						onClick={handleInitializeSearchValue}
 					>
 						<Image
 							src={logoSrc}

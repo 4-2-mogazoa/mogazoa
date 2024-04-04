@@ -16,7 +16,7 @@ import DropdownList from "./DropdownList";
 import DropdownToggleButton from "./DropdownToggleButton";
 
 export type Item = {
-	id: number;
+	id: number | string;
 	name: string;
 };
 

@@ -3,7 +3,7 @@ import { ChangeEvent, KeyboardEvent, useState } from "react";
 import { getProducts } from "@/apis/products";
 import useCompareStore from "@/store/compare";
 import { CompareStatePosition } from "@/types/compare";
-import { ProductsResponse } from "@/types/product";
+import { GetProductsParams, ProductsResponse } from "@/types/product";
 
 import useOutsideClick from "../common/useOutsideClick";
 
@@ -33,7 +33,9 @@ export default function useCompareInputState(position: CompareStatePosition) {
 			return;
 		}
 
-		const data = await getProducts(keyword);
+		const params: GetProductsParams = { keyword };
+
+		const data = await getProducts(params);
 
 		if (data.list.length) {
 			setProductList(data);
@@ -97,7 +99,9 @@ export default function useCompareInputState(position: CompareStatePosition) {
 
 	// 드롭박스 - 스크롤
 	const handleLoadMoreProducts = async (nextCursor: number) => {
-		const data = await getProducts(keyword, undefined, undefined, nextCursor);
+		const params: GetProductsParams = { keyword, cursor: nextCursor };
+
+		const data = await getProducts(params);
 
 		if (data) {
 			setProductList(
