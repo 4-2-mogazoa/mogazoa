@@ -1,9 +1,10 @@
 import clsx from "clsx";
-import { forwardRef, useState } from "react";
+import { useState } from "react";
 
 import useCompareStore from "@/store/compare";
 import { useModalActions } from "@/store/modal";
 import { CompareStatePosition, StoredProductInfo } from "@/types/compare";
+import { moveModalText } from "@/utils/modalText";
 
 import BasicButton from "../common/button/BasicButton";
 import MovingPageModal from "../common/modal/MovingPageModal";
@@ -70,7 +71,7 @@ export default function ChangeProductModal({
 
 		const modalId = openModal(
 			<MovingPageModal
-				description="비교 상품이 교체되었습니다. 바로 확인해 보시겠어요?"
+				description={moveModalText.changeProduct}
 				closeModal={() => closeMovePageModal(modalId)}
 				url="/compare"
 			/>,

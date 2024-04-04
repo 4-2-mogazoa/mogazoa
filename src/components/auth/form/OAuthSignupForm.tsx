@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 
 import BasicButton from "@/components/common/button/BasicButton";
 import Input from "@/components/common/inputs/Input";
+import useAuth from "@/hooks/auth/useAuth";
 
 import AuthFormContainer from "./AuthFormContainer";
 
@@ -10,8 +11,11 @@ export default function OAuthSignupForm() {
 	const {
 		handleSubmit,
 		register,
+		setError,
 		formState: { errors },
 	} = useForm({ mode: "onBlur" });
+
+	const { OAuthSignUp } = useAuth();
 
 	const nicknameValidationSchema = {
 		required: "닉네임은 필수 입력입니다.",
@@ -22,7 +26,11 @@ export default function OAuthSignupForm() {
 	};
 
 	return (
-		<AuthFormContainer handleSubmit={handleSubmit}>
+		<AuthFormContainer
+			handleSubmit={handleSubmit}
+			setError={setError}
+			api={OAuthSignUp}
+		>
 			<div className="mb-[6rem]">
 				<Input
 					inputType="nickname"

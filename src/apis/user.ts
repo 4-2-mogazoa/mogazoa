@@ -9,8 +9,8 @@ import {
 
 import instance from "./axiosInstance";
 
-export const getMe = async (): Promise<UserDetail> => {
-	const response = await instance.get<UserDetail>(`users/me`);
+export const getMe = async (config = {}): Promise<UserDetail> => {
+	const response = await instance.get<UserDetail>(`users/me`, { ...config });
 	return response.data;
 };
 
@@ -27,8 +27,13 @@ export const patchUpdateMe = async ({
 	return response.data;
 };
 
-export const getUserDetail = async (userId: number): Promise<UserDetail> => {
-	const response = await instance.get<UserDetail>(`users/${userId}`);
+export const getUserDetail = async (
+	userId: number,
+	config = {},
+): Promise<UserDetail> => {
+	const response = await instance.get<UserDetail>(`users/${userId}`, {
+		...config,
+	});
 	return response.data;
 };
 

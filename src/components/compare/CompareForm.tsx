@@ -1,11 +1,16 @@
-import { FormEvent, useState } from "react";
+import { FormEvent } from "react";
 
+import useSigninModal from "@/hooks/common/useSigninModal";
 import useCompareQueries from "@/hooks/compare/useCompareQueries";
 
 import BasicButton from "../common/button/BasicButton";
 import CompareInput from "./CompareInput";
 
-export default function CompareForm() {
+type Props = {
+	openSigninModal?: () => void;
+};
+
+export default function CompareForm({ openSigninModal }: Props) {
 	const {
 		state: {
 			numberOfProducts,
@@ -16,7 +21,12 @@ export default function CompareForm() {
 
 	const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		// TODO: 모달 띄우기 ? - 어차피 인풋에 에러메시지를 보여주니까, 필요없을까?
+
+		if (openSigninModal) {
+			openSigninModal();
+			return;
+		}
+
 		if (numberOfProducts !== 2) return;
 
 		refetchAll();

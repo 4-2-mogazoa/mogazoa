@@ -13,6 +13,8 @@ import {
 	UserResponseByVariant,
 } from "@/types/user";
 
+import Loading from "./Loading";
+
 type Props = {
 	variant: "followee" | "follower";
 	owner: UserDetail;
@@ -23,17 +25,16 @@ export default function FollowUsersModal({
 	owner,
 }: Props) {
 	const { closeAllModals } = useModalActions();
-	const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery<
-		UserResponseByVariant[typeof variant]
-	>({
-		queryKey: [variant, owner.id],
-		queryFn: ({ pageParam }) =>
-			variant === "followee"
-				? getUserFollowees(owner.id, pageParam as number)
-				: getUserFollowers(owner.id, pageParam as number),
-		initialPageParam: 0,
-		getNextPageParam: (lastPage) => lastPage.nextCursor,
-	});
+	const { data, fetchNextPage, hasNextPage, isFetching, isLoading } =
+		useInfiniteQuery<UserResponseByVariant[typeof variant]>({
+			queryKey: [variant, owner.id],
+			queryFn: ({ pageParam }) =>
+				variant === "followee"
+					? getUserFollowees(owner.id, pageParam as number)
+					: getUserFollowers(owner.id, pageParam as number),
+			initialPageParam: 0,
+			getNextPageParam: (lastPage) => lastPage.nextCursor,
+		});
 
 	const intersectRef = useIntersect<HTMLLIElement>(
 		async (entry, observer) => {
@@ -50,9 +51,14 @@ export default function FollowUsersModal({
 			<h3 className="text-[2rem] font-semibold text-white lg:text-[2.4rem]">
 				{owner.nickname}님{variant === "followee" ? "을" : "이"} 팔로우하는 유저
 			</h3>
-			{data?.pages[0].list.length ? (
-				<ul className="flex flex-col gap-[2rem] overflow-auto">
-					{data.pages.map((users, i) => (
+			{isLoading && <Loading />}
+			{!isLoading && !data?.pages[0].list.length ? (
+				<div className="text-center text-[1.8rem] text-gray-400 lg:text-[2rem]">
+					팔로우하는 유저가 없습니다.
+				</div>
+			) : (
+				<ul className="_scrollbar flex flex-col gap-[2rem]">
+					{data?.pages?.map((users, i) => (
 						<Fragment key={i}>
 							{users.list.map((item, idx, arr) => {
 								const isLastItem = idx === arr.length - 1;
@@ -78,10 +84,6 @@ export default function FollowUsersModal({
 						</Fragment>
 					))}
 				</ul>
-			) : (
-				<div className="text-center text-[1.8rem] text-gray-400 lg:text-[2rem]">
-					팔로우하는 유저가 없습니다.
-				</div>
 			)}
 		</div>
 	);

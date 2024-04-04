@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import { RefObject, useEffect, useRef } from "react";
 
+import useThrottle from "@/hooks/common/useThrottle";
 import { ProductsResponse } from "@/types/product";
 import getDataByScroll from "@/utils/getDataByScroll";
 
@@ -12,7 +13,6 @@ type Props = {
 	handleLoadMoreProducts: (nextCursor: number) => void;
 };
 
-// TODO: 무한 스크롤 테스트
 export default function CompareDropdown({
 	focusIndex,
 	productList,
@@ -25,24 +25,43 @@ export default function CompareDropdown({
 
 	const nextCursor = productList?.nextCursor;
 
+	const handleScroll = () =>
+		getDataByScroll(scrollRef, nextCursor, handleLoadMoreProducts);
+
+	const throttledHandleLoadMoreData = useThrottle(handleScroll, 200);
+
+	const throttledHandleLoadMoreDataWithTab = (e: KeyboardEvent) => {
+		if (e.key === "Tab") {
+			throttledHandleLoadMoreData();
+		}
+	};
+
 	useEffect(() => {
 		setTimeout(() =>
 			focusRef.current?.scrollIntoView({ block: "center", behavior: "smooth" }),
 		);
 
 		if (scrollRef.current) {
-			scrollRef.current.addEventListener("scroll", handleScroll);
+			scrollRef.current.addEventListener("scroll", throttledHandleLoadMoreData);
+			scrollRef.current.addEventListener(
+				"keydown",
+				throttledHandleLoadMoreDataWithTab,
+			);
 		}
 
 		return () => {
 			if (scrollRef.current) {
-				scrollRef.current.removeEventListener("scroll", handleScroll);
+				scrollRef.current.removeEventListener(
+					"scroll",
+					throttledHandleLoadMoreData,
+				);
+				scrollRef.current.removeEventListener(
+					"keydown",
+					throttledHandleLoadMoreDataWithTab,
+				);
 			}
 		};
 	}, [focusIndex, nextCursor]);
-
-	const handleScroll = () =>
-		getDataByScroll(scrollRef, nextCursor, handleLoadMoreProducts);
 
 	return (
 		<div ref={dropdownRef}>

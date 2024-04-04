@@ -13,7 +13,9 @@ export default function Loading() {
 					className="absolute left-0 top-0"
 				/>
 			</div>
-			<p className="text-[1.8rem] text-gray-200 lg:text-[2rem]">Loading...</p>
+			<p className="text-[1.8rem] text-gray-200 lg:text-[2rem]">
+				원하는 상품을 비교해 보세요.
+			</p>
 		</div>
 	);
 }

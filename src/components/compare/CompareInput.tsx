@@ -1,10 +1,11 @@
 import useCompareInputState from "@/hooks/compare/useCompareInputState";
+import { CompareStatePosition } from "@/types/compare";
 
 import ProductNameTag from "../common/productNameTag/ProductNameTag";
 import CompareDropdown from "./CompareDropdown";
 
 type Props = {
-	position: "firstProduct" | "secondProduct";
+	position: CompareStatePosition;
 	label: "상품 1" | "상품 2";
 	product?: { id: number; name: string } | null;
 	tagColor: "green" | "pink";

@@ -1,12 +1,15 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
 import { deleteReviewLike, postReviewLike } from "@/apis/review";
+import { getMe } from "@/apis/user";
 import { starRate } from "@/constants/starRate";
 import { useModalActions } from "@/store/modal";
 import { Review, ReviewImages, ReviewResponsePage } from "@/types/review";
+import { moveModalText } from "@/utils/modalText";
 
+import MovingPageModal from "../common/modal/MovingPageModal";
 import ProfileImage from "../common/profileImage/ProfileImage";
 import Thumbs from "../common/thumbs/Thumbs";
 import ReviewAlertModal from "./ReviewAlertModal";
@@ -37,7 +40,13 @@ export default function ReviewCard({ reviewData, isMyReview, order }: Props) {
 
 	const { openModal, closeModal } = useModalActions();
 
-	const { mutate: toggleLike, error } = useMutation({
+	const { isError } = useQuery({
+		queryKey: ["me"],
+		queryFn: () => getMe(),
+		retry: false,
+	});
+
+	const { mutate: toggleLike } = useMutation({
 		mutationFn: () => (isLiked ? deleteReviewLike(id) : postReviewLike(id)),
 		onMutate: () => {
 			const previous: ReviewResponsePage | undefined = queryClient.getQueryData(
@@ -83,8 +92,18 @@ export default function ReviewCard({ reviewData, isMyReview, order }: Props) {
 	});
 
 	const handleButtonClick = () => {
-		if (error?.message === "Request failed with status code 401") {
-			alert("로그인해주세요!");
+		if (isError) {
+			const modalId = openModal(
+				<MovingPageModal
+					closeModal={() => closeModal(modalId)}
+					description={moveModalText.signin}
+					url="/signin"
+				/>,
+				{
+					isCloseClickOutside: true,
+					isCloseESC: true,
+				},
+			);
 			return;
 		}
 
@@ -101,6 +120,7 @@ export default function ReviewCard({ reviewData, isMyReview, order }: Props) {
 			);
 			return;
 		}
+
 		toggleLike();
 	};
 
@@ -139,7 +159,7 @@ export default function ReviewCard({ reviewData, isMyReview, order }: Props) {
 			<div className="flex min-w-[11rem] max-[767px]:mb-[2rem] md:mr-[2rem] lg:mr-[3rem]">
 				<button
 					className="flex h-[5rem] items-center gap-[1rem]"
-					onClick={() => router.push(`/profile/${user.id}`)}
+					onClick={() => router.push(`/user/${user.id}`)}
 				>
 					<ProfileImage src={user.image} size="small" />
 					<div className="text-[1.4rem] text-white lg:text-[1.6rem]">
