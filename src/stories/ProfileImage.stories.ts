@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 
 import ProfileImage from "@/components/common/profileImage/ProfileImage";
 
-import TestImage from "../../public/images/testImage.png";
+const TestImage = "../../public/images/testImage.png";
 
 const meta = {
 	title: "Components/Common/ProfileImage",

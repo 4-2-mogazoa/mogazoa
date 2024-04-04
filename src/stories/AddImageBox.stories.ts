@@ -11,5 +11,10 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
-	args: {},
+	args: {
+		previewImage:
+			"https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/Mogazoa/user/72/1712242947013/XL.jpg",
+		setNextImage: () => {},
+		setPreviewImage: () => {},
+	},
 };

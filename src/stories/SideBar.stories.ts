@@ -13,11 +13,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const LoggedIn: Story = {
-	args: {
-		user: {
-			id: 1,
-		},
-	},
+	args: {},
 };
 
 export const LoggedOut: Story = {

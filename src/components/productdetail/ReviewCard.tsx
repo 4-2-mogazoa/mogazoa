@@ -19,7 +19,7 @@ import ReviewModal from "./ReviewModal";
 type Props = {
 	reviewData: Review;
 	isMyReview: boolean;
-	order: string;
+	order?: string;
 };
 
 export default function ReviewCard({ reviewData, isMyReview, order }: Props) {
