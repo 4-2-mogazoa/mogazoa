@@ -10,7 +10,7 @@ export const postOAuthSignin = async (
 	const url = `auth/signIn/${platform}`;
 
 	const OAuthSignupData = {
-		redirectUri: "http://localhost:3000/oauth",
+		redirectUri: process.env.NEXT_PUBLIC_REDIRECT_URL,
 		token: token,
 	};
 	try {

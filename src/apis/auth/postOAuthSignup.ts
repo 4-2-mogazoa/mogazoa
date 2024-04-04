@@ -16,7 +16,7 @@ export const postOAuthSignup = async (
 
 	const OAuthSignupData = {
 		nickname: data.nickname,
-		redirectUri: "http://localhost:3000/oauth/test",
+		redirectUri: process.env.NEXT_PUBLIC_REDIRECT_URL,
 		token: token,
 	};
 	try {
