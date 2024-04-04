@@ -18,7 +18,7 @@ export default function EachResultLayout({ title, children }: Props) {
 					{title}
 				</p>
 			)}
-			<div className="grid grid-cols-2 justify-items-center gap-8 md:gap-12 lg:gap-16">
+			<div className="grid grid-cols-2 justify-items-center gap-8 py-10 md:gap-12 lg:gap-16">
 				{children}
 			</div>
 		</div>

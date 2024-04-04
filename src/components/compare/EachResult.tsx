@@ -29,7 +29,7 @@ export default function EachResult({
 			<span
 				className={clsx(
 					winBadgeClassName,
-					"rounded-2xl px-2 py-[0.1rem] text-[1.2rem] lg:text-[1.4rem]",
+					"select-none rounded-2xl px-2 py-[0.1rem] text-[1.2rem] lg:text-[1.4rem]",
 				)}
 			>
 				승리
