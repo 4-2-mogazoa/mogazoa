@@ -186,7 +186,7 @@ export default function ReviewModalAddImageBox({
 	};
 
 	return (
-		<div className="flex items-center gap-[1rem] overflow-x-scroll md:gap-[1.5rem] lg:gap-[2rem]">
+		<div className="flex items-center gap-[1rem] md:gap-[1.5rem] lg:gap-[2rem]">
 			{editorData.length + previousImage.length < 3 && (
 				<label
 					htmlFor="fileInput"
