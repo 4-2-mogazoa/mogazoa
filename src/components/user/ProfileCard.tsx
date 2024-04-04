@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { isAxiosError } from "axios";
 import { useCallback } from "react";
 
 import { deleteFollow, postFollow } from "@/apis/follow";
@@ -6,6 +7,7 @@ import BasicButton from "@/components/common/button/BasicButton";
 import ProfileImage from "@/components/common/profileImage/ProfileImage";
 import { useModalActions } from "@/store/modal";
 import { UserDetail } from "@/types/user";
+import getCookies from "@/utils/getCookies";
 
 import FollowUsersModal from "./FollowUsersModal";
 import ProfileModifyModal from "./ProfileModifyModal";
@@ -25,6 +27,15 @@ export default function ProfileCard({ user, isMine = true }: Props) {
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["user", user.id] });
 		},
+		onError: (error) => {
+			if (isAxiosError(error)) {
+				openModal(
+					<div className="p-[1.5rem] text-center text-[1.8rem] text-gray-400 lg:text-[2rem]">
+						{error?.response?.data.message || "팔로우 실패했습니다."}
+					</div>,
+				);
+			}
+		},
 	});
 
 	const handleOpenProfileModifyModal = () => {
@@ -43,8 +54,17 @@ export default function ProfileCard({ user, isMine = true }: Props) {
 	};
 
 	const handleClickFollow = useCallback(() => {
+		const token = getCookies()["accessToken"];
+		if (!token) {
+			openModal(
+				<div className="p-[1.5rem] text-center text-[1.8rem] text-gray-400 lg:text-[2rem]">
+					로그인이 필요합니다.
+				</div>,
+			);
+		}
+
 		followMutation.mutate(user.id);
-	}, [followMutation, user.id]);
+	}, [followMutation, openModal, user.id]);
 
 	return (
 		<section className="_flex-col-center w-[33.5rem] gap-[3rem] rounded-[1.2rem] border border-black-border bg-black-bg px-[2rem] py-[3rem] md:w-[50.9rem] lg:w-[34rem]">

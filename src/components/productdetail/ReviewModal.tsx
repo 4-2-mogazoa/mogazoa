@@ -51,6 +51,7 @@ export default function ReviewModal({
 		queryFn: () => getProductDetail(productId),
 		enabled: !!productId,
 		staleTime: 60 * 1000,
+		retry: false,
 	});
 
 	const { mutate: getImage } = useMutation({
@@ -189,7 +190,7 @@ export default function ReviewModal({
 						))}
 					</div>
 					{
-						<span className="text-[1rem] text-yellow md:text-[1.5rem]">
+						<span className="text-[1rem] text-[#F00] md:text-[1.5rem]">
 							{rateErrMsg}
 						</span>
 					}
@@ -212,7 +213,7 @@ export default function ReviewModal({
 					</p>
 				</div>
 				{errMsg && (
-					<div className="text-[1rem] text-yellow md:text-[1.5rem]">
+					<div className="text-[1rem] text-[#F00] md:text-[1.5rem]">
 						{errMsg}
 					</div>
 				)}

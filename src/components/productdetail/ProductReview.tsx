@@ -4,7 +4,7 @@ import { useState } from "react";
 import { getReviews } from "@/apis/products";
 import { getMe } from "@/apis/user";
 import { filterBy } from "@/constants/filterBy";
-import { useIntersectionObserver } from "@/hooks/common/useIntersectionObserver";
+import { useIntersect } from "@/hooks/common/useIntersect";
 import useThrottle from "@/hooks/common/useThrottle";
 import { ReviewResponse } from "@/types/review";
 
@@ -23,6 +23,7 @@ export default function ProductReview({ id }: { id: number }) {
 		isFetching,
 		fetchNextPage,
 		hasNextPage,
+		isError,
 	} = useInfiniteQuery({
 		queryKey: ["review", id, order],
 		queryFn: ({ pageParam = 0 }) =>
@@ -39,14 +40,20 @@ export default function ProductReview({ id }: { id: number }) {
 
 	const fetchNextPageThrottled = useThrottle(fetchNextPage, 200);
 
-	const { setTarget } = useIntersectionObserver({
-		hasNextPage,
-		fetchNextPage: fetchNextPageThrottled,
-	});
+	const intersectRef = useIntersect<HTMLDivElement>(
+		async (entry, observer) => {
+			observer.unobserve(entry.target);
+			if (hasNextPage && !isFetching) {
+				fetchNextPageThrottled();
+			}
+		},
+		{ rootMargin: "50px" },
+	);
 
 	const myData = useQuery({
 		queryKey: ["me"],
 		queryFn: () => getMe(),
+		retry: false,
 	}).data;
 
 	const handleOnSelect = (item: { id: number; name: string }) => {
@@ -82,21 +89,23 @@ export default function ProductReview({ id }: { id: number }) {
 					<Dropdown.List />
 				</Dropdown>
 			</div>
-			{reviewData?.pages.map((page, index) => (
-				<div key={index} className="flex flex-col gap-[1.5rem] lg:gap-[2rem]">
-					{page.list.map((review) => (
-						<ReviewCard
-							reviewData={review}
-							isMyReview={review.userId === myData?.id}
-							key={review.id}
-							order={order}
-						/>
-					))}
-				</div>
-			))}
+			{!isError &&
+				reviewData?.pages.map((page, index) => (
+					<div key={index} className="flex flex-col gap-[1.5rem] lg:gap-[2rem]">
+						{page.list.map((review) => (
+							<ReviewCard
+								reviewData={review}
+								isMyReview={review.userId === myData?.id}
+								key={review.id}
+								order={order}
+							/>
+						))}
+					</div>
+				))}
 			{reviewData?.pages[0].list.length === 0 && <NoneReview type="none" />}
 			{(isLoading || isFetching) && <NoneReview type="loading" />}
-			<div ref={setTarget}></div>
+			{isError && <NoneReview type="error" />}
+			<div ref={intersectRef}></div>
 		</div>
 	);
 }

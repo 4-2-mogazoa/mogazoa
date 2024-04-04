@@ -83,6 +83,10 @@ export default function ReviewModalAddImageBox({
 					},
 				]);
 			};
+
+			if (fileRef.current) {
+				fileRef.current.value = "";
+			}
 		}
 	};
 
@@ -178,6 +182,7 @@ export default function ReviewModalAddImageBox({
 		setEditorData((prevState) => prevState.filter((data) => data.id !== id));
 		setImage((prevState) => prevState.filter((data) => data.id !== id));
 		setPreviousImage((prevState) => prevState.filter((data) => data.id !== id));
+		fileRef === null;
 	};
 
 	return (
