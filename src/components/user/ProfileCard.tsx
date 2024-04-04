@@ -5,6 +5,7 @@ import { useCallback } from "react";
 import { deleteFollow, postFollow } from "@/apis/follow";
 import BasicButton from "@/components/common/button/BasicButton";
 import ProfileImage from "@/components/common/profileImage/ProfileImage";
+import useAuth from "@/hooks/auth/useAuth";
 import { useModalActions } from "@/store/modal";
 import { UserDetail } from "@/types/user";
 import getCookies from "@/utils/getCookies";
@@ -20,6 +21,7 @@ type Props = {
 export default function ProfileCard({ user, isMine = true }: Props) {
 	const queryClient = useQueryClient();
 	const { openModal, closeModal } = useModalActions();
+	const { logout } = useAuth();
 
 	const followMutation = useMutation({
 		mutationFn: (userId: number) =>
@@ -98,7 +100,7 @@ export default function ProfileCard({ user, isMine = true }: Props) {
 						label="프로필 편집"
 						onClick={handleOpenProfileModifyModal}
 					/>
-					<BasicButton variant={"tertiary"} label="로그아웃" />
+					<BasicButton variant={"tertiary"} label="로그아웃" onClick={logout} />
 				</div>
 			) : (
 				<BasicButton
