@@ -4,11 +4,8 @@ import Image from "next/image";
 import { useEffect } from "react";
 
 import { deleteFavorite, postFavorite } from "@/apis/products";
-<<<<<<< HEAD
-import ProductModal from "@/components/common/modal/product/ProductModal";
-=======
 import { getMe } from "@/apis/user";
->>>>>>> 8956aa26bf80ae295f2aa575acb3f2c711220f81
+import ProductModal from "@/components/common/modal/product/ProductModal";
 import useCompareModal from "@/hooks/compare/useCompareModal";
 import { useModalActions } from "@/store/modal";
 import { ProductDetail } from "@/types/product";
@@ -80,18 +77,16 @@ export default function DetailCard({ productData, isMyProduct }: Props) {
 		);
 	};
 
-<<<<<<< HEAD
 	const handleEditButtonClick = () => {
 		const modal = openModal(
-			<ProductModal type="edit" productId={id} closeModal={() => closeModal(modal)} />
-		)
-	}
+			<ProductModal
+				type="edit"
+				productId={id}
+				closeModal={() => closeModal(modal)}
+			/>,
+		);
+	};
 
-	const cookie = getCookies();
-	const accessToken = cookie["accessToken"];
-
-=======
->>>>>>> 8956aa26bf80ae295f2aa575acb3f2c711220f81
 	const { compareButtonText, handleCompareButtonClick } = useCompareModal(
 		productData,
 		accessToken,
@@ -197,14 +192,10 @@ export function Share({ className }: ShareProps) {
 
 	return (
 		<div className={cn("flex gap-[1rem]", className)}>
-<<<<<<< HEAD
-			<button className="flex size-[2.4rem] items-center justify-center rounded-[0.6rem] bg-black-bg lg:size-[2.8rem]">
-=======
 			<button
 				className="flex size-[2.4rem] items-center justify-center rounded-[0.6rem] bg-black-bg lg:size-[2.8rem]"
 				onClick={handleCopyKakao}
 			>
->>>>>>> 8956aa26bf80ae295f2aa575acb3f2c711220f81
 				<div className="relative size-[1.4rem] lg:size-[1.8rem]">
 					<Image
 						src="/icons/kakaotalk.svg"
