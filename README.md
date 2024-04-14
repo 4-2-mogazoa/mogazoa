@@ -13,7 +13,7 @@
 - 유저 페이지에서는 해당 유저의 활동내역을 확인할 수 있습니다.
 - 내 정보 페이지에서는 사용자의 프로필 이미지, 닉네임을 변경할 수 있습니다.
 
-## 🔎 기술 스택
+## 기술 스택
 
 <img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white"> <img src="https://img.shields.io/badge/tailwind css-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white"> <img src="https://img.shields.io/badge/React Query-FF4154?style=for-the-badge&logo=reactquery&logoColor=white"> <img src="https://img.shields.io/badge/Storybook-FF4785?style=for-the-badge&logo=storybook&logoColor=white"> <img src="https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white"> <img src="https://img.shields.io/badge/vercel-000000?style=for-the-badge&logo=vercel&logoColor=white">
 
@@ -29,6 +29,6 @@
 상품 상세 페이지를 존재하지 않는 상품 번호로 접속하거나 문자열로 입력하여 접속할 경우 빈페이지가 표시 <br/> → 라우터의 query가 NaN으로 확인되거나 서버에서 상품을 불러오지못하여 에러가 발생한경우 홈화면으로 리다이렉트하도록 수정<br/>
 [관련 PR 링크](https://github.com/4-2-mogazoa/mogazoa/pull/165)
 
-## 🔗 배포링크
+## 배포링크
 
-[🔗Link](https://mogazoa4-2.vercel.app/)
+[Link](https://mogazoa4-2.vercel.app/)
