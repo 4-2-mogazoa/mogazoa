@@ -17,8 +17,10 @@
 > Team : Codeit-Sprint-2-Part4-Team2(김우현,김동빈,이찬주,정성원,황채연)
 
 ## 🔎 사용기술
-
-<img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=white"><img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white">  
+- React , Next.js
+- Tailwind , Tailwind-merge , CVA , clsx
+- Axios , Tanstack/Query , Zustand
+- Storybook, Framer-Motion , React-hook-form
 
 
 ## 👥 팀 & 역할
